@@ -20,10 +20,13 @@ import asyncio
 from typing import Dict, Type, TypeVar
 
 from google.adk.agents import LlmAgent
+from google.adk.apps import App
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 from pydantic import BaseModel
+
+from token_usage_plugin import TokenUsagePlugin
 
 APP_NAME = "flow"
 USER_ID = "flow_user"
@@ -35,11 +38,17 @@ _session_service = InMemorySessionService()
 _runners: Dict[str, Runner] = {}
 agent_usage: Dict[str, int] = {}
 
+# Shared across every Runner this module creates (and main.py's top-level
+# FlowAgent Runner, which imports this same instance) so token counts
+# accumulate into one global tally regardless of which agent made the call.
+token_usage_plugin = TokenUsagePlugin()
+
 
 def _runner_for(agent: LlmAgent) -> Runner:
     runner = _runners.get(agent.name)
     if runner is None:
-        runner = Runner(app_name=APP_NAME, agent=agent, session_service=_session_service)
+        app = App(name=APP_NAME, root_agent=agent, plugins=[token_usage_plugin])
+        runner = Runner(app=app, session_service=_session_service)
         _runners[agent.name] = runner
         agent_usage[agent.name] = 0
     return runner

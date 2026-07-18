@@ -2,6 +2,7 @@ import asyncio
 import sys
 import time
 
+from google.adk.apps import App
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
@@ -27,7 +28,8 @@ USER_ID = "flow_user"
 async def _run_flow(flow_agent: FlowAgent):
     """Drive FlowAgent through a real ADK Runner, logging every progress Event it yields."""
     session_service = InMemorySessionService()
-    runner = Runner(app_name=APP_NAME, agent=flow_agent, session_service=session_service)
+    app = App(name=APP_NAME, root_agent=flow_agent, plugins=[adk_runtime.token_usage_plugin])
+    runner = Runner(app=app, session_service=session_service)
     session_id = f"flow_run_{get_run_id()}"
     await session_service.create_session(app_name=APP_NAME, user_id=USER_ID, session_id=session_id)
 
@@ -126,6 +128,15 @@ Return the output as a .txt file of all the steps taken to perform the tasks.
     print("\nAgent Usage Statistics:")
     for agent_name, count in adk_runtime.agent_usage.items():
         print(f"{agent_name} -> {count}")
+
+    token_usage = adk_runtime.token_usage_plugin
+    print("\nToken Usage Statistics:")
+    for agent_name, counts in token_usage.per_agent.items():
+        print(
+            f"{agent_name} -> prompt={counts['prompt']} "
+            f"response={counts['response']} total={counts['total']}"
+        )
+    print(f"TOTAL -> {token_usage.total_tokens}")
 
 
 if __name__ == "__main__":
