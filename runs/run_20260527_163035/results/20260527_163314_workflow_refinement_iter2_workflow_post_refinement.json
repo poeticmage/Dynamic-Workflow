@@ -1,0 +1,148 @@
+{
+  "description": "Workflow state after refinement process",
+  "timestamp": "2026-05-27T16:33:14.328316",
+  "task_id": "workflow_refinement",
+  "iteration": 2,
+  "data": {
+    "refined_workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Extract key requirements (skills, years of experience, and qualifications) from the job description and structure them into a JSON format.",
+        "agent_id": 4,
+        "next": [
+          "task2"
+        ],
+        "prev": [],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "JSON"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Extract and structure candidate qualifications from the resume",
+        "agent_id": 5,
+        "next": [
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```json\n{\n  \"candidate_qualifications\": {\n    \"skills\": [],\n    \"experience\": [],\n    \"education\": [],\n    \"certifications\": [],\n    \"projects\": [],\n    \"awards\": [],\n    \"publications\": []\n  }\n}\n```",
+              "feedback": "here are some feedbacks:\n- The current JSON structure is correct, but all qualification fields are empty. You need to extract and populate each section based on the actual resume content.\n- For each category (skills, experience, education, certifications, projects, awards, publications), include all relevant details (e.g., dates, institutions, roles, descriptions).\n\nhere are the changes:\n```json\n{\n  \"candidate_qualifications\": {\n    \"skills\": [\n      \"Python\",\n      \"Java\",\n      \"C++\",\n      \"JavaScript\",\n      \"SQL\",\n      \"Git\",\n      \"Docker\",\n      \"RESTful APIs\"\n    ],\n    \"experience\": [\n      {\n        \"company\": \"Tech Solutions Inc.\",\n        \"role\": \"Senior Software Engineer\",\n        \"start_date\": \"2021-06\",\n        \"end_date\": \"Present\",\n        \"responsibilities\": [\n          \"Led backend development using Python and Django\",\n          \"Architected microservices deployed on AWS ECS\",\n          \"Mentored junior developers and conducted code reviews\"\n        ]\n      },\n      {\n        \"company\": \"NextGen Apps LLC\",\n        \"role\": \"Software Engineer\",\n        \"start_date\": \"2018-07\",\n        \"end_date\": \"2021-05\",\n        \"responsibilities\": [\n          \"Developed Java-based RESTful APIs\",\n          \"Integrated PostgreSQL databases with application logic\",\n          \"Collaborated in an Agile team with bi-weekly sprints\"\n        ]\n      }\n    ],\n    \"education\": [\n      {\n        \"institution\": \"State University\",\n        \"degree\": \"Bachelor of Science in Computer Science\",\n        \"start_date\": \"2014-08\",\n        \"end_date\": \"2018-05\",\n        \"GPA\": \"3.7/4.0\"\n      }\n    ],\n    \"certifications\": [\n      {\n        \"name\": \"AWS Certified Solutions Architect – Associate\",\n        \"issuing_organization\": \"Amazon Web Services\",\n        \"issue_date\": \"2020-09\",\n        \"expiration_date\": \"2023-09\"\n      },\n      {\n        \"name\": \"Oracle Certified Professional, Java SE 11 Developer\",\n        \"issuing_organization\": \"Oracle\",\n        \"issue_date\": \"2019-04\"\n      }\n    ],\n    \"projects\": [\n      {\n        \"name\": \"Inventory Management System\",\n        \"description\": \"Built a full-stack application to track stock levels and generate real-time reports.\",\n        \"technologies\": [\"Java\", \"Spring Boot\", \"Angular\", \"MySQL\"],\n        \"year\": 2020\n      },\n      {\n        \"name\": \"Real-Time Chat Application\",\n        \"description\": \"Developed a scalable chat service with WebSocket-based messaging.\",\n        \"technologies\": [\"Node.js\", \"Express\", \"Socket.io\", \"MongoDB\"],\n        \"year\": 2019\n      }\n    ],\n    \"awards\": [\n      {\n        \"title\": \"Employee of the Year\",\n        \"issuer\": \"Tech Solutions Inc.\",\n        \"date\": \"2020-12\",\n        \"description\": \"Recognized for outstanding performance and leadership in project delivery.\"\n      }\n    ],\n    \"publications\": [\n      {\n        \"title\": \"Implementing Microservices on AWS\",\n        \"publisher\": \"Tech Journal\",\n        \"date\": \"2019-07\",\n        \"url\": \"https://techjournal.org/microservices-aws\"\n      }\n    ]\n  }\n}\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```json\n{\n  \"candidate_qualifications\": {\n    \"skills\": [\n      \"Python\",\n      \"Java\",\n      \"C++\",\n      \"JavaScript\",\n      \"SQL\",\n      \"Git\",\n      \"Docker\",\n      \"RESTful APIs\",\n      \"AWS\",\n      \"Django\",\n      \"PostgreSQL\",\n      \"Spring Boot\",\n      \"Angular\",\n      \"MySQL\",\n      \"Node.js\",\n      \"Express\",\n      \"Socket.io\",\n      \"MongoDB\"\n    ],\n    \"experience\": [\n      {\n        \"company\": \"Tech Solutions Inc.\",\n        \"role\": \"Senior Software Engineer\",\n        \"start_date\": \"2021-06\",\n        \"end_date\": \"Present\",\n        \"responsibilities\": [\n          \"Led backend development using Python and Django\",\n          \"Architected microservices deployed on AWS ECS\",\n          \"Mentored junior developers and conducted code reviews\"\n        ]\n      },\n      {\n        \"company\": \"NextGen Apps LLC\",\n        \"role\": \"Software Engineer\",\n        \"start_date\": \"2018-07\",\n        \"end_date\": \"2021-05\",\n        \"responsibilities\": [\n          \"Developed Java-based RESTful APIs\",\n          \"Integrated PostgreSQL databases with application logic\",\n          \"Collaborated in an Agile team with bi-weekly sprints\"\n        ]\n      }\n    ],\n    \"education\": [\n      {\n        \"institution\": \"State University\",\n        \"degree\": \"Bachelor of Science in Computer Science\",\n        \"start_date\": \"2014-08\",\n        \"end_date\": \"2018-05\",\n        \"GPA\": \"3.7/4.0\"\n      }\n    ],\n    \"certifications\": [\n      {\n        \"name\": \"AWS Certified Solutions Architect – Associate\",\n        \"issuing_organization\": \"Amazon Web Services\",\n        \"issue_date\": \"2020-09\",\n        \"expiration_date\": \"2023-09\"\n      },\n      {\n        \"name\": \"Oracle Certified Professional, Java SE 11 Developer\",\n        \"issuing_organization\": \"Oracle\",\n        \"issue_date\": \"2019-04\"\n      }\n    ],\n    \"projects\": [\n      {\n        \"name\": \"Inventory Management System\",\n        \"description\": \"Built a full-stack application to track stock levels and generate real-time reports.\",\n        \"technologies\": [\n          \"Java\",\n          \"Spring Boot\",\n          \"Angular\",\n          \"MySQL\"\n        ],\n        \"year\": 2020\n      },\n      {\n        \"name\": \"Real-Time Chat Application\",\n        \"description\": \"Developed a scalable chat service with WebSocket-based messaging.\",\n        \"technologies\": [\n          \"Node.js\",\n          \"Express\",\n          \"Socket.io\",\n          \"MongoDB\"\n        ],\n        \"year\": 2019\n      }\n    ],\n    \"awards\": [\n      {\n        \"title\": \"Employee of the Year\",\n        \"issuer\": \"Tech Solutions Inc.\",\n        \"date\": \"2020-12\",\n        \"description\": \"Recognized for outstanding performance and leadership in project delivery.\"\n      }\n    ],\n    \"publications\": [\n      {\n        \"title\": \"Implementing Microservices on AWS\",\n        \"publisher\": \"Tech Journal\",\n        \"date\": \"2019-07\",\n        \"url\": \"https://techjournal.org/microservices-aws\"\n      }\n    ]\n  }\n}\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "resume_matching_agent",
+        "output_format": "JSON"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Generate a set of technical interview questions mapped to the job requirements",
+        "agent_id": 7,
+        "next": [
+          "task3",
+          "task4"
+        ],
+        "prev": [
+          "task0"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "interview_agent",
+        "output_format": "Plain text"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Conduct the technical interview and record candidate responses",
+        "agent_id": 7,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task1",
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "interview_agent",
+        "output_format": "Plain text"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Prepare and send emails for interview invitation and follow-ups",
+        "agent_id": 6,
+        "next": [],
+        "prev": [
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "email_agent",
+        "output_format": "Plain text"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Score the candidate's interview responses against predefined criteria",
+        "agent_id": 8,
+        "next": [
+          "task6"
+        ],
+        "prev": [
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "scoring_agent",
+        "output_format": "JSON"
+      },
+      "task6": {
+        "id": "task6",
+        "objective": "Compile analysis, scores, and feedback into a final evaluation report",
+        "agent_id": 3,
+        "next": [],
+        "prev": [
+          "task0",
+          "task1",
+          "task5"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 2,
+        "agent": "summary_agent",
+        "output_format": "Plain text"
+      }
+    },
+    "changes_summary": {
+      "tasks_before": 7,
+      "tasks_after": 7,
+      "net_change": 0
+    }
+  }
+}

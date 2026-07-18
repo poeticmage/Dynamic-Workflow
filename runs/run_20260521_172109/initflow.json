@@ -1,0 +1,103 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: grid representation, Tetromino shapes, gem types, and overall game state models.",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Model Developer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement Tetromino mechanics: spawning, movement (left/right), rotation, gravity drop, and locking into the grid.",
+            "agent_id": 1,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Mechanics Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop gem transformation logic: convert locked Tetromino cells into colored gems and detect match-3 patterns.",
+            "agent_id": 2,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Gem Mechanics Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Implement Tetris line-clearing mechanics: detect and remove full horizontal lines in the grid.",
+            "agent_id": 3,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Line Clearing Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Create chain reaction and scoring system: coordinate match-3 and line clears, handle cascading falls, and calculate bonus points.",
+            "agent_id": 4,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task1",
+                "task2",
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "Scoring System Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Build the Pygame GUI: render grid, gems, current Tetromino, next-piece preview, score display, smooth animations, and keyboard controls.",
+            "agent_id": 5,
+            "next": [],
+            "prev": [
+                "task1",
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "GUI Developer",
+            "output_format": "Python code"
+        }
+    }
+}

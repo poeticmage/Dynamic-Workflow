@@ -1,0 +1,384 @@
+```python
+import pygame
+import random
+
+# Constants
+GRID_WIDTH = 10
+GRID_HEIGHT = 20
+CELL_SIZE = 30
+COLORS = [
+    (255, 0, 0),  # Red
+    (0, 255, 0),  # Green
+    (0, 0, 255),  # Blue
+    (255, 255, 0),  # Yellow
+    (255, 0, 255),  # Magenta
+    (0, 255, 255),  # Cyan
+]
+EMPTY = None
+GRID_LINE_COLOR = (128, 128, 128)
+TETROMINO_START_X = GRID_WIDTH // 2 - 2
+TETROMINO_START_Y = 0
+FALL_SPEED = 0.5  # blocks per second
+PREVIEW_SIZE = 4
+PREVIEW_X = GRID_WIDTH * CELL_SIZE + 20
+PREVIEW_Y = 20
+SCORE_X = GRID_WIDTH * CELL_SIZE + 20
+SCORE_Y = PREVIEW_Y + PREVIEW_SIZE * CELL_SIZE + 20
+LINE_CLEAR_SCORE = 100
+MATCH_SCORE = 10
+CHAIN_MULTIPLIER = 1.5
+ANIMATION_DURATION = 0.2  # seconds
+
+
+# Tetromino shapes as lists of (dx,dy) for each rotation state
+TETROMINO_SHAPES = {
+    "I": [
+        [(0, 0), (1, 0), (2, 0), (3, 0)],
+        [(1, 0), (1, 1), (1, 2), (1, 3)],
+    ],
+    "O": [
+        [(0, 0), (1, 0), (0, 1), (1, 1)],
+    ],
+    "T": [
+        [(1, 0), (0, 1), (1, 1), (2, 1)],
+        [(1, 0), (1, 1), (2, 1), (1, 2)],
+        [(0, 1), (1, 1), (2, 1), (1, 2)],
+        [(1, 0), (0, 1), (1, 1), (1, 2)],
+    ],
+    "L": [
+        [(0, 0), (0, 1), (0, 2), (1, 2)],
+        [(0, 1), (1, 1), (2, 1), (2, 0)],
+        [(1, 0), (1, 1), (1, 2), (0, 0)],
+        [(0, 0), (1, 0), (2, 0), (0, 1)],
+    ],
+    "J": [
+        [(1, 0), (1, 1), (1, 2), (0, 2)],
+        [(0, 0), (0, 1), (1, 1), (2, 1)],
+        [(0, 0), (0, 1), (0, 2), (1, 0)],
+        [(0, 1), (1, 1), (2, 1), (2, 0)],
+    ],
+    "S": [
+        [(1, 0), (2, 0), (0, 1), (1, 1)],
+        [(0, 0), (0, 1), (1, 1), (1, 2)],
+    ],
+    "Z": [
+        [(0, 0), (1, 0), (1, 1), (2, 1)],
+        [(1, 0), (1, 1), (0, 1), (0, 2)],
+    ],
+}
+
+class Tetromino:
+    def __init__(self, shape, color):
+        self.shape = shape
+        self.color = color
+        self.rotations = TETROMINO_SHAPES[shape]
+        self.rotation_index = 0
+        self.x = TETROMINO_START_X
+        self.y = TETROMINO_START_Y
+
+    def rotate(self, direction):
+        """direction: +1 clockwise, -1 counter-clockwise"""
+        self.rotation_index = (self.rotation_index + direction) % len(self.rotations)
+
+    def get_block_positions(self, x=None, y=None):
+        """Return list of absolute (x,y) positions of the four blocks,
+        either at the tetromino's current position or at (x,y) if supplied.
+        """
+        base_x = self.x if x is None else x
+        base_y = self.y if y is None else y
+        rels = self.rotations[self.rotation_index]
+        return [(base_x + dx, base_y + dy) for dx, dy in rels]
+
+    def move(self, dx, dy, grid):
+        if grid.is_valid_position(self, self.x + dx, self.y + dy):
+            self.x += dx
+            self.y += dy
+            return True
+        return False
+
+    def collides_below(self, grid):
+        return not grid.is_valid_position(self, self.x, self.y + 1)
+
+    def draw(self, screen, offset_x, offset_y):
+        for bx, by in self.get_block_positions():
+            rect = pygame.Rect(
+                offset_x + bx * CELL_SIZE,
+                offset_y + by * CELL_SIZE,
+                CELL_SIZE,
+                CELL_SIZE,
+            )
+            pygame.draw.rect(screen, self.color, rect)
+
+    def draw_preview(self, screen, offset_x, offset_y, scale=1.0):
+        """Draw the tetromino in the preview window."""
+        matrix = self.rotations[0]  # Use the first rotation state for preview
+        for dx, dy in matrix:
+            x = offset_x + dx * CELL_SIZE * scale
+            y = offset_y + dy * CELL_SIZE * scale
+            rect = pygame.Rect(x, y, CELL_SIZE * scale, CELL_SIZE * scale)
+            pygame.draw.rect(screen, self.color, rect)
+
+class Grid:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.grid = [[EMPTY for _ in range(width)] for _ in range(height)]
+
+    def get_cell(self, x, y):
+        if 0 <= x < self.width and 0 <= y < self.height:
+            return self.grid[y][x]
+        return None
+
+    def set_cell(self, x, y, value):
+        if 0 <= x < self.width and 0 <= y < self.height:
+            self.grid[y][x] = value
+
+    def is_valid_position(self, tetro, x, y):
+        for bx, by in tetro.get_block_positions(x, y):
+            if bx < 0 or bx >= self.width or by < 0 or by >= self.height:
+                return False
+            if self.get_cell(bx, by) is not EMPTY:
+                return False
+        return True
+
+    def lock_tetromino(self, tetro):
+        for bx, by in tetro.get_block_positions():
+            self.set_cell(bx, by, tetro.color)
+
+    def clear_full_lines(self):
+        new_rows = []
+        cleared = 0
+        lines_to_clear = []  # Store the indices of lines to clear
+        for i, row in enumerate(self.grid):
+            if all(cell is not EMPTY for cell in row):
+                cleared += 1
+                lines_to_clear.append(i)
+            else:
+                new_rows.append(row)
+        for _ in range(cleared):
+            new_rows.insert(0, [EMPTY] * self.width)
+        self.grid = new_rows
+        return cleared, lines_to_clear
+
+    def find_matches(self):
+        to_clear = set()
+        # horizontal
+        for y in range(self.height):
+            x = 0
+            while x < self.width - 2:
+                c = self.get_cell(x, y)
+                if (
+                    c is not EMPTY
+                    and c == self.get_cell(x + 1, y) == self.get_cell(x + 2, y)
+                ):
+                    run = 3
+                    while (
+                        x + run < self.width and self.get_cell(x + run, y) == c
+                    ):
+                        run += 1
+                    for i in range(run):
+                        to_clear.add((x + i, y))
+                    x += run
+                else:
+                    x += 1
+        # vertical
+        for x in range(self.width):
+            y = 0
+            while y < self.height - 2:
+                c = self.get_cell(x, y)
+                if (
+                    c is not EMPTY
+                    and c == self.get_cell(x, y + 1) == self.get_cell(x, y + 2)
+                ):
+                    run = 3
+                    while (
+                        y + run < self.height and self.get_cell(x, y + run) == c
+                    ):
+                        run += 1
+                    for i in range(run):
+                        to_clear.add((x, y + i))
+                    y += run
+                else:
+                    y += 1
+        return to_clear
+
+    def clear_matches_with_animation(self, screen, offset_x, offset_y):
+        matches = self.find_matches()
+        cleared_cells = list(matches)
+        start_time = pygame.time.get_ticks()
+        while True:
+            elapsed_time = (pygame.time.get_ticks() - start_time) / 1000.0
+            if elapsed_time > ANIMATION_DURATION:
+                break
+
+            screen.fill((0, 0, 0))
+            self.draw(screen, offset_x, offset_y)
+            for x, y in cleared_cells:
+                alpha = int(255 * (1 - elapsed_time / ANIMATION_DURATION))
+                if self.get_cell(x, y):
+                    color = list(self.get_cell(x, y))  # Copy color tuple
+                    color.append(alpha)  # Add alpha value
+                    color = tuple(color)  # Convert back to tuple
+                    r = pygame.Rect(
+                        offset_x + x * CELL_SIZE,
+                        offset_y + y * CELL_SIZE,
+                        CELL_SIZE,
+                        CELL_SIZE,
+                    )
+                    pygame.draw.rect(screen, color, r)
+
+            pygame.display.flip()
+
+        for mx, my in matches:
+            self.set_cell(mx, my, EMPTY)
+        return len(matches)
+
+    def cascade(self):
+        for x in range(self.width):
+            stack = [
+                self.get_cell(x, y)
+                for y in range(self.height)
+                if self.get_cell(x, y) is not EMPTY
+            ]
+            for y in range(self.height - 1, -1, -1):
+                val = stack.pop() if stack else EMPTY
+                self.set_cell(x, y, val)
+
+    def draw(self, screen, offset_x, offset_y):
+        for y in range(self.height):
+            for x in range(self.width):
+                c = self.get_cell(x, y)
+                if c is not EMPTY:
+                    r = pygame.Rect(
+                        offset_x + x * CELL_SIZE,
+                        offset_y + y * CELL_SIZE,
+                        CELL_SIZE,
+                        CELL_SIZE,
+                    )
+                    pygame.draw.rect(screen, c, r)
+                # grid lines
+                r = pygame.Rect(
+                    offset_x + x * CELL_SIZE,
+                    offset_y + y * CELL_SIZE,
+                    CELL_SIZE,
+                    CELL_SIZE,
+                )
+                pygame.draw.rect(screen, GRID_LINE_COLOR, r, 1)
+
+def get_random_tetromino():
+    shape = random.choice(list(TETROMINO_SHAPES.keys()))
+    color = random.choice(COLORS)
+    return Tetromino(shape, color)
+
+if __name__ == "__main__":
+    pygame.init()
+    screen_width = GRID_WIDTH * CELL_SIZE + 200
+    screen_height = GRID_HEIGHT * CELL_SIZE
+    screen = pygame.display.set_mode((screen_width, screen_height))
+    pygame.display.set_caption("Tetris-Bejeweled Fusion")
+    clock = pygame.time.Clock()
+
+    grid = Grid(GRID_WIDTH, GRID_HEIGHT)
+    current = get_random_tetromino()
+    next_tetro = get_random_tetromino()
+    fall_timer = 0
+    score = 0
+    running = True
+    game_over = False
+    font = pygame.font.Font(None, 36)
+
+    def display_message(msg):
+        surf = font.render(msg, True, (255, 255, 255))
+        rect = surf.get_rect(center=(screen_width // 2, screen_height // 2))
+        screen.blit(surf, rect)
+        pygame.display.flip()
+        pygame.time.delay(2000)
+
+    while running:
+        dt = clock.tick(60) / 1000.0
+        fall_timer += dt
+
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                running = False
+            elif e.type == pygame.KEYDOWN and not game_over:
+                if e.key == pygame.K_LEFT:
+                    current.move(-1, 0, grid)
+                elif e.key == pygame.K_RIGHT:
+                    current.move(1, 0, grid)
+                elif e.key == pygame.K_DOWN:
+                    current.move(0, 1, grid)
+                elif e.key == pygame.K_UP:
+                    current.rotate(1)
+                    if not grid.is_valid_position(current, current.x, current.y):
+                        current.rotate(-1)
+
+        if fall_timer >= 1 / FALL_SPEED and not game_over:
+            fall_timer = 0
+            if not current.move(0, 1, grid):
+                grid.lock_tetromino(current)
+
+                # --- Scoring with per-drop chain reactions ---
+                drop_chain_stage = 0
+                drop_score = 0
+
+                # 1) Tetris line clear
+                lines, lines_to_clear = grid.clear_full_lines()
+                if lines > 0:
+                    drop_score += (
+                        lines
+                        * LINE_CLEAR_SCORE
+                        * (CHAIN_MULTIPLIER**drop_chain_stage)
+                    )
+                    drop_chain_stage += 1
+
+                # 2) Bejeweled match cascades
+                match_count = 0
+                while True:
+                    matches = grid.find_matches()
+                    if not matches:
+                        break
+                    cleared_count = grid.clear_matches_with_animation(screen, 0, 0)
+                    grid.cascade()
+                    match_count += cleared_count
+                if match_count > 0:
+                    drop_score += (
+                        match_count * MATCH_SCORE * (CHAIN_MULTIPLIER**drop_chain_stage)
+                    )
+                    drop_chain_stage += 1
+                score += int(drop_score)
+
+                # Spawn next piece
+                current = next_tetro
+                next_tetro = get_random_tetromino()
+
+                # Check game over
+                if not grid.is_valid_position(current, current.x, current.y):
+                    game_over = True
+                    display_message(f"Game Over! Final Score: {score}")
+                    running = False
+
+        # --- Drawing ---
+        screen.fill((0, 0, 0))
+        grid.draw(screen, 0, 0)
+        current.draw(screen, 0, 0)
+
+        # Next preview
+        pygame.draw.rect(
+            screen, (50, 50, 50), (PREVIEW_X - 10, PREVIEW_Y - 10, 130, 130)
+        )
+        next_tetro.draw_preview(screen, PREVIEW_X, PREVIEW_Y, 0.75)
+        screen.blit(
+            font.render("Next:", True, (255, 255, 255)), (PREVIEW_X, PREVIEW_Y - 30)
+        )
+
+        # Score display
+        screen.blit(
+            font.render(f"Score: {score}", True, (255, 255, 255)),
+            (SCORE_X, SCORE_Y),
+        )
+
+        pygame.display.flip()
+
+    pygame.quit()
+```

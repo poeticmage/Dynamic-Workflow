@@ -1,0 +1,42 @@
+```
+1. Analyze the job description:
+   - Review the job description to identify required technical skills, experience level, and desired soft skills.
+   - Create a checklist of essential qualifications and "nice-to-have" attributes.
+
+2. Analyze the candidate resume:
+   - Compare the candidate's resume to the job description checklist.
+   - Identify areas of alignment and potential gaps in skills or experience.
+   - Note any specific projects or accomplishments that align with the role requirements.
+
+3. Conduct technical interview:
+   - Prepare a set of technical questions based on the job description and resume analysis.
+   - Cover core technical concepts, problem-solving skills, and practical application of knowledge.
+   - Use a mix of theoretical and coding questions to assess different aspects of the candidate's abilities.
+   - Take detailed notes on the candidate's responses, including strengths, weaknesses, and areas for follow-up.
+
+4. Send emails as and when needed:
+   - Use the EmailNotification class to send interview invitations, reminders, and follow-up emails.
+   - Send interview invitation:
+     - Call `email_notifier.send_interview_invitation(recipient_email, candidate_name, job_title, interview_time, interview_details)` with the appropriate information.
+   - Send interview reminder:
+     - Call `email_notifier.schedule_reminder(recipient_email, reminder_subject, reminder_body, interview_time)` with the appropriate information.
+   - Send follow-up email:
+     - Call `email_notifier.send_follow_up_email(recipient_email, candidate_name)` with the appropriate information.
+
+5. Score candidate responses:
+   - Utilize the ResponseScorer class to evaluate the candidate's answers.
+   - Load the scoring rubric from the `scoring_rubric.json` file.
+   - Score each response individually using `scorer.score_response(question, response)`.
+   - Calculate an overall score for the interview based on the weighted scores of individual responses.
+   - Use the `scorer.evaluate_interview(interview_data)` to generate a dictionary of scored responses.
+
+6. Generate final evaluation report:
+   - Create a plain text report summarizing the candidate's performance.
+   - Include the following sections:
+     - Candidate Information: Name, contact information, and job applied for.
+     - Resume Summary: Highlights of relevant skills and experience from the resume.
+     - Interview Performance: Summary of technical skills demonstrated during the interview, including specific examples and observations.
+     - Response Scores: Include the scored responses with question, the candidate's answer, and the score from the `scorer.evaluate_interview(interview_data)`.
+     - Overall Assessment: A concise statement of the candidate's strengths and weaknesses, suitability for the role, and a final recommendation (hire, no hire, or further evaluation).
+   - Export the evaluation report as a `.txt` file.
+```

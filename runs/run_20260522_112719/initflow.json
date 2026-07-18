@@ -1,0 +1,102 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement the core grid data structure to represent cells, store gem colors, tetromino occupancy, and handle gravity operations at the data level",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task2",
+                "task4"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Structure Developer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Build the Tetromino module: define shapes, rotation logic, spawn queue, falling mechanics, and lock-to-grid conversion of tetromino blocks into colored gems",
+            "agent_id": 1,
+            "next": [
+                "task3",
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Logic Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop the clearing logic combining Tetris line clears and Bejeweled match-3: detect full rows and gem matches, remove them, apply gravity drops, chain detection, and calculate bonuses",
+            "agent_id": 2,
+            "next": [
+                "task3"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Clearing Logic Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Create the Game Controller: integrate input handling, manage game states (fall, lock, clear, chain), invoke tetromino and clearing modules, and update score",
+            "agent_id": 3,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task1",
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Game Controller Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement the GUI module using Pygame: initialize window, draw grid cells and gems, display current score and next-tetromino preview, and handle smooth animations",
+            "agent_id": 4,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "GUI Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Integrate all modules into the main game loop: wire up controller updates with GUI rendering, process keyboard input, and drive the real-time gameplay loop",
+            "agent_id": 5,
+            "next": [],
+            "prev": [
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Integration Developer",
+            "output_format": "Python code"
+        }
+    }
+}

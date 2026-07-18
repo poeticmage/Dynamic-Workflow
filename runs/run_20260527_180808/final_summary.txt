@@ -1,0 +1,34 @@
+```
+TASK: Interview Process Steps
+
+1. **Analyze the Job Description:** 
+   - Implemented the module to parse and extract key requirements from the job description.
+   - The function `parse_job_description` was developed to extract job elements such as job title, seniority level, department, skills required, and compensation details.
+   - It generated the output and saved it to "job_description_data.txt".
+
+2. **Analyze the Candidate Resume:**
+   - Implemented the `ResumeParser` class to extract candidate profile details.
+   - The class successfully retrieves the candidate's name, email, phone number, skills, and a summary of work experience by parsing the provided resume text.
+   - Example usage was demonstrated, which creates an instance of `ResumeParser`, and profiles were printed accordingly.
+
+3. **Conduct Technical Interview:**
+   - Developed an interview execution component to conduct technical interviews.
+   - The component reads job descriptions and resumes, loads generated questions, and records candidate responses.
+   - Notified the candidate via email before starting the interview session and logged significant steps along the way.
+
+4. **Send Emails as Needed:**
+   - Integrated an email notification module for sending interview invites, reminders, and follow-up messages.
+   - Utilized a function that sends emails for various situations, including interview initiation and conclusion.
+   
+5. **Score Candidate Responses:**
+   - A scoring engine to evaluate candidate responses against a predefined rubric was constructed.
+   - Candidate responses were scored for correctness and depth based on the response to questions asked during the interview.
+   - This process involved matching keywords to assigned scores based on rubric expectations.
+
+6. **Generate Final Evaluation Report:**
+   - A final evaluation report summarizing candidate scores, skills assessment, and evaluation steps was created.
+   - The report documented the scoring summary, actionable recommendations, and detailed logs of the interview process that were logged throughout the procedure.
+   - The report was formatted for clarity, including scores and follow-up suggestions, and saved as a text file.
+
+The entire procedure encompassed a thorough examination of both the candidate's qualifications and an assessment of their technical skills, culminating in a detailed report ready for review by hiring managers.
+```

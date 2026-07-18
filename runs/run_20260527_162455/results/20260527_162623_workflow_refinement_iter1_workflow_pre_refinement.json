@@ -1,0 +1,159 @@
+{
+  "description": "Workflow state before refinement process",
+  "timestamp": "2026-05-27T16:26:23.701611",
+  "task_id": "workflow_refinement",
+  "iteration": 1,
+  "data": {
+    "workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Develop Python code to parse the job description and extract required skills and responsibilities",
+        "agent_id": 2,
+        "next": [
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport re\n\ndef extract_skills_responsibilities(job_description):\n    \"\"\"\n    Extracts skills and responsibilities from a job description.\n\n    Args:\n        job_description (str): The job description text.\n\n    Returns:\n        dict: A dictionary containing lists of skills and responsibilities.\n              Returns None if extraction fails.\n    \"\"\"\n\n    if not isinstance(job_description, str) or not job_description:\n        print(\"Error: Job description must be a non-empty string.\")\n        return None\n\n    skills = []\n    responsibilities = []\n\n    # Skill extraction (using regex, customize as needed)\n    skill_patterns = [\n        r\"(?i)\\b(?:proficient in|experience with|knowledge of|familiar with|expertise in|skilled in)\\s+(?:[a-zA-Z#]+(?:,\\s*[a-zA-Z#]+)*(?:and\\s*[a-zA-Z#]+)?)\",\n        r\"(?i)\\b[A-Z][a-zA-Z]+(?:\\s+[A-Z][a-zA-Z]+)*(?:\\s+skills?)\\b\", # e.g., Python skills, Java skills\n        r\"(?i)\\b(?:skills:)\\s*(.+)\",  # skills: python, java\n        r\"(?i)\\b(?:skillset:)\\s*(.+)\" # skillset: python, java\n    ]\n\n    for pattern in skill_patterns:\n        matches = re.findall(pattern, job_description)\n        for match in matches:\n            # Clean up matches (remove prefixes, split into individual skills)\n            cleaned_match = re.sub(r\"(?i)(?:proficient in|experience with|knowledge of|familiar with|expertise in|skilled in|skills:|skillset:)\\s*\", \"\", match).strip()\n            individual_skills = re.split(r\",\\s*|and\\s*\", cleaned_match)\n            skills.extend([skill.strip() for skill in individual_skills if skill.strip()])\n\n    # Responsibility extraction (using sentence splitting and keyword identification)\n    responsibility_keywords = [\"responsible for\", \"responsibilities include\", \"duties include\", \"manage\", \"develop\", \"support\", \"lead\", \"coordinate\", \"implement\", \"maintain\"]\n    sentences = re.split(r\"(?<!\\w\\.\\w.)(?<![A-Z][a-z]\\.)(?<=\\.|\\?)\\s\", job_description) # Split into sentences\n    for sentence in sentences:\n        for keyword in responsibility_keywords:\n            if keyword in sentence.lower():\n                responsibilities.append(sentence.strip())\n                break  # Avoid adding the same sentence multiple times\n\n\n    # Further cleaning and deduplication\n    skills = list(set(skills)) # Remove duplicates\n    responsibilities = list(set(responsibilities)) # Remove duplicates\n\n    return {\"skills\": skills, \"responsibilities\": responsibilities}\n\nif __name__ == '__main__':\n    job_description = \"\"\"\n    Job Title: Software Engineer\n\n    Responsibilities include designing, developing, and testing software applications.\n    Responsible for maintaining existing systems and implementing new features.\n    Duties include collaborating with cross-functional teams.\n\n    Proficient in Python, Java, and C++. Experience with cloud technologies like AWS and Azure.\n    Knowledge of database systems such as MySQL and PostgreSQL.\n    Python skills are required.\n    Strong analytical skills.\n    skills: javascript, HTML, CSS.\n    skillset: Docker, Kubernetes\n    \"\"\"\n\n    extracted_data = extract_skills_responsibilities(job_description)\n\n    if extracted_data:\n        print(\"Skills:\", extracted_data[\"skills\"])\n        print(\"Responsibilities:\", extracted_data[\"responsibilities\"])\n    else:\n        print(\"Extraction failed.\")\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Develop Python code to parse the candidate resume and extract skills and experience",
+        "agent_id": 2,
+        "next": [
+          "task2",
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport re\n\ndef extract_skills_and_experience(resume_text):\n    \"\"\"\n    Extracts skills and experience from a resume text.\n\n    Args:\n        resume_text: The text content of the resume.\n\n    Returns:\n        A dictionary containing lists of skills and experience entries.\n    \"\"\"\n\n    skills = extract_skills(resume_text)\n    experience = extract_experience(resume_text)\n\n    return {\n        \"skills\": skills,\n        \"experience\": experience\n    }\n\ndef extract_skills(resume_text):\n    \"\"\"\n    Extracts skills from the resume text using regex.\n\n    Args:\n        resume_text: The text content of the resume.\n\n    Returns:\n        A list of skills.\n    \"\"\"\n\n    # Define common skill keywords and patterns\n    skill_patterns = [\n        r\"(Python|Java|C++|JavaScript|SQL|HTML|CSS|React|Angular|Node\\.js)\",\n        r\"(Data Science|Machine Learning|Deep Learning|Natural Language Processing)\",\n        r\"(Cloud Computing|AWS|Azure|GCP)\",\n        r\"(Project Management|Agile|Scrum)\",\n        r\"(Communication|Leadership|Teamwork)\"\n    ]\n\n    skills = []\n    for pattern in skill_patterns:\n        matches = re.findall(pattern, resume_text, re.IGNORECASE)\n        skills.extend(matches)\n    \n    # Remove duplicates while preserving order\n    unique_skills = []\n    [unique_skills.append(x) for x in skills if x not in unique_skills]\n\n    return unique_skills\n\ndef extract_experience(resume_text):\n    \"\"\"\n    Extracts experience entries from the resume text using regex.\n\n    Args:\n        resume_text: The text content of the resume.\n\n    Returns:\n        A list of experience entries.\n    \"\"\"\n    # Define pattern for experience sections\n    experience_pattern = r\"(?i)(?:Experience|Employment History)([\\s\\S]*?)(?:Education|Skills|References|$)\"\n\n    match = re.search(experience_pattern, resume_text)\n    if match:\n      experience_section = match.group(1)\n\n      #Split experience section into individual entries based on common separators like dates or job titles\n      experience_entries = re.split(r\"\\d{4}[-–—]\\d{4}|\\d{4}\\s*-\\s*(Present|Current)|\\b(?:[A-Z][a-z]+\\s)+[A-Z][a-z]+(?:,\\s(?:[A-Z][a-z]+))?\\b\", experience_section)\n      \n      #Clean up the entries by removing whitespace and empty strings\n      experience_entries = [entry.strip() for entry in experience_entries if entry.strip()]\n\n      return experience_entries\n\n    return []\n\n\n\nif __name__ == '__main__':\n    # Example usage:\n    resume_text = \"\"\"\n    John Doe\n    john.doe@example.com\n    (123) 456-7890\n\n    Summary\n    A highly motivated and experienced software engineer with a passion for developing innovative solutions.\n\n    Experience\n    Software Engineer, Acme Corp, 2018-2022\n    - Developed and maintained web applications using Python, JavaScript, and React.\n    - Designed and implemented REST APIs using Node.js.\n    - Worked with databases such as SQL and MongoDB.\n\n    Senior Software Engineer, Beta Inc, 2022-Present\n    - Led a team of engineers in the development of a new mobile application.\n    - Utilized cloud computing platforms such as AWS and Azure.\n    - Implemented machine learning algorithms for data analysis.\n\n    Education\n    Bachelor of Science in Computer Science, University of Example, 2018\n\n    Skills\n    Python, Java, JavaScript, SQL, HTML, CSS, React, Node.js, Data Science, Machine Learning, Cloud Computing, AWS, Azure, Project Management, Agile, Scrum, Communication, Leadership, Teamwork\n\n    References\n    Available upon request.\n    \"\"\"\n\n    extracted_data = extract_skills_and_experience(resume_text)\n    print(\"Extracted Skills:\", extracted_data['skills'])\n    print(\"Extracted Experience:\", extracted_data['experience'])\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Implement Python code to match extracted resume data against job requirements and build a candidate profile",
+        "agent_id": 2,
+        "next": [
+          "task6"
+        ],
+        "prev": [
+          "task1"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\ndef create_candidate_profile(job_description, resume_data):\n    \"\"\"\n    Matches extracted resume data against job requirements and builds a candidate profile.\n\n    Args:\n        job_description: A string containing the job description.\n        resume_data: A dictionary containing extracted resume data (skills and experience).\n\n    Returns:\n        A dictionary representing the candidate profile, including:\n            - skills_match: A list of skills from the resume that match the job description.\n            - experience_match: A list of experience entries from the resume that align with the job description.\n            - overall_fit: A score (0-100) indicating the overall fit of the candidate for the job.\n    \"\"\"\n\n    skills_match = find_matching_skills(job_description, resume_data['skills'])\n    experience_match = find_matching_experience(job_description, resume_data['experience'])\n    overall_fit = calculate_overall_fit(job_description, resume_data)\n\n    candidate_profile = {\n        \"skills_match\": skills_match,\n        \"experience_match\": experience_match,\n        \"overall_fit\": overall_fit\n    }\n\n    return candidate_profile\n\ndef find_matching_skills(job_description, resume_skills):\n    \"\"\"\n    Identifies skills from the resume that match the job description.\n\n    Args:\n        job_description: A string containing the job description.\n        resume_skills: A list of skills extracted from the resume.\n\n    Returns:\n        A list of skills from the resume that are present in the job description.\n    \"\"\"\n\n    matching_skills = [skill for skill in resume_skills if skill.lower() in job_description.lower()]\n    return matching_skills\n\ndef find_matching_experience(job_description, resume_experience):\n    \"\"\"\n    Identifies experience entries from the resume that align with the job description.\n\n    Args:\n        job_description: A string containing the job description.\n        resume_experience: A list of experience entries extracted from the resume.\n\n    Returns:\n        A list of experience entries from the resume that are relevant to the job description.\n    \"\"\"\n\n    matching_experience = [exp for exp in resume_experience if exp.lower() in job_description.lower()]\n    return matching_experience\n\ndef calculate_overall_fit(job_description, resume_data):\n    \"\"\"\n    Calculates an overall fit score for the candidate based on skills and experience.\n\n    Args:\n        job_description: A string containing the job description.\n        resume_data: A dictionary containing extracted resume data (skills and experience).\n\n    Returns:\n        An integer representing the overall fit score (0-100).\n    \"\"\"\n\n    # Placeholder logic for calculating overall fit.  This can be refined with more sophisticated methods.\n    skills_match = find_matching_skills(job_description, resume_data['skills'])\n    experience_match = find_matching_experience(job_description, resume_data['experience'])\n\n    skill_points = len(skills_match) * 15  #Weight each skill match as 15 points\n    experience_points = len(experience_match) * 20 #Weight each experience match as 20 points\n\n    overall_fit = skill_points + experience_points\n\n    # Cap the score at 100\n    overall_fit = min(overall_fit, 100)\n\n    return overall_fit\n\nif __name__ == '__main__':\n    # Example usage:\n    job_description = \"\"\"\n    We are looking for a skilled Software Engineer with experience in Python, JavaScript, and React.\n    The ideal candidate should have experience with cloud computing platforms such as AWS and Azure.\n    Experience with data science and machine learning is a plus.\n    \"\"\"\n\n    resume_data = {\n        \"skills\": [\"Python\", \"JavaScript\", \"React\", \"AWS\", \"Azure\", \"Data Science\", \"SQL\"],\n        \"experience\": [\n            \"Developed web applications using Python, JavaScript, and React.\",\n            \"Worked with cloud computing platforms such as AWS and Azure.\",\n            \"Implemented machine learning algorithms for data analysis.\"\n        ]\n    }\n\n    candidate_profile = create_candidate_profile(job_description, resume_data)\n    print(\"Candidate Profile:\", candidate_profile)\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Create the interview engine in Python that generates and delivers technical questions based on job requirements and candidate profile",
+        "agent_id": 2,
+        "next": [
+          "task4"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport random\n\nclass InterviewEngine:\n    def __init__(self, job_description, resume):\n        \"\"\"\n        Initializes the InterviewEngine with the job description and candidate resume.\n        Args:\n            job_description (dict): A dictionary containing job description details like skills and responsibilities.\n            resume (dict): A dictionary containing candidate resume details like skills and experience.\n        \"\"\"\n        self.job_description = job_description\n        self.resume = resume\n        self.question_bank = {\n            \"Python\": [\n                \"Explain the difference between lists and tuples in Python.\",\n                \"What are decorators in Python?\",\n                \"How does garbage collection work in Python?\",\n            ],\n            \"Java\": [\n                \"Explain the difference between == and .equals() in Java.\",\n                \"What are the principles of Object-Oriented Programming?\",\n                \"How does the JVM work?\",\n            ],\n            \"JavaScript\": [\n                \"What is the difference between '==' and '===' in JavaScript?\",\n                \"Explain closures in JavaScript.\",\n                \"What are promises in JavaScript?\",\n            ],\n            \"SQL\": [\n                \"Explain the difference between INNER JOIN and OUTER JOIN.\",\n                \"What is a primary key?\",\n                \"How can you optimize SQL queries?\",\n            ],\n            \"Data Science\": [\n                \"Explain the difference between supervised and unsupervised learning.\",\n                \"What is the bias-variance tradeoff?\",\n                \"How do you handle missing data?\",\n            ],\n            \"Machine Learning\": [\n                \"Explain the difference between different machine learning algorithms?\",\n                \"What is regularization?\",\n                \"How do you evaluate the performance of a machine learning model?\",\n            ],\n            \"Cloud Computing\": [\n                \"Explain the difference between IaaS, PaaS, and SaaS.\",\n                \"What are the benefits of using cloud computing?\",\n                \"How does cloud autoscaling work?\",\n            ],\n            \"AWS\": [\n                \"What is EC2?\",\n                \"What is S3?\",\n                \"How do you deploy an application on AWS?\",\n            ],\n            \"Azure\": [\n                \"What is Azure Virtual Machines?\",\n                \"What is Azure Blob Storage?\",\n                \"How do you deploy an application on Azure?\",\n            ],\n            \"Project Management\": [\n                \"What are the different phases of project management?\",\n                \"Explain Agile methodologies.\",\n                \"How do you manage project risks?\",\n            ]\n        }\n\n    def generate_questions(self, num_questions=5):\n        \"\"\"\n        Generates technical questions based on the job description and candidate resume.\n        Args:\n            num_questions (int): The number of questions to generate.\n        Returns:\n            list: A list of technical questions.\n        \"\"\"\n        relevant_skills = set(self.job_description['skills']).intersection(set(self.resume['skills']))\n        questions = []\n        for skill in relevant_skills:\n            if skill in self.question_bank:\n                questions.extend(self.question_bank[skill])\n\n        selected_questions = random.sample(questions, min(num_questions, len(questions))) # Avoid exceeding list length\n        return selected_questions\n\n    def deliver_question(self, question):\n        \"\"\"\n        Delivers a technical question to the candidate (simulated).\n        Args:\n            question (str): The technical question to deliver.\n        Returns:\n            None\n        \"\"\"\n        print(f\"Question: {question}\")\n\n    def get_candidate_response(self):\n        \"\"\"\n        Simulates getting a response from the candidate.\n        Returns:\n            str: The candidate's response.\n        \"\"\"\n        return input(\"Your Answer: \")\n\nif __name__ == '__main__':\n    # Example Usage\n    job_description = {\n        \"skills\": [\"Python\", \"Data Science\", \"Machine Learning\"],\n        \"responsibilities\": [\"Develop machine learning models\", \"Analyze data\"]\n    }\n    resume = {\n        \"skills\": [\"Python\", \"Data Science\", \"Machine Learning\", \"SQL\"],\n        \"experience\": [\"Developed machine learning models using Python\"]\n    }\n\n    interview_engine = InterviewEngine(job_description, resume)\n    questions = interview_engine.generate_questions(num_questions=3)\n\n    for question in questions:\n        interview_engine.deliver_question(question)\n        candidate_response = interview_engine.get_candidate_response()\n        print(f\"Candidate's Response: {candidate_response}\\n\")\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Implement the scoring algorithm in Python to evaluate candidate responses from the interview engine",
+        "agent_id": 2,
+        "next": [
+          "task6"
+        ],
+        "prev": [
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Build the email service module in Python to send invitations, reminders, and notifications as needed",
+        "agent_id": 2,
+        "next": [],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport smtplib\nfrom email.mime.text import MIMEText\nfrom email.mime.multipart import MIMEMultipart\n\nclass EmailService:\n    def __init__(self, smtp_server, smtp_port, smtp_username, smtp_password):\n        self.smtp_server = smtp_server\n        self.smtp_port = smtp_port\n        self.smtp_username = smtp_username\n        self.smtp_password = smtp_password\n        self.server = None  # Initialize server to None\n\n    def connect(self):\n        \"\"\"Connect to the SMTP server.\"\"\"\n        try:\n            self.server = smtplib.SMTP(self.smtp_server, self.smtp_port)\n            self.server.starttls()\n            self.server.login(self.smtp_username, self.smtp_password)\n            print(\"Successfully connected to the SMTP server.\")\n            return True\n        except Exception as e:\n            print(f\"Failed to connect to the SMTP server: {e}\")\n            return False\n\n    def disconnect(self):\n         \"\"\"Disconnect from the SMTP server.\"\"\"\n         if self.server:\n             try:\n                 self.server.quit()\n                 print(\"Successfully disconnected from the SMTP server.\")\n             except Exception as e:\n                 print(f\"Failed to disconnect gracefully: {e}\")\n             finally:\n                 self.server = None\n\n    def send_email(self, sender_email, recipient_email, subject, body, is_html=False):\n        \"\"\"Sends an email.\"\"\"\n        if not self.server:\n            print(\"Not connected to SMTP server. Call connect() first.\")\n            return False\n\n        message = MIMEMultipart(\"alternative\")\n        message[\"Subject\"] = subject\n        message[\"From\"] = sender_email\n        message[\"To\"] = recipient_email\n\n        if is_html:\n            part = MIMEText(body, \"html\")\n        else:\n            part = MIMEText(body, \"plain\")\n\n        message.attach(part)\n\n        try:\n            self.server.sendmail(sender_email, recipient_email, message.as_string())\n            print(f\"Email sent successfully to {recipient_email}\")\n            return True\n        except Exception as e:\n            print(f\"Failed to send email: {e}\")\n            return False\n\n    def send_invitation(self, sender_email, recipient_email, interview_time, interview_link):\n        \"\"\"Sends an interview invitation email.\"\"\"\n        subject = \"Interview Invitation\"\n        body = f\"\"\"\n        Dear Candidate,\n\n        You are invited to an interview on {interview_time}.\n\n        Please join the interview using the following link: {interview_link}\n\n        Best regards,\n        The Hiring Team\n        \"\"\"\n        return self.send_email(sender_email, recipient_email, subject, body)\n\n    def send_reminder(self, sender_email, recipient_email, interview_time, interview_link):\n        \"\"\"Sends an interview reminder email.\"\"\"\n        subject = \"Interview Reminder\"\n        body = f\"\"\"\n        Dear Candidate,\n\n        This is a reminder for your interview scheduled on {interview_time}.\n\n        Please join the interview using the following link: {interview_link}\n\n        Best regards,\n        The Hiring Team\n        \"\"\"\n        return self.send_email(sender_email, recipient_email, subject, body)\n\n    def send_notification(self, sender_email, recipient_email, message_body):\n        \"\"\"Sends a general notification email.\"\"\"\n        subject = \"Notification\"\n        return self.send_email(sender_email, recipient_email, subject, message_body)\n\n\nif __name__ == '__main__':\n    # Example Usage (replace with your actual credentials)\n    smtp_server = \"your_smtp_server\"  # e.g., \"smtp.gmail.com\"\n    smtp_port = 587  # Or 465 for SSL\n    smtp_username = \"your_email@example.com\"\n    smtp_password = \"your_password\"  # Consider using environment variables for security\n\n    email_service = EmailService(smtp_server, smtp_port, smtp_username, smtp_password)\n\n    # Connect to the SMTP server\n    if email_service.connect():\n        sender_email = \"your_email@example.com\"\n        recipient_email = \"candidate@example.com\"\n\n        # Send Invitation\n        interview_time = \"2024-01-20 10:00 AM\"\n        interview_link = \"https://meet.google.com/xyz\"\n        email_service.send_invitation(sender_email, recipient_email, interview_time, interview_link)\n\n        # Send Reminder\n        email_service.send_reminder(sender_email, recipient_email, interview_time, interview_link)\n\n        # Send Notification\n        notification_message = \"Your application has been received.\"\n        email_service.send_notification(sender_email, recipient_email, notification_message)\n\n        # Send HTML email\n        html_body = \"\"\"\n        <html>\n          <body>\n            <p>Dear Candidate,<br><br>\n               Thank you for your interest in our company!<br><br>\n               We are excited about your application.\n            </p>\n          </body>\n        </html>\n        \"\"\"\n        email_service.send_email(sender_email, recipient_email, \"Application Received\", html_body, is_html=True)\n\n        # Disconnect from the SMTP server\n        email_service.disconnect()\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task6": {
+        "id": "task6",
+        "objective": "Generate the final evaluation report in Python by aggregating candidate profile and interview scores",
+        "agent_id": 2,
+        "next": [],
+        "prev": [
+          "task2",
+          "task4"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      }
+    }
+  }
+}

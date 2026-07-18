@@ -1,0 +1,39 @@
+```text
+---- evaluation_report.txt ----
+Interview Evaluation Report for John Doe
+Candidate Email: john.doe@example.com
+Job Title: Software Engineer
+
+Step 1: Analyzing the job description and candidate resume.
+  - Job requirements: Code quality, Problem-solving, Teamwork.
+  - Candidate profile: Python, SQL skills.
+
+Step 2: Generating tailored technical interview questions.
+  1. What is your experience with Python?
+  2. How do you handle error handling in your code?
+  3. Describe your approach to solving a challenging problem.
+
+Step 3: Conducted the technical interview.
+Candidate responses:
+  1. "I have extensive experience with Python and wrote unit tests."
+  2. "I use a structured approach: analysis, steps, edge case consideration."
+
+Step 4: Scored candidate responses.
+  - Code quality: raw_score=2.0, normalized_score=2
+  - Problem-solving: raw_score=3.5, normalized_score=3
+  - Teamwork: raw_score=0.0, normalized_score=0
+
+Step 5: Compiled Overall Evaluation.
+Overall Evaluation:
+  The candidate demonstrates moderate code quality (2/5) and problem-solving skills (3/5). Teamwork could not be assessed through the current questions (0/5). Further evaluation may be needed.
+
+---- end of evaluation_report.txt ----
+
+Triggering email automation component:
+  Subject: "Final Evaluation Report for John Doe"
+  To: john.doe@example.com
+  Body: "Dear Hiring Team, please find attached the completed evaluation report for John Doe."
+  Attachment: evaluation_report.txt
+
+Email status: SENT SUCCESSFULLY.
+```

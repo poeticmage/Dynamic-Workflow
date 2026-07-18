@@ -1,0 +1,114 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement a parser to analyze the job description and extract required skills, competencies, and evaluation criteria.",
+            "agent_id": 2,
+            "next": [
+                "task2"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement a parser to analyze the candidate resume and extract skills, experience, and project details.",
+            "agent_id": 2,
+            "next": [
+                "task2"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Build a module to generate a tailored set of technical interview questions based on the job requirements and candidate profile.",
+            "agent_id": 7,
+            "next": [
+                "task4",
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "interview_agent",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Create an email automation component with templates and scheduling logic for sending interview invites and notifications.",
+            "agent_id": 2,
+            "next": [
+                "task4",
+                "task6"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Develop an interactive technical interview engine to present questions and record candidate responses.",
+            "agent_id": 2,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task2",
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement a scoring algorithm to evaluate and score candidate responses against predefined criteria.",
+            "agent_id": 2,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task2",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Assemble all steps taken into a final evaluation report in .txt format and trigger its delivery via the email automation component.",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task3",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "email_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

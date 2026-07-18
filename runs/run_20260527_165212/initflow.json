@@ -1,0 +1,95 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement a Job Description Analyzer that parses and structures job requirements into a machine\u2010readable format",
+            "agent_id": 4,
+            "next": [
+                "task2",
+                "task4"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "job_description_agent",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Develop a Resume Analyzer that extracts candidate skills, experience, and education into structured data",
+            "agent_id": 2,
+            "next": [
+                "task2",
+                "task4"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Build an Interview Module that generates technical questions dynamically based on structured JD and resume data",
+            "agent_id": 7,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "interview_agent",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Create an Email Automation component to send templated messages at key workflow events",
+            "agent_id": 2,
+            "next": [],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement a Response Scorer that evaluates candidate answers against JD and resume criteria",
+            "agent_id": 8,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "scoring_agent",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Develop a Report Generator that compiles analysis summaries, interview questions, and scores into a final .txt evaluation",
+            "agent_id": 2,
+            "next": [],
+            "prev": [
+                "task2",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

@@ -1,0 +1,88 @@
+```plaintext
+Candidate Evaluation Report
+
+Candidate Name: John Doe
+Job Title: Python Developer
+
+================================
+1. Resume-Job Match Analysis
+================================
+  Skill Match: Skill match score: 0.80
+  Experience Match: Experience found matching job responsibilities.
+  Education Match: Education requirements met.
+  Overall Match: Overall match score: 0.75
+
+================================
+2. Interview Summary
+================================
+  Technical Questions:
+    - Question: What is a decorator in Python?
+      Answer: A decorator is a function that takes another function as an argument and extends its behavior without modifying it.
+    - Question: Explain the difference between lists and tuples in Python.
+      Answer: Lists are mutable, and tuples are immutable.
+
+  Behavioral Questions:
+    - Question: Tell me about a time you failed.
+      Answer: I once missed a deadline because I underestimated the complexity of the project.
+    - Question: Describe a situation where you had to work with a difficult team member.
+      Answer: I had a team member who was always negative. I tried to understand their perspective and find common ground.
+
+================================
+3. Technical Assessment
+================================
+  Question: What is a decorator in Python?
+    Relevance: 5
+    Depth: 4
+    Confidence: 4
+    Technical Accuracy: 5
+    Feedback: The candidate's answer was relevant and demonstrated good technical knowledge.
+    
+  Question: Explain the difference between lists and tuples in Python.
+    Relevance: 5
+    Depth: 3
+    Confidence: 4
+    Technical Accuracy: 4
+    Feedback: The candidate's answer was relevant and demonstrated some technical knowledge.
+
+================================
+4. Behavioral Assessment
+================================
+  Question: Tell me about a time you failed.
+    Relevance: 5
+    Depth: 4
+    Confidence: 3
+    Feedback: The candidate's answer was relevant to the behavioral question.
+    
+  Question: Describe a situation where you had to work with a difficult team member.
+    Relevance: 5
+    Depth: 4
+    Confidence: 4
+    Feedback: The candidate's answer was relevant to the behavioral question.
+
+================================
+5. Strengths
+================================
+  - Strong Python skills
+  - Good communication skills
+  - Problem-solving abilities
+
+================================
+6. Weaknesses
+================================
+  - Limited experience with React
+  - Could improve on providing more detailed answers
+
+================================
+7. Scoring Breakdown
+================================
+  Match: Resume-job match score: 75.00
+  Technical Skills: Technical score: 80.00
+  Problem Solving: Problem-solving score: 70.00
+  Communication: Communication score: 85.00
+  Overall: Overall score: 77.50
+
+================================
+8. Final Recommendation
+================================
+Overall, the candidate is a good fit for the role. Recommend further consideration.
+```

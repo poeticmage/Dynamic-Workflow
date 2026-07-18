@@ -1,0 +1,147 @@
+{
+  "description": "Workflow state before refinement process",
+  "timestamp": "2026-05-22T12:35:52.483984",
+  "task_id": "workflow_refinement",
+  "iteration": 1,
+  "data": {
+    "workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Define core data structures: grid matrix, tetromino shapes with color mappings, and gem representation.",
+        "agent_id": 0,
+        "next": [
+          "task1",
+          "task2",
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport pygame\n\n# Grid dimensions\nGRID_WIDTH = 10\nGRID_HEIGHT = 20\n\ndef get_empty_grid():\n    return [[None for _ in range(GRID_WIDTH)] for _ in range(GRID_HEIGHT)]\n\n# Tetromino rotation states as lists of (x,y) offsets within a 4x4 block\nTETROMINO_SHAPES = {\n    'I': [\n        [(0,1),(1,1),(2,1),(3,1)],\n        [(2,0),(2,1),(2,2),(2,3)],\n        [(0,2),(1,2),(2,2),(3,2)],\n        [(1,0),(1,1),(1,2),(1,3)]\n    ],\n    'J': [\n        [(0,0),(0,1),(1,1),(2,1)],\n        [(1,0),(2,0),(1,1),(1,2)],\n        [(0,1),(1,1),(2,1),(2,2)],\n        [(1,0),(1,1),(1,2),(0,2)]\n    ],\n    'L': [\n        [(2,0),(0,1),(1,1),(2,1)],\n        [(1,0),(1,1),(1,2),(2,0)],\n        [(0,1),(1,1),(2,1),(0,2)],\n        [(0,2),(1,0),(1,1),(1,2)]\n    ],\n    'O': [\n        [(1,0),(2,0),(1,1),(2,1)]\n    ],\n    'S': [\n        [(1,1),(2,1),(0,2),(1,2)],\n        [(1,0),(1,1),(2,1),(2,2)],\n        [(1,1),(2,1),(0,2),(1,2)],\n        [(1,0),(1,1),(2,1),(2,2)]\n    ],\n    'T': [\n        [(1,0),(0,1),(1,1),(2,1)],\n        [(1,0),(1,1),(2,1),(1,2)],\n        [(0,1),(1,1),(2,1),(1,2)],\n        [(1,0),(0,1),(1,1),(1,2)]\n    ],\n    'Z': [\n        [(0,1),(1,1),(1,2),(2,2)],\n        [(2,0),(1,1),(2,1),(1,2)],\n        [(0,1),(1,1),(1,2),(2,2)],\n        [(2,0),(1,1),(2,1),(1,2)]\n    ]\n}\n\n# Color mapping for tetromino types / gems\nCOLOR_MAP = {\n    'I': (0, 240, 240),\n    'J': (0, 0, 240),\n    'L': (240, 160, 0),\n    'O': (240, 240, 0),\n    'S': (0, 240, 0),\n    'T': (160, 0, 240),\n    'Z': (240, 0, 0)\n}\n\nclass Gem:\n    def __init__(self, color):\n        self.color = color\n\nclass Tetromino:\n    def __init__(self, shape_key):\n        self.key = shape_key\n        self.rotations = TETROMINO_SHAPES[shape_key]\n        self.rotation_index = 0\n        self.color = COLOR_MAP[shape_key]\n        self.position = [GRID_WIDTH // 2 - 2, 0]  # x, y on the grid\n\n    @property\n    def blocks(self):\n        return [(self.position[0] + x, self.position[1] + y)\n                for (x, y) in self.rotations[self.rotation_index]]\n\n    def rotate(self):\n        self.rotation_index = (self.rotation_index + 1) % len(self.rotations)\n\n    def move(self, dx, dy):\n        self.position[0] += dx\n        self.position[1] += dy\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "Data Modeler",
+        "output_format": "Python code"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Implement tetromino generation, movement, rotation, and collision detection against the grid.",
+        "agent_id": 1,
+        "next": [
+          "task2",
+          "task5"
+        ],
+        "prev": [
+          "task0"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport random\n\nfrom task0 import GRID_WIDTH, GRID_HEIGHT, TETROMINO_SHAPES, COLOR_MAP, Gem, Tetromino, get_empty_grid\n\n\nclass GameState:\n    def __init__(self):\n        self.grid = get_empty_grid()\n        self.current_tetromino = self.new_tetromino()\n        self.next_tetromino = self.new_tetromino()\n        self.score = 0\n        self.game_over = False\n\n    def new_tetromino(self):\n        shape_key = random.choice(list(TETROMINO_SHAPES.keys()))\n        return Tetromino(shape_key)\n\n    def hard_drop(self):\n        while self.is_valid_move(self.current_tetromino, 0, 1):\n            self.current_tetromino.move(0, 1)\n        self.lock_tetromino()\n\n    def move_tetromino(self, dx):\n        if self.is_valid_move(self.current_tetromino, dx, 0):\n            self.current_tetromino.move(dx, 0)\n\n    def rotate_tetromino(self):\n        original_rotation_index = self.current_tetromino.rotation_index\n        self.current_tetromino.rotate()\n        if not self.is_valid_move(self.current_tetromino, 0, 0):\n            self.current_tetromino.rotation_index = original_rotation_index\n\n    def is_valid_move(self, tetromino, dx, dy):\n        for x, y in tetromino.blocks:\n            new_x = x + dx\n            new_y = y + dy\n            if new_x < 0 or new_x >= GRID_WIDTH or new_y >= GRID_HEIGHT:\n                return False\n            if new_y >= 0 and self.grid[new_y][new_x] is not None:\n                return False\n        return True\n\n    def drop_tetromino(self):\n        if self.is_valid_move(self.current_tetromino, 0, 1):\n            self.current_tetromino.move(0, 1)\n            return True\n        else:\n            self.lock_tetromino()\n            return False\n\n    def lock_tetromino(self):\n        for x, y in self.current_tetromino.blocks:\n            if y < 0:\n                self.game_over = True\n                return\n            self.grid[y][x] = Gem(self.current_tetromino.color)\n\n        self.current_tetromino = self.next_tetromino\n        self.next_tetromino = self.new_tetromino()\n        self.clear_lines()\n\n    def clear_lines(self):\n        lines_to_clear = []\n        for i in range(GRID_HEIGHT):\n            if all(self.grid[i][j] is not None for j in range(GRID_WIDTH)):\n                lines_to_clear.append(i)\n\n        for line_index in lines_to_clear:\n            del self.grid[line_index]\n            self.grid.insert(0, [None] * GRID_WIDTH)\n            self.score += 100  # Adjust scoring as needed\n```",
+              "feedback": "here are some feedbacks:\n- The `rotate_tetromino` method reverts only the rotation index on invalid rotation, but does not restore the block positions. This leaves the tetromino in an inconsistent state.\n- It’s safer to snapshot both the rotation index and block coordinates (or call a restore method) before attempting a rotation.\n- Adding a simple \"wall kick\" (shifting horizontally on rotation failures) can improve playability, but is optional for basic collision handling.\n\nhere are the changes:\n```python\nimport random\n\nfrom task0 import GRID_WIDTH, GRID_HEIGHT, TETROMINO_SHAPES, COLOR_MAP, Gem, Tetromino, get_empty_grid\n\n\nclass GameState:\n    def __init__(self):\n        self.grid = get_empty_grid()\n        self.current_tetromino = self.new_tetromino()\n        self.next_tetromino = self.new_tetromino()\n        self.score = 0\n        self.game_over = False\n\n    def new_tetromino(self):\n        shape_key = random.choice(list(TETROMINO_SHAPES.keys()))\n        return Tetromino(shape_key)\n\n    def hard_drop(self):\n        while self.is_valid_move(self.current_tetromino, 0, 1):\n            self.current_tetromino.move(0, 1)\n        self.lock_tetromino()\n\n    def move_tetromino(self, dx):\n        if self.is_valid_move(self.current_tetromino, dx, 0):\n            self.current_tetromino.move(dx, 0)\n\n    def rotate_tetromino(self):\n        \"\"\"\n        Rotate current tetromino. On invalid rotation, restore its previous state.\n        Optionally attempt simple wall kicks (left/right shifts).\n        \"\"\"\n        # Snapshot state\n        old_rotation = self.current_tetromino.rotation_index\n        old_blocks = list(self.current_tetromino.blocks)\n\n        # Perform rotation\n        self.current_tetromino.rotate()\n\n        # If rotation collides, try simple wall kicks\n        if not self.is_valid_move(self.current_tetromino, 0, 0):\n            kicked = False\n            for dx in (-1, 1, -2, 2):  # try shifts left/right\n                if self.is_valid_move(self.current_tetromino, dx, 0):\n                    self.current_tetromino.move(dx, 0)\n                    kicked = True\n                    break\n\n            # If still invalid, restore original\n            if not kicked:\n                self.current_tetromino.rotation_index = old_rotation\n                self.current_tetromino.blocks = old_blocks\n\n    def is_valid_move(self, tetromino, dx, dy):\n        \"\"\"\n        Check if moving tetromino by (dx, dy) would cause collision or go out of bounds.\n        \"\"\"\n        for x, y in tetromino.blocks:\n            new_x = x + dx\n            new_y = y + dy\n\n            # Check horizontal bounds\n            if new_x < 0 or new_x >= GRID_WIDTH:\n                return False\n            # Check bottom bound\n            if new_y >= GRID_HEIGHT:\n                return False\n            # Check existing blocks in grid (ignore cells above the visible grid)\n            if new_y >= 0 and self.grid[new_y][new_x] is not None:\n                return False\n        return True\n\n    def drop_tetromino(self):\n        \"\"\"\n        Advance tetromino down by one. Lock if it cannot move further.\n        Returns True if moved, False if locked.\n        \"\"\"\n        if self.is_valid_move(self.current_tetromino, 0, 1):\n            self.current_tetromino.move(0, 1)\n            return True\n        else:\n            self.lock_tetromino()\n            return False\n\n    def lock_tetromino(self):\n        \"\"\"\n        Place current tetromino into the grid as gems, spawn next, and clear lines.\n        \"\"\"\n        for x, y in self.current_tetromino.blocks:\n            # If any part is above the grid, it's game over\n            if y < 0:\n                self.game_over = True\n                return\n            self.grid[y][x] = Gem(self.current_tetromino.color)\n\n        # Spawn next piece\n        self.current_tetromino = self.next_tetromino\n        self.next_tetromino = self.new_tetromino()\n\n        # Run line-clearing\n        self.clear_lines()\n\n    def clear_lines(self):\n        \"\"\"\n        Clear any full rows in Tetris style, shift above rows down,\n        and award score per line cleared.\n        \"\"\"\n        lines_to_clear = []\n        for row in range(GRID_HEIGHT):\n            if all(self.grid[row][col] is not None for col in range(GRID_WIDTH)):\n                lines_to_clear.append(row)\n\n        for row in reversed(lines_to_clear):\n            del self.grid[row]\n            self.grid.insert(0, [None] * GRID_WIDTH)\n            self.score += 100  # base points per line (adjust as desired)\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```python\nimport random\n\nfrom task0 import GRID_WIDTH, GRID_HEIGHT, TETROMINO_SHAPES, COLOR_MAP, Gem, Tetromino, get_empty_grid\n\n\nclass GameState:\n    def __init__(self):\n        self.grid = get_empty_grid()\n        self.current_tetromino = self.new_tetromino()\n        self.next_tetromino = self.new_tetromino()\n        self.score = 0\n        self.game_over = False\n\n    def new_tetromino(self):\n        shape_key = random.choice(list(TETROMINO_SHAPES.keys()))\n        tetromino = Tetromino(shape_key)\n        tetromino.position = [GRID_WIDTH // 2 - 2, 0]\n        return tetromino\n\n    def hard_drop(self):\n        while self.is_valid_move(self.current_tetromino, 0, 1):\n            self.current_tetromino.move(0, 1)\n        self.lock_tetromino()\n\n    def move_tetromino(self, dx):\n        if self.is_valid_move(self.current_tetromino, dx, 0):\n            self.current_tetromino.move(dx, 0)\n\n    def rotate_tetromino(self):\n        \"\"\"\n        Rotate current tetromino. On invalid rotation, restore its previous state.\n        Optionally attempt simple wall kicks (left/right shifts).\n        \"\"\"\n        # Snapshot state\n        old_rotation = self.current_tetromino.rotation_index\n        old_blocks = [(x,y) for x, y in self.current_tetromino.blocks]  # Create a copy\n\n        # Perform rotation\n        self.current_tetromino.rotate()\n\n        # If rotation collides, try simple wall kicks\n        if not self.is_valid_move(self.current_tetromino, 0, 0):\n            kicked = False\n            for dx in (-1, 1):  # try shifts left/right; reduced search for simplicity\n                if self.is_valid_move(self.current_tetromino, dx, 0):\n                    self.current_tetromino.move(dx, 0)\n                    kicked = True\n                    break\n\n            # If still invalid, restore original\n            if not kicked:\n                self.current_tetromino.rotation_index = old_rotation\n                self.current_tetromino.blocks = [(x,y) for x, y in old_blocks]\n\n    def is_valid_move(self, tetromino, dx, dy):\n        \"\"\"\n        Check if moving tetromino by (dx, dy) would cause collision or go out of bounds.\n        \"\"\"\n        for x, y in tetromino.blocks:\n            new_x = x + dx\n            new_y = y + dy\n\n            # Check horizontal bounds\n            if new_x < 0 or new_x >= GRID_WIDTH:\n                return False\n            # Check bottom bound\n            if new_y >= GRID_HEIGHT:\n                return False\n\n            #Check if block is above the grid\n            if new_y < 0:\n                continue\n            # Check existing blocks in grid\n            if self.grid[new_y][new_x] is not None:\n                return False\n        return True\n\n    def drop_tetromino(self):\n        \"\"\"\n        Advance tetromino down by one. Lock if it cannot move further.\n        Returns True if moved, False if locked.\n        \"\"\"\n        if self.is_valid_move(self.current_tetromino, 0, 1):\n            self.current_tetromino.move(0, 1)\n            return True\n        else:\n            self.lock_tetromino()\n            return False\n\n    def lock_tetromino(self):\n        \"\"\"\n        Place current tetromino into the grid as gems, spawn next, and clear lines.\n        \"\"\"\n        for x, y in self.current_tetromino.blocks:\n            # If any part is above the grid, it's game over\n            if y < 0:\n                self.game_over = True\n                return\n            self.grid[y][x] = Gem(self.current_tetromino.color)\n\n        # Spawn next piece\n        self.current_tetromino = self.next_tetromino\n        self.current_tetromino.position = [GRID_WIDTH // 2 - 2, 0] # Reset position\n        self.next_tetromino = self.new_tetromino()\n\n        # Run line-clearing\n        self.clear_lines()\n\n    def clear_lines(self):\n        \"\"\"\n        Clear any full rows in Tetris style, shift above rows down,\n        and award score per line cleared.\n        \"\"\"\n        lines_to_clear = []\n        for row in range(GRID_HEIGHT):\n            if all(self.grid[row][col] is not None for col in range(GRID_WIDTH)):\n                lines_to_clear.append(row)\n\n        for row in reversed(lines_to_clear):\n            del self.grid[row]\n            self.grid.insert(0, [None] * GRID_WIDTH)\n            self.score += 100  # base points per line (adjust as desired)\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "Tetromino Logic Developer",
+        "output_format": "Python code"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Develop lock-in logic: integrate falling tetromino blocks into the grid and convert them into colored gems.",
+        "agent_id": 2,
+        "next": [
+          "task3",
+          "task5"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport pygame\nimport random\n\nfrom task0 import GRID_WIDTH, GRID_HEIGHT, TETROMINO_SHAPES, COLOR_MAP, Gem, Tetromino, get_empty_grid\n\n\nclass GameState:\n    def __init__(self):\n        self.grid = get_empty_grid()\n        self.current_tetromino = self.new_tetromino()\n        self.next_tetromino = self.new_tetromino()\n        self.score = 0\n        self.game_over = False\n\n    def new_tetromino(self):\n        shape_key = random.choice(list(TETROMINO_SHAPES.keys()))\n        tetromino = Tetromino(shape_key)\n        tetromino.position = [GRID_WIDTH // 2 - 2, 0]\n        return tetromino\n\n    def hard_drop(self):\n        while self.is_valid_move(self.current_tetromino, 0, 1):\n            self.current_tetromino.move(0, 1)\n        self.lock_tetromino()\n\n    def move_tetromino(self, dx):\n        if self.is_valid_move(self.current_tetromino, dx, 0):\n            self.current_tetromino.move(dx, 0)\n\n    def rotate_tetromino(self):\n        \"\"\"\n        Rotate current tetromino. On invalid rotation, restore its previous state.\n        Optionally attempt simple wall kicks (left/right shifts).\n        \"\"\"\n        # Snapshot state\n        old_rotation = self.current_tetromino.rotation_index\n        old_blocks = [(x,y) for x, y in self.current_tetromino.blocks]  # Create a copy\n\n        # Perform rotation\n        self.current_tetromino.rotate()\n\n        # If rotation collides, try simple wall kicks\n        if not self.is_valid_move(self.current_tetromino, 0, 0):\n            kicked = False\n            for dx in (-1, 1):  # try shifts left/right; reduced search for simplicity\n                if self.is_valid_move(self.current_tetromino, dx, 0):\n                    self.current_tetromino.move(dx, 0)\n                    kicked = True\n                    break\n\n            # If still invalid, restore original\n            if not kicked:\n                self.current_tetromino.rotation_index = old_rotation\n                self.current_tetromino.blocks = [(x,y) for x, y in old_blocks]\n\n    def is_valid_move(self, tetromino, dx, dy):\n        \"\"\"\n        Check if moving tetromino by (dx, dy) would cause collision or go out of bounds.\n        \"\"\"\n        for x, y in tetromino.blocks:\n            new_x = x + dx\n            new_y = y + dy\n\n            # Check horizontal bounds\n            if new_x < 0 or new_x >= GRID_WIDTH:\n                return False\n            # Check bottom bound\n            if new_y >= GRID_HEIGHT:\n                return False\n\n            #Check if block is above the grid\n            if new_y < 0:\n                continue\n            # Check existing blocks in grid\n            if self.grid[new_y][new_x] is not None:\n                return False\n        return True\n\n    def drop_tetromino(self):\n        \"\"\"\n        Advance tetromino down by one. Lock if it cannot move further.\n        Returns True if moved, False if locked.\n        \"\"\"\n        if self.is_valid_move(self.current_tetromino, 0, 1):\n            self.current_tetromino.move(0, 1)\n            return True\n        else:\n            self.lock_tetromino()\n            return False\n\n    def lock_tetromino(self):\n        \"\"\"\n        Place current tetromino into the grid as gems, spawn next, and clear lines.\n        \"\"\"\n        for x, y in self.current_tetromino.blocks:\n            # If any part is above the grid, it's game over\n            if y < 0:\n                self.game_over = True\n                return\n            self.grid[y][x] = Gem(self.current_tetromino.color)\n\n        # Spawn next piece\n        self.current_tetromino = self.next_tetromino\n        self.current_tetromino.position = [GRID_WIDTH // 2 - 2, 0] # Reset position\n        self.next_tetromino = self.new_tetromino()\n\n        # Run line-clearing\n        self.clear_lines()\n\n    def clear_lines(self):\n        \"\"\"\n        Clear any full rows in Tetris style, shift above rows down,\n        and award score per line cleared.\n        \"\"\"\n        lines_to_clear = []\n        for row in range(GRID_HEIGHT):\n            if all(self.grid[row][col] is not None for col in range(GRID_WIDTH)):\n                lines_to_clear.append(row)\n\n        for row in reversed(lines_to_clear):\n            del self.grid[row]\n            self.grid.insert(0, [None] * GRID_WIDTH)\n            self.score += 100  # base points per line (adjust as desired)\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "Grid Integration Developer",
+        "output_format": "Python code"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Build clearing mechanics: detect and clear full lines (Tetris) and match-3 gem patterns, triggering chain reactions.",
+        "agent_id": 3,
+        "next": [
+          "task4",
+          "task5"
+        ],
+        "prev": [
+          "task0",
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "Clearing Algorithm Developer",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Create scoring system: calculate points for line clears, gem matches, and bonus combos in chain reactions.",
+        "agent_id": 4,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "Scoring System Developer",
+        "output_format": "Python code"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Implement Pygame GUI: render grid, falling pieces, gem animations, score display, next-piece preview, and keyboard controls.",
+        "agent_id": 5,
+        "next": [],
+        "prev": [
+          "task1",
+          "task2",
+          "task3",
+          "task4"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 2,
+        "agent": "GUI Developer",
+        "output_format": "Python code"
+      }
+    }
+  }
+}

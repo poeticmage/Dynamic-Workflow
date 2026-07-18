@@ -1,0 +1,14 @@
+{
+  "description": "Validation attempt 1 for task task2",
+  "timestamp": "2026-05-27T17:00:10.144405",
+  "task_id": "task2",
+  "iteration": 1,
+  "data": {
+    "validation_iteration": 1,
+    "result_being_validated": "```python\ndef score_candidate_response(response, criteria_weights, keywords):\n    \"\"\"\n    Scores a candidate's interview response based on predefined criteria and keywords.\n\n    Args:\n        response (str): The candidate's interview response text.\n        criteria_weights (dict): A dictionary mapping evaluation criteria to their weights.\n                                  Example: {\"Technical Skills\": 0.25, \"Problem-solving abilities\": 0.20, ...}\n        keywords (dict): A dictionary mapping evaluation criteria to a list of relevant keywords.\n                         Example: {\"Technical Skills\": [\"python\", \"algorithm\", \"data structure\"], \"Problem-solving abilities\": [\"debugging\", \"optimization\", \"testing\"], ...}\n\n    Returns:\n        dict: A dictionary containing the scores for each evaluation criterion and the overall score.\n    \"\"\"\n\n    response = response.lower()\n    scores = {}\n    overall_score = 0\n\n    for criterion, weight in criteria_weights.items():\n        scores[criterion] = 0\n        if criterion in keywords:\n            relevant_keywords = keywords[criterion]\n            keyword_count = 0\n            for keyword in relevant_keywords:\n                if keyword in response:\n                    keyword_count += 1\n            scores[criterion] = keyword_count / len(relevant_keywords) if len(relevant_keywords) > 0 else 0\n        overall_score += scores[criterion] * weight\n\n    scores[\"overall_score\"] = overall_score\n    return scores\n\ndef example_usage():\n    \"\"\"\n    Provides an example of how to use the scoring function.\n    \"\"\"\n\n    example_response = \"I have extensive experience with Python and data structures. I also have experience in debugging and optimizing code.\"\n    example_criteria_weights = {\n        \"Technical Skills\": 0.4,\n        \"Problem-solving abilities\": 0.3,\n        \"Communication skills\": 0.1,\n        \"Experience\": 0.2\n    }\n    example_keywords = {\n        \"Technical Skills\": [\"python\", \"algorithm\", \"data structure\"],\n        \"Problem-solving abilities\": [\"debugging\", \"optimization\", \"testing\"],\n        \"Experience\": [\"years of experience\", \"project\", \"worked on\"]\n    }\n\n    scores = score_candidate_response(example_response, example_criteria_weights, example_keywords)\n    print(scores)\n\nif __name__ == \"__main__\":\n    example_usage()\n```",
+    "validation_status": "completed",
+    "validation_feedback": "there are no additional problems",
+    "validation_time": 13.309605121612549,
+    "task_history": []
+  }
+}

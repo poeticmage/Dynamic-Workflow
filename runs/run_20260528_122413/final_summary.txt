@@ -1,0 +1,139 @@
+```
+1. The `InterviewAutomation` class is initialized with the interview module data, the sender's email, and the sender's password.
+2. The `send_email` method sends an email using the provided SMTP server details. It takes the recipient's email, subject, and body as input. It returns `True` if the email is sent successfully, and `False` otherwise.
+3. The `process_emails` method iterates through the emails in the interview module. If an email's status is 'pending', it sends the email (either invite or follow-up) and updates the email's status to 'sent' along with a timestamp.
+4. The `update_interview_module_json` method calls `process_emails` and returns an updated JSON string.
+5. The main block demonstrates how to use the `InterviewAutomation` class with sample data. It initializes the class, processes the emails, and prints the updated JSON. It saves the updated JSON to `updated_interview_module.json`.
+
+Dependencies:
+- `smtplib`: For sending emails.
+- `email.mime.text`: For constructing email messages.
+- `json`: For handling JSON data.
+- `datetime`: For timestamping emails.
+
+To use this code:
+
+1. Replace `"your_email@gmail.com"` and `"your_password"` with your actual Gmail credentials. Note that you might need to enable "less secure app access" in your Gmail settings or use an App Password if you have 2-Factor Authentication enabled.
+2. Replace the sample `interview_module_json` with your actual JSON data.
+3. Run the script. It will print the updated JSON to the console and save it to `updated_interview_module.json`.
+
+Final_Evaluation_Process_Jane_Smith.txt
+
+------------------------------------------------------------
+FULL EVALUATION PROCESS FOR JANE SMITH
+
+Date: 2024-06-16
+Position: Data Scientist
+
+STEP 1: JOB DESCRIPTION ANALYSIS
+--------------------------------
+Source: Hiring Manager's JD for Data Scientist
+Extracted Requirements:
+- Title: Data Scientist (Mid level)
+- Seniority Level: Mid
+- Employment: Full-time, Remote
+- Required Skills:
+    • Python, R
+    • Machine Learning (supervised & unsupervised)
+    • Data Analysis & Visualization
+    • SQL, NoSQL
+    • Deep Learning (TensorFlow, PyTorch)
+    • Cloud (AWS, Azure)
+- Preferred Skills: Docker, Kubernetes, Spark/Hadoop
+- Experience: ≥3 years in data science
+- Education: M.Sc. or higher in quantitative field
+- Responsibilities:
+    1. Develop/deploy ML models
+    2. Build ETL/data pipelines
+    3. Collaborate with stakeholders
+    4. Monitor and retrain models
+- Compensation: $100K–$130K
+
+STEP 2: CANDIDATE RESUME ANALYSIS
+---------------------------------
+Name: Jane Smith
+Contact: jane.smith@email.com | +1-555-123-4567
+LinkedIn: linkedin.com/in/janesmith
+
+Key Resume Facts:
+- Education: M.Sc. Data Science (Berkeley, 2018), B.Sc. Statistics (Michigan, 2016)
+- Experience:
+    • Data Scientist, Acme Corp (06/2020–08/2023): Fraud detection models (+15% accuracy), AWS Glue/Lambda pipelines
+    • Data Analyst, Beta Inc. (01/2019–05/2020): Dashboards (Tableau/Power BI), data‐prep optimizations
+- Projects: Churn prediction (85% accuracy), Real-time recommender in SageMaker
+- Certifications: AWS ML Specialty (Dec 2022)
+- Skills: Python (Expert), R, SQL, NoSQL, TensorFlow, PyTorch, AWS, Docker
+
+STEP 3: EMAIL COMMUNICATIONS
+----------------------------
+1. Interview Invitation (Sent 2024-06-01):
+   Subject: Data Scientist Interview Invitation
+   Body: "Dear Jane, we would like to schedule a technical interview on Jun 10. Please confirm your availability and preferred time."
+
+2. Reminder Email (Sent 2024-06-08):
+   Subject: Interview Reminder – Data Scientist Role
+   Body: "Just a reminder: your interview is on Jun 10 at 2 PM ET via Zoom. Please use this link to join: [Zoom Link]"
+
+3. Thank-You Email (Sent 2024-06-10):
+   Subject: Thank You for Interviewing
+   Body: "Dear Jane, thank you for your time today. We enjoyed learning about your experience. We will follow up with next steps by Jun 18."
+
+STEP 4: TECHNICAL INTERVIEW (Zoom – 2024-06-10, 2 PM ET)
+---------------------------------------------------------
+Q1. Describe your experience with deploying ML models to production.
+A1. "At Acme Corp, I containerized models with Docker, deployed on SageMaker endpoints, set up Jenkins CI/CD pipelines, used Terraform for IaC, monitored via CloudWatch, and automated retraining when metrics dropped below 90%."
+
+Q2. Explain your approach to handling missing data.
+A2. "First I assess MCAR/MAR/NMAR patterns. For MCAR, mean/median imputation; MAR, model‐based (KNN/MICE); NMAR, feature flags plus domain consultation. I validate impact by comparing distributions pre/post imputation and use metrics like R-squared to assess imputation quality."
+
+Q3. Tell me about a challenging data analysis project.
+A3. "At Beta Inc., inconsistent date formats hampered forecasting. I normalized timestamps, engineered time‐series features, then built an ARIMA model improving accuracy by 20%, enabling better inventory management and reduced stockouts."
+
+Q4. How do you stay current in ML?
+A4. "I read arXiv daily, follow NeurIPS/ICML proceedings, subscribe to ML Weekly and Towards Data Science, compete on Kaggle, contribute to GitHub OSS projects like scikit-learn, and attend local data science meetups and webinars."
+
+Q5. L1 vs. L2 regularization differences?
+A5. "L1 adds absolute‐value penalty, promoting sparsity and feature selection by potentially zeroing out coefficients. L2 adds squared penalty, encouraging small nonzero weights and smoother solutions, which helps prevent overfitting, especially when dealing with multicollinearity."
+
+STEP 5: SCORING
+---------------
+Scale: 1 (Poor) – 5 (Excellent)
+
+Q1 (Model Deployment)
+ Criteria: infrastructure best practices, monitoring, automation, scalability
+ Score: 5/5
+
+Q2 (Missing Data)
+ Criteria: statistical rigor, pattern analysis, validation, justification of methods
+ Score: 4/5
+
+Q3 (Challenging Project)
+ Criteria: problem identification, solution design, impact, communication of results
+ Score: 5/5
+
+Q4 (Continuous Learning)
+ Criteria: diversity of sources, proactiveness, application of knowledge
+ Score: 5/5
+
+Q5 (Regularization)
+ Criteria: technical accuracy, clarity, applicability, understanding of trade-offs
+ Score: 5/5
+
+Overall Score = (5 + 4 + 5 + 5 + 5) / 5 = 4.8
+
+STEP 6: FINAL EVALUATION REPORT
+--------------------------------
+Candidate: Jane Smith
+Position: Data Scientist
+Evaluation Date: 2024-06-16
+
+Summary:
+Jane exhibits excellent skills in model deployment, data handling, and continuous learning. Her responses were precise, structured, and demonstrated best practices. With 3+ years of relevant experience and strong technical credentials, she fully meets the job requirements and exceeds expectations in several areas.
+
+Recommendation:
+Strongly recommend extending an offer for the Data Scientist position. Her strong theoretical knowledge combined with practical experience makes her an ideal candidate for our team.
+
+------------------------------------------------------------
+End of Full Evaluation Process
+------------------------------------------------------------
+```

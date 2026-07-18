@@ -1,0 +1,32 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Write a compelling, two-sentence tagline for a coffee shop.",
+            "agent_id": 6,
+            "next": [
+                "task1"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "email_agent",
+            "output_format": "Plain text"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Using the generated tagline, write a one-paragraph Instagram caption for the coffee shop.",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "email_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

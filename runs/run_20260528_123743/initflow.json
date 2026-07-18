@@ -1,0 +1,131 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Parse the job description and extract key requirements and competencies.",
+            "agent_id": 4,
+            "next": [
+                "task2"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "job_description_agent",
+            "output_format": "Plain text"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Parse the candidate resume and summarize relevant experience and skills.",
+            "agent_id": 5,
+            "next": [
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "resume_matching_agent",
+            "output_format": "Plain text"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Compile a tailored list of technical interview questions based on job requirements and candidate profile.",
+            "agent_id": 7,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "interview_agent",
+            "output_format": "Plain text"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Send an interview invitation email to the candidate with schedule and instructions.",
+            "agent_id": 6,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "email_agent",
+            "output_format": "Plain text"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Conduct the technical interview and record candidate responses.",
+            "agent_id": 7,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task2",
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "interview_agent",
+            "output_format": "Plain text"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Score the candidate's interview responses against defined criteria.",
+            "agent_id": 7,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "interview_agent",
+            "output_format": "JSON"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Generate the final evaluation report combining job requirements, resume summary, and scored responses.",
+            "agent_id": 8,
+            "next": [
+                "task7"
+            ],
+            "prev": [
+                "task0",
+                "task1",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "scoring_agent",
+            "output_format": "Plain text"
+        },
+        "task7": {
+            "id": "task7",
+            "objective": "Send the final evaluation and feedback email to stakeholders/candidate.",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task6"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "email_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

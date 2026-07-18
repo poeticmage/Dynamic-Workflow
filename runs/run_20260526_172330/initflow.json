@@ -1,0 +1,119 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement a module to parse and analyze job descriptions and candidate resumes, producing structured feature data and match indicators.",
+            "agent_id": 3,
+            "next": [
+                "task1",
+                "task2",
+                "task5",
+                "task6"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "summary_agent",
+            "output_format": "JSON"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Create a question generator that produces technical and behavioral interview questions based on the parsed job and resume data.",
+            "agent_id": 2,
+            "next": [
+                "task2"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "JSON"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Build an interview engine to conduct the interview session, present generated questions, capture candidate responses, and dynamically trigger follow-up questions.",
+            "agent_id": 3,
+            "next": [
+                "task3",
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "summary_agent",
+            "output_format": "JSON"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Develop an answer evaluation component that assesses each candidate response for relevance, depth, confidence, and technical accuracy, outputting evaluation metrics.",
+            "agent_id": 3,
+            "next": [
+                "task4",
+                "task6"
+            ],
+            "prev": [
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "summary_agent",
+            "output_format": "JSON"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement a scoring system that aggregates evaluation metrics into category scores (technical, behavioral, etc.) and computes a final numeric breakdown.",
+            "agent_id": 2,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "JSON"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Build a recruiter communication generator to produce interview invitations and follow-up emails using templates and candidate/job data.",
+            "agent_id": 1,
+            "next": [],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "research_agent",
+            "output_format": "JSON"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Assemble the final candidate evaluation report in plain text, combining resume-job match analysis, interview summary, technical and behavioral assessments, strengths/weaknesses, recommendation, and scoring breakdown.",
+            "agent_id": 4,
+            "next": [],
+            "prev": [
+                "task0",
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "job_description_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

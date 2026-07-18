@@ -1,0 +1,99 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: implement Grid class (2D array of cells), Cell states, and ScoreTracker",
+            "agent_id": 0,
+            "next": [
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Structures Specialist",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement Tetromino module: define shapes, rotation states, and spawn logic",
+            "agent_id": 1,
+            "next": [
+                "task2"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Tetromino Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Build physics engine: falling piece movement, collision detection, locking tetrominoes into grid as colored gems",
+            "agent_id": 2,
+            "next": [
+                "task4",
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Physics Module Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Develop clearing logic: detect and clear Tetris lines and Bejeweled match-3 chains, handle chain reactions and bonus scoring",
+            "agent_id": 3,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Clearing Logic Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement keyboard control handler: map arrow keys and rotation/drop commands to piece actions",
+            "agent_id": 4,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Input Handler Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Create main game loop and GUI with Pygame: render grid, falling piece, next-piece preview, score display, and smooth animations",
+            "agent_id": 5,
+            "next": [],
+            "prev": [
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "GUI & Game Loop Developer",
+            "output_format": "Python code"
+        }
+    }
+}

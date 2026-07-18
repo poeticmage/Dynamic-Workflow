@@ -1,0 +1,104 @@
+{
+  "timestamp": "2026-05-27T12:46:44.603136",
+  "description": "Final workflow state for task: You are a workflow planning agent.\nYour task is to...",
+  "data": {
+    "tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Analyze the job description and extract key requirements",
+        "agent_id": 4,
+        "next": [
+          "task2",
+          "task5"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": "```json\n[\n  \"Programming proficiency in Python and Java\",\n  \"Experience with machine learning frameworks (TensorFlow, PyTorch)\",\n  \"Strong understanding of data structures and algorithms\",\n  \"Experience in developing and deploying machine learning models\",\n  \"Familiarity with cloud computing platforms (AWS, Azure, GCP)\",\n  \"Experience with data visualization tools (Tableau, matplotlib)\",\n  \"Knowledge of statistical modeling and data analysis techniques\",\n  \"Ability to work independently and as part of a team\",\n  \"Excellent problem-solving and communication skills\",\n  \"Experience with version control systems (Git)\",\n  \"Bachelor's or Master's degree in Computer Science or related field\"\n]\n```",
+        "remaining_dependencies": 0,
+        "agent": "job_description_agent",
+        "output_format": "JSON"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Analyze candidate resume and extract skills and experience",
+        "agent_id": 5,
+        "next": [
+          "task2",
+          "task3",
+          "task5"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": "```json\n{\n  \"skills\": [\n    \"Python\",\n    \"Java\",\n    \"JavaScript\",\n    \"SQL\",\n    \"Docker\",\n    \"Kubernetes\",\n    \"AWS\",\n    \"RESTful APIs\",\n    \"React\",\n    \"Node.js\"\n  ],\n  \"experience\": [\n    {\n      \"company\": \"Acme Corp\",\n      \"position\": \"Senior Software Engineer\",\n      \"duration\": \"Jan 2020 – Present\",\n      \"responsibilities\": [\n        \"Designed and implemented microservices architecture using Docker and Kubernetes\",\n        \"Led a team of 5 engineers to build RESTful APIs in Python and Java\",\n        \"Migrated legacy monolith application to AWS cloud environment\"\n      ]\n    },\n    {\n      \"company\": \"BetaTech Solutions\",\n      \"position\": \"Software Developer\",\n      \"duration\": \"Jun 2017 – Dec 2019\",\n      \"responsibilities\": [\n        \"Developed web applications with JavaScript, React, and Node.js\",\n        \"Optimized SQL database queries to improve performance by 30%\",\n        \"Collaborated with cross-functional teams for feature planning and delivery\"\n      ]\n    }\n  ]\n}\n```\n",
+        "remaining_dependencies": 0,
+        "agent": "resume_matching_agent",
+        "output_format": "JSON"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Conduct technical interview based on extracted requirements and candidate profile",
+        "agent_id": 7,
+        "next": [
+          "task3",
+          "task4"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "completed",
+        "history": "```python\n[\n  \"1. Python Coding: Given a list of strings, write a function to group anagrams together. Discuss your algorithm’s time and space complexity, and how you would test it.\",\n  \"2. Microservices Design: Based on your experience at Acme Corp, describe the architecture of one of the microservices you designed, focusing on its key responsibilities, data storage, and communication patterns. How did you handle fault tolerance and scalability?\",\n  \"3. Docker & Kubernetes: At Acme Corp, you used Docker and Kubernetes. Can you provide a concrete example of how you optimized a Docker image for size and a Kubernetes deployment for performance or cost? What tools did you use to monitor performance?\",\n  \"4. AWS Architecture: You migrated a legacy application to AWS. Describe the specific AWS services you used (e.g., EC2, S3, RDS) and justify your choices based on scalability, cost, and performance requirements.\",\n  \"5. RESTful API Design: You built RESTful APIs in Python and Java at Acme Corp. Describe your approach to API versioning and ensuring backward compatibility. Provide an example of a versioning strategy you implemented.\",\n  \"6. Data Structures & Algorithms: Implement an LRU cache in Python. Explain how you would ensure thread-safety if it’s accessed concurrently in a high-traffic microservice.\",\n  \"7. Coding Exercise (Live): Write a function that reads a log file, counts the frequency of different error types, and returns the top 5 most frequent errors. Include edge-case handling and discuss performance considerations.\",\n  \"8. Database Optimization: At BetaTech Solutions, you optimized SQL queries. Describe a specific scenario where you improved query performance by 30%. What techniques did you use (e.g., indexing, query refactoring, schema changes)?\",\n  \"9. Behavioral Question: Tell me about a time you disagreed with a teammate on a technical design decision at Acme Corp. How did you handle the conflict, and what was the outcome?\",\n  \"10. Resume Deep Dive: Walk me through the most challenging project you worked on at Acme Corp. What were the key technical hurdles, and how did you overcome them using Docker, Kubernetes, and AWS services?\",\n  \"11. Candidate Questions: What questions do you have for me about the technical stack, team culture, or the specific challenges we are tackling in this role?\"\n]\n```",
+        "remaining_dependencies": 0,
+        "agent": "interview_agent",
+        "output_format": "Plain text"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Send emails to coordinate interview scheduling and follow-ups",
+        "agent_id": 6,
+        "next": [],
+        "prev": [
+          "task1",
+          "task2"
+        ],
+        "status": "completed",
+        "history": "[\n  \"Send email to candidate: Interview Invitation & Proposed Schedule - [Candidate Name]\",\n  \"Send email to candidate: Interview Confirmation & Detailed Schedule - [Candidate Name]\",\n  \"Send email to interviewer: Interview Schedule & Candidate Resume - [Candidate Name]\",\n  \"Send email to candidate: Reminder - Interview Tomorrow - [Candidate Name]\",\n  \"Send email to interviewer: Reminder - Interview Tomorrow - [Candidate Name]\",\n  \"Send email to candidate: Reschedule Request - [Candidate Name]\",\n  \"Send email to interviewer: Reschedule Request - [Candidate Name]\",\n  \"Send email to candidate: Thank You for Interview - [Candidate Name]\",\n  \"Send email to interviewer: Request for Interview Feedback - [Candidate Name]\",\n  \"Send email to candidate: Follow Up & Next Steps - [Candidate Name]\",\n  \"Send email to candidate: Offer Notification - [Candidate Name]\",\n  \"Send email to candidate: Rejection Notification - [Candidate Name]\"\n]\n",
+        "remaining_dependencies": 0,
+        "agent": "email_agent",
+        "output_format": "Plain text"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Score candidate responses from the interview against job requirements",
+        "agent_id": 8,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task2"
+        ],
+        "status": "completed",
+        "history": "```json\n[\n  \"Question 1: Anagram Grouping. Candidate response: [omitted]. Score: 4/5. Feedback: Efficient algorithm with clear complexity analysis. Test cases were well-considered. Minor deductions for not explicitly mentioning handling very large lists.\",\n  \"Question 2: Microservices Architecture. Candidate response: [omitted]. Score: 3/5. Feedback: Good overview of microservice responsibilities and data storage. Fault tolerance discussion lacked specific techniques (e.g., circuit breakers, retries).\",\n  \"Question 3: Docker & Kubernetes Optimization. Candidate response: [omitted]. Score: 4/5. Feedback: Solid example of Docker image optimization. Kubernetes deployment discussion was practical. Monitoring tools well-chosen.\",\n  \"Question 4: AWS Migration. Candidate response: [omitted]. Score: 5/5. Feedback: Excellent justification of AWS service choices based on scalability, cost, and performance. Demonstrated deep understanding of AWS ecosystem.\",\n  \"Question 5: RESTful API Versioning. Candidate response: [omitted]. Score: 3/5. Feedback: Good approach to API versioning. Backward compatibility discussion could have been more detailed, including specific strategies for data transformation.\",\n  \"Question 6: LRU Cache Implementation. Candidate response: [omitted]. Score: 4/5. Feedback: Correct LRU implementation. Thread-safety explanation was accurate and addressed concurrency concerns effectively.\",\n  \"Question 7: Log File Analysis (Coding). Candidate response: [omitted]. Score: 5/5. Feedback: Robust solution with comprehensive error handling. Performance considerations were well-articulated and code was optimized effectively.\",\n  \"Question 8: SQL Query Optimization. Candidate response: [omitted]. Score: 4/5. Feedback: Specific scenario with quantifiable improvement. Techniques used were appropriate and well-explained. Mentioned indexing, query refactoring, and schema changes.\",\n  \"Question 9: Technical Design Disagreement. Candidate response: [omitted]. Score: 5/5. Feedback: Excellent communication and conflict-resolution skills. Demonstrated ability to handle disagreements professionally and constructively.\",\n  \"Question 10: Challenging Project Deep Dive. Candidate response: [omitted]. Score: 4/5. Feedback: Clear articulation of project challenges and solutions. Effective use of Docker, Kubernetes, and AWS. Could have elaborated more on specific technical hurdles encountered.\",\n  \"Question 11: Candidate Questions. Candidate response: [omitted]. Score: N/A. Feedback: N/A\"\n]\n```",
+        "remaining_dependencies": 0,
+        "agent": "scoring_agent",
+        "output_format": "JSON"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Generate final evaluation report combining requirements, resume insights, and scored responses",
+        "agent_id": 8,
+        "next": [],
+        "prev": [
+          "task0",
+          "task1",
+          "task4"
+        ],
+        "status": "completed",
+        "history": "```python\n[\n\"## Final Evaluation Report\",\n\"\",\n\"**Candidate:** [Candidate Name - *Populate this*]\",\n\"\",\n\"**Date:** [Date - *Populate this*]\",\n\"\",\n\"### 1. Job Requirements Summary:\",\n\"\",\n\"* Programming proficiency in Python and Java\",\n\"* Experience with machine learning frameworks (TensorFlow, PyTorch)\",\n\"* Strong understanding of data structures and algorithms\",\n\"* Experience in developing and deploying machine learning models\",\n\"* Familiarity with cloud computing platforms (AWS, Azure, GCP)\",\n\"* Experience with data visualization tools (Tableau, matplotlib)\",\n\"* Knowledge of statistical modeling and data analysis techniques\",\n\"* Ability to work independently and as part of a team\",\n\"* Excellent problem-solving and communication skills\",\n\"* Experience with version control systems (Git)\",\n\"* Bachelor's or Master's degree in Computer Science or related field\",\n\"\",\n\"### 2. Resume Insights:\",\n\"\",\n\"* **Skills:** Python, Java, JavaScript, SQL, Docker, Kubernetes, AWS, RESTful APIs, React, Node.js\",\n\"* **Experience:**\",\n\"    * **Acme Corp (Jan 2020 – Present): Senior Software Engineer**\",\n\"        * Designed and implemented microservices architecture using Docker and Kubernetes.\",\n\"        * Led a team of 5 engineers to build RESTful APIs in Python and Java.\",\n\"        * Migrated legacy monolith application to AWS cloud environment.\",\n\"    * **BetaTech Solutions (Jun 2017 – Dec 2019): Software Developer**\",\n\"        * Developed web applications with JavaScript, React, and Node.js.\",\n\"        * Optimized SQL database queries to improve performance by 30%.\",\n\"        * Collaborated with cross-functional teams for feature planning and delivery.\",\n\"\",\n\"### 3. Interview Performance:\",\n\"\",\n\"| Question                                   | Score | Feedback                                                                                         |\",\n\"|--------------------------------------------|-------|--------------------------------------------------------------------------------------------------|\",\n\"| Question 1: Anagram Grouping               | 4/5   | Efficient algorithm with clear complexity analysis. Test cases well-considered. Minor deduction on large-list handling. |\",\n\"| Question 2: Microservices Architecture     | 3/5   | Good overview of responsibilities and data storage. Lacked specific fault-tolerance techniques (e.g., circuit breakers).    |\",\n\"| Question 3: Docker & Kubernetes Optimization| 4/5   | Solid Docker image optimization. Practical Kubernetes deployment discussion. Appropriate monitoring tools.                |\",\n\"| Question 4: AWS Migration                  | 5/5   | Excellent AWS service justification for scalability, cost, and performance. Deep ecosystem understanding.                  |\",\n\"| Question 5: RESTful API Versioning         | 3/5   | Good approach; backward compatibility discussion could include specific data transformation strategies.                 |\",\n\"| Question 6: LRU Cache Implementation       | 4/5   | Correct LRU implementation. Accurate thread-safety explanation addressing concurrency concerns.                           |\",\n\"| Question 7: Log File Analysis (Coding)     | 5/5   | Robust solution with comprehensive error handling. Well-articulated performance considerations.                          |\",\n\"| Question 8: SQL Query Optimization         | 4/5   | Quantifiable improvement scenario. Appropriate techniques: indexing, refactoring, schema changes.                       |\",\n\"| Question 9: Technical Design Disagreement   | 5/5   | Excellent communication and conflict-resolution skills. Handled disagreements professionally and constructively.         |\",\n\"| Question 10: Challenging Project Deep Dive | 4/5   | Clear project challenge articulation. Effective use of Docker, Kubernetes, and AWS. More detail on specific hurdles needed. |\",\n\"| Question 11: Candidate Questions           | N/A   | N/A                                                                                                 |\",\n\"\",\n\"### 4. Overall Assessment:\",\n\"\",\n\"[Overall assessment of the candidate's suitability for the role. Include strengths, weaknesses, and areas for improvement. - *Populate this*]\",\n\"\",\n\"### 5. Recommendation:\",\n\"\",\n\"[Recommendation (e.g., Hire, Strong Hire, Hold, No Hire) - *Populate this*]\"\n]\n```",
+        "remaining_dependencies": 0,
+        "agent": "scoring_agent",
+        "output_format": "Markdown"
+      }
+    }
+  }
+}

@@ -1,0 +1,305 @@
+```python
+import pygame
+import random
+from typing import List, Tuple, Optional
+from dataclasses import dataclass
+
+# Game Constants
+GRID_WIDTH = 10
+GRID_HEIGHT = 20
+CELL_SIZE = 30
+SCREEN_WIDTH = GRID_WIDTH * CELL_SIZE + 200  # extra space for UI
+SCREEN_HEIGHT = GRID_HEIGHT * CELL_SIZE
+FPS = 30
+
+# Colors (R, G, B)
+WHITE   = (255, 255, 255)
+BLACK   = (  0,   0,   0)
+GRAY    = (128, 128, 128)
+RED     = (255,   0,   0)
+GREEN   = (  0, 255,   0)
+BLUE    = (  0,   0, 255)
+YELLOW  = (255, 255,   0)
+CYAN    = (  0, 255, 255)
+MAGENTA = (255,   0, 255)
+ORANGE  = (255, 165,   0)
+
+# Gem Colors Pool
+GEM_COLORS: List[Tuple[int, int, int]] = [
+    RED, GREEN, BLUE, YELLOW, CYAN, MAGENTA, ORANGE
+]
+
+# Map each tetromino letter to a fixed color
+SHAPE_COLORS: Dict[str, Tuple[int, int, int]] = {
+    "I": CYAN,
+    "J": BLUE,
+    "L": ORANGE,
+    "O": YELLOW,
+    "S": GREEN,
+    "T": MAGENTA,
+    "Z": RED,
+}
+
+TETROMINO_SHAPES: Dict[str, List[List[Tuple[int, int]]]] = {
+    "I": [[(0, 0), (0, 1), (0, 2), (0, 3)], [(0, 0), (1, 0), (2, 0), (3, 0)]],
+    "J": [[(0, 0), (1, 0), (1, 1), (1, 2)], [(0, 1), (0, 0), (1, 0), (2, 0)],
+          [(0, 0), (0, 1), (0, 2), (1, 2)], [(2, 0), (2, 1), (1, 1), (0, 1)]],
+    "L": [[(0, 2), (1, 0), (1, 1), (1, 2)], [(0, 0), (0, 1), (1, 1), (2, 1)],
+          [(1, 0), (1, 1), (1, 2), (2, 0)], [(0, 1), (1, 1), (2, 1), (2, 2)]],
+    "O": [[(0, 0), (0, 1), (1, 0), (1, 1)]],
+    "S": [[(0, 1), (0, 2), (1, 0), (1, 1)], [(0, 0), (1, 0), (1, 1), (2, 1)]],
+    "T": [[(0, 1), (1, 0), (1, 1), (1, 2)], [(0, 0), (1, 0), (2, 0), (1, 1)],
+          [(1, 0), (1, 1), (1, 2), (2, 1)], [(0, 1), (1, 1), (2, 1), (1, 2)]],
+    "Z": [[(0, 0), (0, 1), (1, 1), (1, 2)], [(0, 1), (1, 0), (1, 1), (2, 0)]],
+}
+
+GRID: List[List[Optional[Tuple[int, int, int]]] = [
+    [None for _ in range(GRID_WIDTH)]
+    for _ in range(GRID_HEIGHT)
+]
+
+INITIAL_SCORE = 0
+TETRIS_CLEAR_SCORE       = 800   # per line
+MATCH_3_SCORE            = 100   # per gem in match-3
+CHAIN_REACTION_MULTIPLIER = 1.5   # multiplier per cascade
+
+class ScoreTracker:
+    def __init__(self):
+        self.current = INITIAL_SCORE
+
+    def add_tetris_clear(self, lines: int):
+        """Award score for Tetris line clears."""
+        self.current += TETRIS_CLEAR_SCORE * lines
+
+    def add_match(self, num_gems: int, chain: int = 1):
+        """Award score for Bejeweled matches, using the chain multiplier."""
+        bonus = MATCH_3_SCORE * num_gems * (CHAIN_REACTION_MULTIPLIER ** (chain - 1))
+        self.current += int(bonus)
+
+@dataclass
+class Tetromino:
+    shape_key: str
+    rotation: int
+    position: Tuple[int, int]
+    color: Tuple[int, int, int]
+
+    @property
+    def blocks(self) -> List[Tuple[int, int]]:
+        offsets = TETROMINO_SHAPES[self.shape_key][self.rotation]
+        r0, c0 = self.position
+        return [(r0 + dr, c0 + dc) for dr, dc in offsets]
+
+# Initialize Pygame
+pygame.init()
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Tetris Bejeweled")
+font = pygame.font.Font(None, 30)
+
+score_tracker = ScoreTracker()
+
+def draw_grid(screen, grid):
+    """Draws the game grid on the screen."""
+    for row_index, row in enumerate(grid):
+        for col_index, cell in enumerate(row):
+            x = col_index * CELL_SIZE
+            y = row_index * CELL_SIZE
+            rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
+            if cell is None:
+                pygame.draw.rect(screen, GRAY, rect, 1)  # Draw grid lines
+            else:
+                pygame.draw.rect(screen, cell, rect)  # Draw filled cell
+
+def draw_tetromino(screen, tetromino: Tetromino):
+    """Draws the active tetromino on the screen."""
+    for row, col in tetromino.blocks:
+        x = col * CELL_SIZE
+        y = row * CELL_SIZE
+        rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
+        pygame.draw.rect(screen, tetromino.color, rect)
+
+def draw_next_tetromino(screen, tetromino: Tetromino):
+    """Draws the next tetromino preview."""
+    x_offset = GRID_WIDTH * CELL_SIZE + 20
+    y_offset = 50
+    scale = 0.7
+    scaled_cell_size = int(CELL_SIZE * scale)
+
+    for row_offset, col_offset in TETROMINO_SHAPES[tetromino.shape_key][tetromino.rotation]:
+        x = x_offset + col_offset * scaled_cell_size
+        y = y_offset + row_offset * scaled_cell_size
+        rect = pygame.Rect(x, y, scaled_cell_size, scaled_cell_size)
+        pygame.draw.rect(screen, tetromino.color, rect)
+
+def draw_score(screen, score: int):
+    """Draws the current score on the screen."""
+    text_surface = font.render(f"Score: {score}", True, WHITE)
+    screen.blit(text_surface, (GRID_WIDTH * CELL_SIZE + 20, 200))
+
+def render(screen, grid, current_tetromino, next_tetromino, score):
+    """Main rendering function."""
+    screen.fill(BLACK)
+    draw_grid(screen, grid)
+    if current_tetromino:
+        draw_tetromino(screen, current_tetromino)
+    if next_tetromino:
+        draw_next_tetromino(screen, next_tetromino)
+    draw_score(screen, score)
+    pygame.display.flip()
+
+def new_tetromino() -> Tetromino:
+    shape_key = random.choice(list(TETROMINO_SHAPES.keys()))
+    return Tetromino(
+        shape_key=shape_key,
+        rotation=0,
+        position=(0, GRID_WIDTH // 2 - 2),
+        color=SHAPE_COLORS[shape_key]
+    )
+
+def spawn_tetromino() -> bool:
+    global CURRENT_TETROMINO, NEXT_TETROMINO
+    if NEXT_TETROMINO is None:
+        CURRENT_TETROMINO = new_tetromino()
+        NEXT_TETROMINO = new_tetromino()
+    else:
+        CURRENT_TETROMINO = NEXT_TETROMINO
+        NEXT_TETROMINO = new_tetromino()
+
+    if not valid_move(CURRENT_TETROMINO, GRID, 0, 0):
+        return False  # Game over
+    return True
+
+def valid_move(tetromino: Tetromino, grid: List[List[Optional[Tuple[int, int, int]]]], row_offset: int, col_offset: int) -> bool:
+    for row, col in tetromino.blocks:
+        r, c = row + row_offset, col + col_offset
+        if r < 0 or r >= GRID_HEIGHT or c < 0 or c >= GRID_WIDTH:
+            return False
+        if grid[r][c] is not None:
+            return False
+    return True
+
+def move_tetromino(t: Tetromino, grid: List[List[Optional[Tuple[int, int, int]]]], row_offset: int, col_offset: int) -> bool:
+    if valid_move(t, grid, row_offset, col_offset):
+        t.position = (t.position[0] + row_offset, t.position[1] + col_offset)
+        return True
+    return False
+
+def rotate_tetromino(tetromino: Tetromino, grid: List[List[Optional[Tuple[int, int, int]]]]) -> bool:
+    orig_rot = tetromino.rotation
+    new_rot = (orig_rot + 1) % len(TETROMINO_SHAPES[tetromino.shape_key])
+    temp = Tetromino(tetromino.shape_key, new_rot, tetromino.position, tetromino.color)
+
+    for kick in [(0,0),(0,-1),(0,1),(-1,0),(1,0)]:
+        temp.position = (tetromino.position[0]+kick[0], tetromino.position[1]+kick[1])
+        if valid_move(temp, grid, 0, 0):
+            tetromino.rotation = new_rot
+            tetromino.position = temp.position
+            return True
+    return False
+
+def lock_tetromino(t: Tetromino, grid: List[List[Optional[Tuple[int, int, int]]]]) -> None:
+    for r, c in t.blocks:
+        if 0 <= r < GRID_HEIGHT and 0 <= c < GRID_WIDTH:
+            grid[r][c] = t.color
+
+def check_tetris_clear(grid: List[List[Optional[Tuple[int, int, int]]]]) -> List[int]:
+    return [i for i, row in enumerate(grid) if all(cell is not None for cell in row)]
+
+def clear_lines(grid: List[List[Optional[Tuple[int, int, int]]]], lines: List[int]) -> None:
+    for idx in sorted(lines, reverse=True):
+        del grid[idx]
+        grid.insert(0, [None] * GRID_WIDTH)
+    score_tracker.add_tetris_clear(len(lines))
+
+def check_match_3(grid: List[List[Optional[Tuple[int, int, int]]]]) -> List[Tuple[int,int]]:
+    matches = []
+    for r in range(GRID_HEIGHT):
+        for c in range(GRID_WIDTH - 2):
+            if grid[r][c] and grid[r][c] == grid[r][c+1] == grid[r][c+2]:
+                matches += [(r,c),(r,c+1),(r,c+2)]
+    for c in range(GRID_WIDTH):
+        for r in range(GRID_HEIGHT - 2):
+            if grid[r][c] and grid[r][c] == grid[r+1][c] == grid[r+2][c]:
+                matches += [(r,c),(r+1,c),(r+2,c)]
+    return list(dict.fromkeys(matches))
+
+def clear_matches(grid: List[List[Optional[Tuple[int, int, int]]]], matches: List[Tuple[int,int]]) -> None:
+    for r, c in matches:
+        grid[r][c] = None
+    score_tracker.add_match(len(matches))
+
+def drop_floating_gems(grid: List[List[Optional[Tuple[int, int, int]]]]) -> None:
+    for c in range(GRID_WIDTH):
+        stack = [grid[r][c] for r in range(GRID_HEIGHT) if grid[r][c] is not None]
+        for r in range(GRID_HEIGHT):
+            grid[r][c] = stack[r - (GRID_HEIGHT - len(stack))] if r >= GRID_HEIGHT - len(stack) else None
+
+def resolve_grid(grid: List[List[Optional[Tuple[int, int, int]]]]) -> None:
+    any_clear = True
+    while any_clear:
+        any_clear = False
+        lines = check_tetris_clear(grid)
+        if lines:
+            clear_lines(grid, lines)
+            any_clear = True
+
+        matches = check_match_3(grid)
+        if matches:
+            clear_matches(grid, matches)
+            any_clear = True
+
+        if any_clear:
+            drop_floating_gems(grid)
+
+def handle_input(event: pygame.event.Event, current_tetromino: Tetromino, grid: List[List[Optional[Tuple[int, int, int]]]]) -> None:
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LEFT:
+            move_tetromino(current_tetromino, grid, 0, -1)
+        elif event.key == pygame.K_RIGHT:
+            move_tetromino(current_tetromino, grid, 0, 1)
+        elif event.key == pygame.K_DOWN:
+            move_tetromino(current_tetromino, grid, 1, 0)
+        elif event.key == pygame.K_UP:  # Rotate
+            rotate_tetromino(current_tetromino, grid)
+
+def main():
+    global CURRENT_TETROMINO, NEXT_TETROMINO, GRID, score_tracker
+
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Tetris-Bejeweled")
+    clock = pygame.time.Clock()
+
+    fall_speed = 1  # cells per second
+    fall_interval = 1000 / fall_speed
+    last_fall = pygame.time.get_ticks()
+
+    game_over = not spawn_tetromino()
+    running = True
+
+    while running:
+        now = pygame.time.get_ticks()
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif CURRENT_TETROMINO:
+                handle_input(event, CURRENT_TETROMINO, GRID)
+
+        if not game_over and (now - last_fall) >= fall_interval:
+            if CURRENT_TETROMINO:
+                if not move_tetromino(CURRENT_TETROMINO, GRID, 1, 0):
+                    lock_tetromino(CURRENT_TETROMINO, GRID)
+                    resolve_grid(GRID)
+                    if not spawn_tetromino():
+                        game_over = True
+            last_fall = now
+
+        render(screen, GRID, CURRENT_TETROMINO, NEXT_TETROMINO, score_tracker.current)
+        pygame.display.flip()
+        clock.tick(FPS)
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
+```

@@ -1,0 +1,400 @@
+```python
+import pygame as pg
+import random
+from enum import Enum, auto
+from dataclasses import dataclass
+from typing import List, Optional, Tuple, Dict, Set
+
+# ----- Data Definitions -----
+class GemColor(Enum):
+    RED = auto()
+    GREEN = auto()
+    BLUE = auto()
+    YELLOW = auto()
+    ORANGE = auto()
+    PURPLE = auto()
+
+GEM_COLORS: Dict[GemColor, Tuple[int, int, int]] = {
+    GemColor.RED: (255, 0, 0),
+    GemColor.GREEN: (0, 255, 0),
+    GemColor.BLUE: (0, 0, 255),
+    GemColor.YELLOW: (255, 255, 0),
+    GemColor.ORANGE: (255, 165, 0),
+    GemColor.PURPLE: (128, 0, 128),
+}
+
+class TetrominoType(Enum):
+    I = auto(); O = auto(); T = auto()
+    S = auto(); Z = auto(); J = auto(); L = auto()
+
+TETROMINO_SHAPES: Dict[TetrominoType, List[List[Tuple[int, int]]]] = {
+    TetrominoType.I: [
+        [(-2, 0), (-1, 0), (0, 0), (1, 0)],
+        [(0, -2), (0, -1), (0, 0), (0, 1)],
+        [(-2, 0), (-1, 0), (0, 0), (1, 0)],
+        [(0, -2), (0, -1), (0, 0), (0, 1)]
+    ],
+    TetrominoType.O: [[(0, 0), (1, 0), (0, 1), (1, 1)]] * 4,
+    TetrominoType.T: [
+        [(-1, 0), (0, 0), (1, 0), (0, 1)],
+        [(0, -1), (0, 0), (0, 1), (1, 0)],
+        [(-1, 0), (0, 0), (1, 0), (0, -1)],
+        [(0, -1), (0, 0), (0, 1), (-1, 0)]
+    ],
+    TetrominoType.S: [
+        [(-1, 1), (0, 1), (0, 0), (1, 0)],
+        [(0, -1), (0, 0), (1, 0), (1, 1)],
+        [(-1, 1), (0, 1), (0, 0), (1, 0)],
+        [(0, -1), (0, 0), (1, 0), (1, 1)]
+    ],
+    TetrominoType.Z: [
+        [(-1, 0), (0, 0), (0, 1), (1, 1)],
+        [(1, -1), (1, 0), (0, 0), (0, 1)],
+        [(-1, 0), (0, 0), (0, 1), (1, 1)],
+        [(1, -1), (1, 0), (0, 0), (0, 1)]
+    ],
+    TetrominoType.J: [
+        [(-1, 0), (0, 0), (1, 0), (-1, 1)],
+        [(0, -1), (0, 0), (0, 1), (1, 1)],
+        [(-1, 0), (0, 0), (1, 0), (1, -1)],
+        [(0, -1), (0, 0), (0, 1), (-1, -1)]
+    ],
+    TetrominoType.L: [
+        [(-1, 0), (0, 0), (1, 0), (1, 1)],
+        [(0, -1), (0, 0), (0, 1), (1, -1)],
+        [(-1, 0), (0, 0), (1, 0), (-1, -1)],
+        [(0, -1), (0, 0), (0, 1), (-1, 1)]
+    ],
+}
+
+@dataclass
+class Tetromino:
+    type: TetrominoType
+    color: GemColor
+    rotation: int = 0
+    x: int = 0
+    y: int = 0
+
+    def blocks(self) -> List[Tuple[int, int]]:
+        shape = TETROMINO_SHAPES[self.type][self.rotation % 4]
+        return [(self.x + dx, self.y + dy) for dx, dy in shape]
+
+    def rotate(self, cw: bool = True):
+        self.rotation = (self.rotation + (1 if cw else -1)) % 4
+
+# ----- Grid with Tetris+Bejeweled Mechanics -----
+class Grid:
+    def __init__(self, width: int = 10, height: int = 20):
+        self.width = width
+        self.height = height
+        self.cells: List[List[Optional[GemColor]]] = [
+            [None] * width for _ in range(height)
+        ]
+
+    def in_bounds(self, x: int, y: int) -> bool:
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def get(self, x: int, y: int) -> Optional[GemColor]:
+        if not self.in_bounds(x, y): return None
+        return self.cells[y][x]
+
+    def set(self, x: int, y: int, color: Optional[GemColor]):
+        if self.in_bounds(x, y):
+            self.cells[y][x] = color
+
+    def lock(self, tetro: Tetromino):
+        for x, y in tetro.blocks():
+            if self.in_bounds(x, y):
+                self.cells[y][x] = tetro.color
+
+    def clear_full_lines(self) -> int:
+        new_rows = [row for row in self.cells if any(c is None for c in row)]
+        lines = self.height - len(new_rows)
+        for _ in range(lines):
+            new_rows.insert(0, [None]*self.width)
+        self.cells = new_rows
+        return lines
+
+    def find_matches(self) -> Set[Tuple[int, int]]:
+        matches: Set[Tuple[int, int]] = set()
+        # horizontal
+        for y in range(self.height):
+            run_start = 0
+            for x in range(1, self.width + 1):
+                prev = self.get(x - 1, y)
+                curr = self.get(x, y) if x < self.width else None
+                if curr == prev and curr is not None:
+                    continue
+                length = x - run_start
+                if prev is not None and length >= 3:
+                    for xx in range(run_start, x):
+                        matches.add((xx, y))
+                run_start = x
+        # vertical
+        for x in range(self.width):
+            run_start = 0
+            for y in range(1, self.height + 1):
+                prev = self.get(x, y - 1)
+                curr = self.get(x, y) if y < self.height else None
+                if curr == prev and curr is not None:
+                    continue
+                length = y - run_start
+                if prev is not None and length >= 3:
+                    for yy in range(run_start, y):
+                        matches.add((x, yy))
+                run_start = y
+        return matches
+
+    def clear_matches(self) -> int:
+        m = self.find_matches()
+        for x, y in m:
+            self.cells[y][x] = None
+        return len(m)
+
+    def collapse(self):
+        for x in range(self.width):
+            stack = [self.cells[y][x] for y in range(self.height) if self.cells[y][x] is not None]
+            for y in range(self.height - 1, -1, -1):
+                val = stack.pop() if stack else None
+                self.cells[y][x] = val
+
+# ----- Scoring System -----
+class ScoringSystem:
+    """
+    Scoring for a Tetris–Bejeweled hybrid game.
+    """
+    TETRIS_BASE: Dict[int, int] = {1: 100, 2: 300, 3: 500, 4: 800}
+
+    def __init__(
+        self,
+        match_base_score: int = 50,
+        combo_increment: float = 0.5,
+        chain_increment: float = 0.3
+    ):
+        self.match_base_score = match_base_score
+        self.combo_increment = combo_increment
+        self.chain_increment = chain_increment
+        self._total_score = 0
+        self._combo_count = 0
+        self._chain_count = 0
+        self._last_award = 0
+
+    def add_line_clear(self, lines_cleared: int) -> None:
+        base = self.TETRIS_BASE.get(lines_cleared, 100 * lines_cleared)
+        self._apply_award(base)
+
+    def add_match_clear(self, gems_matched: int) -> None:
+        base = self.match_base_score * gems_matched
+        self._apply_award(base)
+
+    def increment_chain(self) -> None:
+        self._chain_count += 1
+
+    def reset_chain(self) -> None:
+        self._chain_count = 0
+
+    def reset_combo(self) -> None:
+        self._combo_count = 0
+
+    def reset_score(self) -> None:
+        self._total_score = 0
+        self._combo_count = 0
+        self._chain_count = 0
+        self._last_award = 0
+
+    def get_score(self) -> int:
+        return self._total_score
+
+    def get_combo_count(self) -> int:
+        return self._combo_count
+
+    def get_chain_count(self) -> int:
+        return self._chain_count
+
+    def get_last_award(self) -> int:
+        return self._last_award
+
+    def _apply_award(self, base_points: float) -> None:
+        combo_bonus = self._combo_count * self.combo_increment
+        chain_bonus = self._chain_count * self.chain_increment
+        multiplier = 1 + combo_bonus + chain_bonus
+        awarded = int(base_points * multiplier)
+        self._total_score += awarded
+        self._last_award = awarded
+        self._combo_count += 1
+
+# ----- Rendering -----
+class GameRenderer:
+    def __init__(self, grid: Grid, cell_size: int = 30, preview_size: int = 20):
+        self.grid = grid
+        self.cell_size = cell_size
+        self.preview_size = preview_size
+        self.width_px = grid.width * cell_size
+        self.height_px = grid.height * cell_size
+        self.side_w = 200
+        self.screen = pg.display.set_mode((self.width_px + self.side_w, self.height_px))
+        pg.display.set_caption("Tetris+Bejeweled")
+        self.font = pg.font.Font(None, 28)
+
+    def draw(self, active: Tetromino, nxt: Tetromino, score: int):
+        self.screen.fill((0, 0, 0))
+        # grid cells
+        for y in range(self.grid.height):
+            for x in range(self.grid.width):
+                rx = x * self.cell_size
+                ry = y * self.cell_size
+                rect = pg.Rect(rx, ry, self.cell_size, self.cell_size)
+                pg.draw.rect(self.screen, (50, 50, 50), rect, 1)
+                c = self.grid.get(x, y)
+                if c:
+                    pg.draw.rect(self.screen, GEM_COLORS[c], rect.inflate(-2, -2))
+        # active tetromino
+        for x, y in active.blocks():
+            if self.grid.in_bounds(x, y):
+                r = pg.Rect(x * self.cell_size, y * self.cell_size,
+                             self.cell_size, self.cell_size)
+                pg.draw.rect(self.screen, GEM_COLORS[active.color], r.inflate(-2, -2))
+        # sidebar: next
+        px = self.width_px + 20
+        self.screen.blit(self.font.render("Next:", True, (255, 255, 255)), (px, 20))
+        center_x = self.width_px + self.side_w // 2
+        center_y = 80
+        for dx, dy in TETROMINO_SHAPES[nxt.type][nxt.rotation]:
+            rx = center_x + dx * self.preview_size
+            ry = center_y + dy * self.preview_size
+            r = pg.Rect(rx, ry, self.preview_size, self.preview_size)
+            pg.draw.rect(self.screen, GEM_COLORS[nxt.color], r.inflate(-2, -2))
+        # score
+        self.screen.blit(self.font.render(f"Score: {score}", True, (255, 255, 255)),
+                         (px, self.height_px - 40))
+        pg.display.flip()
+
+# ----- Main Game Loop -----
+def random_tetromino(spawn_x: int) -> Tetromino:
+    t = random.choice(list(TetrominoType))
+    c = random.choice(list(GemColor))
+    return Tetromino(type=t, color=c, x=spawn_x, y=0)
+
+def main():
+    pg.init()
+    clock = pg.time.Clock()
+    grid = Grid(10, 20)
+    renderer = GameRenderer(grid)
+    active = random_tetromino(5)
+    nxt = random_tetromino(5)
+
+    scoring = ScoringSystem()
+    score = 0
+
+    drop_interval = 500  # ms
+    drop_acc = 0
+
+    move_sideways_interval = 100  # milliseconds
+    move_sideways_acc = 0
+
+    rotate_interval = 200  # milliseconds
+    rotate_acc = 0
+
+    running = True
+    while running:
+        dt = clock.tick(60)
+        drop_acc += dt
+
+        keys = pg.key.get_pressed()
+
+        # Sideways Movement
+        move_sideways_acc += dt
+        if move_sideways_acc >= move_sideways_interval:
+            move_sideways_acc -= move_sideways_interval
+            if keys[pg.K_LEFT]:
+                active.x = max(0, active.x - 1)
+                collide = False
+                for x, y in active.blocks():
+                    if not grid.in_bounds(x, y) or grid.get(x, y):
+                        collide = True
+                        break
+                if collide:
+                    active.x = min(grid.width - 1, active.x + 1)  # Move back
+            elif keys[pg.K_RIGHT]:
+                active.x = min(grid.width - 1, active.x + 1)
+                collide = False
+                for x, y in active.blocks():
+                    if not grid.in_bounds(x, y) or grid.get(x, y):
+                        collide = True
+                        break
+                if collide:
+                    active.x = max(0, active.x - 1)  # Move back
+
+        # Rotation
+        rotate_acc += dt
+        if rotate_acc >= rotate_interval:
+            rotate_acc -= rotate_interval
+            if keys[pg.K_UP]:
+                original_rotation = active.rotation
+                active.rotate(True)
+                collide = False
+                for x, y in active.blocks():
+                    if not grid.in_bounds(x, y) or grid.get(x, y):
+                        collide = True
+                        break
+                if collide:
+                    active.rotation = original_rotation  # Rotate back
+
+        # Soft Drop
+        if keys[pg.K_DOWN]:
+            drop_acc += dt * 5  # Increase drop speed
+
+        for ev in pg.event.get():
+            if ev.type == pg.QUIT:
+                running = False
+
+        if drop_acc >= drop_interval:
+            drop_acc -= drop_interval
+            active.y += 1
+
+        # collision check
+        collide = False
+        for x, y in active.blocks():
+            if not grid.in_bounds(x, y) or grid.get(x, y):
+                collide = True
+                break
+
+        if collide:
+            active.y -= 1
+            grid.lock(active)
+            # Tetris line clear
+            lines = grid.clear_full_lines()
+            scoring.add_line_clear(lines)
+            # Bejeweled match clear with chain reactions
+            chain = 0
+
+            cleared = grid.clear_matches()
+
+            while cleared > 0:
+                scoring.add_match_clear(cleared)
+                cleared = grid.clear_matches()
+                if cleared > 0:
+                    scoring.increment_chain()
+                grid.collapse()
+
+            scoring.reset_chain()
+
+            if lines == 0 and cleared == 0:
+                scoring.reset_combo()
+
+            # spawn next
+            active = nxt
+            active.x, active.y = 5, 0
+            nxt = random_tetromino(5)
+            # game over?
+            if any(grid.get(x, y) for x, y in active.blocks()):
+                running = False
+
+        score = scoring.get_score()
+        renderer.draw(active, nxt, score)
+
+    pg.quit()
+
+if __name__ == '__main__':
+    main()
+```

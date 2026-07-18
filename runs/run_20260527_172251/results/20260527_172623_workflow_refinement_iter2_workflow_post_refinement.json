@@ -1,0 +1,152 @@
+{
+  "description": "Workflow state after refinement process",
+  "timestamp": "2026-05-27T17:26:23.426394",
+  "task_id": "workflow_refinement",
+  "iteration": 2,
+  "data": {
+    "refined_workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Extract and structure key requirements and evaluation criteria from the job description, outputting a JSON object with fields: requirements, evaluation_criteria.",
+        "agent_id": 4,
+        "next": [
+          "task2",
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```json\n{\n  \"requirements\": [\n    \"Analyze job descriptions\",\n    \"Analyze candidate resumes\",\n    \"Conduct technical interviews\",\n    \"Send emails\",\n    \"Score candidate responses\",\n    \"Generate final evaluation reports\"\n  ],\n  \"evaluation_criteria\": [\n    \"Accuracy of job description analysis\",\n    \"Accuracy of candidate resume analysis\",\n    \"Effectiveness of technical interview\",\n    \"Timeliness and relevance of emails\",\n    \"Accuracy and fairness of candidate scoring\",\n    \"Completeness and clarity of final evaluation report\"\n  ]\n}\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "JSON"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Analyze the candidate's resume to extract skills, experience, and qualifications, outputting a JSON object with fields: skills, experience, qualifications.",
+        "agent_id": 5,
+        "next": [
+          "task2",
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```json\n{\n  \"skills\": [\n    \"Python\",\n    \"Data Analysis\",\n    \"Machine Learning\",\n    \"SQL\",\n    \"Data Mining\",\n    \"Statistical Modeling\",\n    \"Data Visualization\",\n    \"R\",\n    \"Tableau\",\n    \"Communication\",\n    \"Problem-solving\"\n  ],\n  \"experience\": [\n    {\n      \"title\": \"Data Scientist\",\n      \"company\": \"ABC Company\",\n      \"years\": \"2018-2022\",\n      \"description\": \"Developed machine learning models for fraud detection and customer churn prediction. Improved model accuracy by 15%. Led a team of junior data scientists.\"\n    },\n    {\n      \"title\": \"Data Analyst\",\n      \"company\": \"XYZ Corporation\",\n      \"years\": \"2016-2018\",\n      \"description\": \"Performed data analysis and visualization to identify trends and insights. Created reports to communicate findings to stakeholders.\"\n    }\n  ],\n  \"qualifications\": [\n    \"Master's degree in Data Science\",\n    \"Bachelor's degree in Statistics\",\n    \"Certified Data Scientist\"\n  ]\n}\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "JSON"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Schedule the technical interview and send invitation emails to the candidate and interviewers",
+        "agent_id": 6,
+        "next": [
+          "task4"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "email_agent",
+        "output_format": "Plain text"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Generate a tailored set of technical interview questions based on job requirements and candidate profile",
+        "agent_id": 7,
+        "next": [
+          "task4"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "interview_agent",
+        "output_format": "Plain text"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Conduct the technical interview, present questions, and record candidate responses",
+        "agent_id": 7,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task2",
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 2,
+        "agent": "interview_agent",
+        "output_format": "JSON"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Score the recorded interview responses using the extracted evaluation criteria",
+        "agent_id": 8,
+        "next": [
+          "task6"
+        ],
+        "prev": [
+          "task4"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "scoring_agent",
+        "output_format": "JSON"
+      },
+      "task6": {
+        "id": "task6",
+        "objective": "Compile the scored results and observations into a final evaluation report",
+        "agent_id": 8,
+        "next": [],
+        "prev": [
+          "task5"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "scoring_agent",
+        "output_format": "Plain text"
+      }
+    },
+    "changes_summary": {
+      "tasks_before": 7,
+      "tasks_after": 7,
+      "net_change": 0
+    }
+  }
+}

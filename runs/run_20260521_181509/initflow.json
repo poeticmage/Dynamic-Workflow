@@ -1,0 +1,120 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement core data structures: grid representation, gem storage, and tetromino shape definitions",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Structures Engineer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Build tetromino generation and rotation logic with next-piece queue",
+            "agent_id": 1,
+            "next": [
+                "task2",
+                "task6"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Logic Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop keyboard control module: move, rotate, drop tetrominoes",
+            "agent_id": 2,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Input Handler Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Implement Tetris line-clearing mechanics: detect full rows and clear them",
+            "agent_id": 3,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetris Mechanics Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement Bejeweled match-3 detection and clearing with chain reaction logic",
+            "agent_id": 4,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Match-3 Mechanics Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Create scoring system: award points for lines, matches, chains, and bonuses",
+            "agent_id": 5,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Scoring System Developer",
+            "output_format": "Python code"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Develop Pygame-based GUI and main game loop: render grid, animations, score, next-preview",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task1",
+                "task2",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "GUI Developer",
+            "output_format": "Python code"
+        }
+    }
+}

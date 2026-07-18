@@ -1,0 +1,340 @@
+```python
+import pygame
+import random
+
+# Constants
+GRID_WIDTH = 10
+GRID_HEIGHT = 20
+BLOCK_SIZE = 30
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 800
+GRID_OFFSET_X = 150
+GRID_OFFSET_Y = 50
+SCORE_X = 10
+SCORE_Y = 10
+PREVIEW_AREA_WIDTH = 150
+PREVIEW_AREA_HEIGHT = 150
+PREVIEW_X = SCREEN_WIDTH - PREVIEW_AREA_WIDTH - 10
+PREVIEW_Y = 10
+LATERAL_SPEED = 10    # Moves per second
+DROP_SPEED = 1        # Moves per second
+SOFT_DROP_SPEED = 20  # Moves per second
+FALL_SPEED = 500      # ms per cell
+CLEAR_FLASH_SPEED = 200  # ms per flash toggle
+CLEAR_DURATION = 600     # total ms of flashing
+
+# Colors
+COLORS = {
+    "red":     (255, 0, 0),
+    "green":   (0, 255, 0),
+    "blue":    (0, 0, 255),
+    "yellow":  (255, 255, 0),
+    "magenta": (255, 0, 255),
+    "cyan":    (0, 255, 255),
+    "white":   (255, 255, 255),
+    "gray":    (128, 128, 128),
+    "black":   (0, 0, 0)
+}
+
+# Map tetromino shapes to gem colors
+SHAPE_COLORS = {
+    "I": COLORS["cyan"],
+    "J": COLORS["blue"],
+    "L": COLORS["yellow"],
+    "O": COLORS["yellow"],
+    "S": COLORS["green"],
+    "T": COLORS["magenta"],
+    "Z": COLORS["red"],
+}
+
+# Tetromino definitions
+TETROMINOES = {
+    "I": [
+        [(0, 0), (1, 0), (2, 0), (3, 0)],
+        [(1, 0), (1, 1), (1, 2), (1, 3)]
+    ],
+    "J": [
+        [(0, 0), (1, 0), (2, 0), (2, 1)],
+        [(1, 0), (1, 1), (1, 2), (0, 2)],
+        [(0, 1), (1, 1), (2, 1), (0, 0)],
+        [(1, 0), (1, 1), (1, 2), (2, 0)]
+    ],
+    "L": [
+        [(0, 0), (1, 0), (2, 0), (0, 1)],
+        [(0, 0), (0, 1), (0, 2), (1, 2)],
+        [(2, 0), (0, 1), (1, 1), (2, 1)],
+        [(0, 0), (1, 0), (1, 1), (1, 2)]
+    ],
+    "O": [
+        [(0, 0), (1, 0), (0, 1), (1, 1)]
+    ],
+    "S": [
+        [(1, 0), (2, 0), (0, 1), (1, 1)],
+        [(0, 0), (0, 1), (1, 1), (1, 2)]
+    ],
+    "T": [
+        [(0, 0), (1, 0), (2, 0), (1, 1)],
+        [(1, 0), (0, 1), (1, 1), (1, 2)],
+        [(1, 0), (0, 1), (1, 1), (2, 1)],
+        [(0, 0), (0, 1), (1, 1), (0, 2)]
+    ],
+    "Z": [
+        [(0, 0), (1, 0), (1, 1), (2, 1)],
+        [(1, 0), (0, 1), (1, 1), (0, 2)]
+    ],
+}
+
+
+class Tetromino:
+    def __init__(self, shape):
+        self.shape = shape
+        self.color = SHAPE_COLORS[shape]
+        self.rotation = 0
+        self.x = GRID_WIDTH // 2 - 2
+        self.y = 0
+
+    def current_blocks(self):
+        coords = TETROMINOES[self.shape][self.rotation % len(TETROMINOES[self.shape])]
+        return [(self.x + dx, self.y + dy) for dx, dy in coords]
+
+    def copy(self):
+        return Tetromino(self.shape)
+
+def check_collision(grid, tetromino):
+    for x, y in tetromino.current_blocks():
+        if x < 0 or x >= GRID_WIDTH or y >= GRID_HEIGHT or (y >= 0 and grid[y][x] is not None):
+            return True
+    return False
+
+def lock_tetromino(grid, tetromino):
+    for x, y in tetromino.current_blocks():
+        if 0 <= x < GRID_WIDTH and 0 <= y < GRID_HEIGHT:
+            grid[y][x] = tetromino.color
+
+def clear_full_lines(grid):
+    removed = 0
+    new_grid = []
+    for row in grid:
+        if all(cell is not None for cell in row):
+            removed += 1
+        else:
+            new_grid.append(row)
+    for _ in range(removed):
+        new_grid.insert(0, [None] * GRID_WIDTH)
+    return new_grid, removed
+
+def find_matches(grid):
+    matches = set()
+    # horizontal
+    for y in range(GRID_HEIGHT):
+        x = 0
+        while x < GRID_WIDTH - 2:
+            c = grid[y][x]
+            if c and grid[y][x + 1] == c and grid[y][x + 2] == c:
+                span = 3
+                while x + span < GRID_WIDTH and grid[y][x + span] == c:
+                    span += 1
+                for i in range(span):
+                    matches.add((x + i, y))
+                x += span
+            else:
+                x += 1
+    # vertical
+    for x in range(GRID_WIDTH):
+        y = 0
+        while y < GRID_HEIGHT - 2:
+            c = grid[y][x]
+            if c and grid[y + 1][x] == c and grid[y + 2][x] == c:
+                span = 3
+                while y + span < GRID_HEIGHT and grid[y + span][x] == c:
+                    span += 1
+                for i in range(span):
+                    matches.add((x, y + i))
+                y += span
+            else:
+                y += 1
+    return matches
+
+def apply_gravity(grid):
+    for x in range(GRID_WIDTH):
+        stack = [grid[y][x] for y in range(GRID_HEIGHT) if grid[y][x] is not None]
+        for y in range(GRID_HEIGHT - 1, -1, -1):
+            if stack:
+                grid[y][x] = stack.pop()
+            else:
+                grid[y][x] = None
+
+def handle_clearing(grid):
+    """Handle chain reactions of match-3 and line clears."""
+    total_score = 0
+    chain = 1
+
+    while True:
+        # 1) Check and clear gem matches
+        matches = find_matches(grid)
+        if matches:
+            clear_cells(grid, matches)
+            apply_gravity(grid)
+            # Scoring: 10 points per gem
+            pts = len(matches) * 10 * chain
+            total_score += pts
+            chain += 1
+            continue
+
+        # 2) If no gem matches, check line clears
+        full_lines = find_full_lines(grid)
+        if full_lines:
+            clear_full_lines(grid, full_lines)
+            pts = len(full_lines) * 100 * chain
+            total_score += pts
+            chain += 1
+            continue
+
+        break
+
+    return total_score
+
+def draw_grid(screen, grid):
+    for y, row in enumerate(grid):
+        for x, cell in enumerate(row):
+            rect = pygame.Rect(GRID_OFFSET_X + x * BLOCK_SIZE, GRID_OFFSET_Y + y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+            if cell:
+                pygame.draw.rect(screen, cell, rect)
+            pygame.draw.rect(screen, COLORS["gray"], rect, 1)
+
+def draw_score(screen, score, font):
+    text = font.render(f"Score: {score}", True, COLORS["white"])
+    screen.blit(text, (SCORE_X, SCORE_Y))
+
+def draw_next(screen, next_piece, font):
+    pygame.draw.rect(screen, COLORS["gray"], (PREVIEW_X, PREVIEW_Y, PREVIEW_AREA_WIDTH, PREVIEW_AREA_HEIGHT), 2)
+    center_x = PREVIEW_X + PREVIEW_AREA_WIDTH // 2
+    center_y = PREVIEW_Y + PREVIEW_AREA_HEIGHT // 2
+    shape = TETROMINOES[next_piece.shape][0]
+    max_w = max(x for x, y in shape) + 1
+    max_h = max(y for x, y in shape) + 1
+    scale = min(PREVIEW_AREA_WIDTH / (max_w * BLOCK_SIZE), PREVIEW_AREA_HEIGHT / (max_h * BLOCK_SIZE))
+    for dx, dy in shape:
+        px = center_x + (dx - max_w / 2) * BLOCK_SIZE * scale
+        py = center_y + (dy - max_h / 2) * BLOCK_SIZE * scale
+        rect = pygame.Rect(px, py, BLOCK_SIZE * scale, BLOCK_SIZE * scale)
+        pygame.draw.rect(screen, next_piece.color, rect)
+
+def game_over_screen(screen, font):
+    text = font.render("Game Over! Press any key to restart.", True, COLORS["red"])
+    rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+    screen.blit(text, rect)
+    pygame.display.flip()
+
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            if event.type == pygame.KEYDOWN:
+                return True
+
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Tetris-Bejeweled Fusion")
+    clock = pygame.time.Clock()
+    font = pygame.font.Font(None, 36)
+
+    grid = [[None for _ in range(GRID_WIDTH)] for _ in range(GRID_HEIGHT)]
+    score = 0
+
+    current = Tetromino(random.choice(list(TETROMINOES.keys())))
+    next_piece = Tetromino(random.choice(list(TETROMINOES.keys())))
+    game_over = False
+
+    key_left = key_right = key_down = False
+    fall_time = 0
+    fall_speed = DROP_SPEED
+    lateral_time = 0
+    running = True
+
+    while running:
+        dt = clock.tick(60) / 1000.0  # seconds
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    key_left = True
+                elif event.key == pygame.K_RIGHT:
+                    key_right = True
+                elif event.key == pygame.K_DOWN:
+                    key_down = True
+                elif event.key == pygame.K_UP:
+                    current.rotate()
+                elif event.key == pygame.K_SPACE:
+                    current.hard_drop()
+                    lock_tetromino(grid, current)
+                    score += handle_clearing(grid)
+                    current = next_piece
+                    next_piece = Tetromino(random.choice(list(TETROMINOES.keys())))
+                    current.x = GRID_WIDTH // 2 - 2
+                    current.y = 0
+                    if not current.is_valid_position(current.x, current.y, current.rotation):
+                        game_over = True
+                        running = False
+
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT:
+                    key_left = False
+                elif event.key == pygame.K_RIGHT:
+                    key_right = False
+                elif event.key == pygame.K_DOWN:
+                    key_down = False
+
+        # Lateral move timing
+        lateral_time += dt
+        if lateral_time >= 1.0 / LATERAL_SPEED:
+            if key_left:
+                current.move(-1, 0)
+            elif key_right:
+                current.move(1, 0)
+            lateral_time = 0
+
+        # Gravity
+        fall_time += dt
+        if fall_time >= 1.0 / fall_speed:
+            if not current.move(0, 1):
+                lock_tetromino(grid, current)
+                score += handle_clearing(grid)
+                current = next_piece
+                next_piece = Tetromino(random.choice(list(TETROMINOES.keys())))
+                current.x = GRID_WIDTH // 2 - 2
+                current.y = 0
+                if not current.is_valid_position(current.x, current.y, current.rotation):
+                    game_over = True
+                    running = False
+            fall_time = 0
+
+        # Render
+        screen.fill(COLORS["black"])
+        draw_grid(screen, grid)
+        for x, y in current.current_blocks():
+            if 0 <= x < GRID_WIDTH and 0 <= y < GRID_HEIGHT:
+                pygame.draw.rect(screen, current.color, (GRID_OFFSET_X + x * BLOCK_SIZE, GRID_OFFSET_Y + y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE))
+
+        draw_score(screen, score, font)
+        draw_next(screen, next_piece, font)
+
+        if game_over:
+            if game_over_screen(screen, font):
+                grid = [[None for _ in range(GRID_WIDTH)] for _ in range(GRID_HEIGHT)]
+                score = 0
+                current = Tetromino(random.choice(list(TETROMINOES.keys())))
+                next_piece = Tetromino(random.choice(list(TETROMINOES.keys())))
+                game_over = False
+
+        pygame.display.flip()
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
+```

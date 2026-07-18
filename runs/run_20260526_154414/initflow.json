@@ -1,0 +1,103 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Create the base HTML template for the conference website, including DOCTYPE, <head> with meta tags, linked CSS file reference, and placeholder <div> containers for header, navigation, and content sections.",
+            "agent_id": 1,
+            "next": [
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "research_agent",
+            "output_format": "HTML"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Develop the CSS stylesheet defining typography, layout grid, header/nav styling, section containers, table styles for schedule, and map container styling.",
+            "agent_id": 2,
+            "next": [
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "CSS"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Generate the Home page HTML content: include conference name (ICLR2025), dates, location, organizer info, and site navigation menu.",
+            "agent_id": 1,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "research_agent",
+            "output_format": "HTML"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Generate the Schedule section HTML: create a multi-day table (April 27 \u2013 May 1, 2025) with placeholder session titles and times.",
+            "agent_id": 1,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "research_agent",
+            "output_format": "HTML"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Generate the Venue section HTML: include venue address (San Francisco, CA, USA) and embed a map iframe pointing to the conference location.",
+            "agent_id": 1,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "research_agent",
+            "output_format": "HTML"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Assemble a .ppt slide deck: one slide per section (Home, Schedule, Venue), embedding the generated HTML snippets and linked CSS content into appropriately formatted slides.",
+            "agent_id": 1,
+            "next": [],
+            "prev": [
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "research_agent",
+            "output_format": "PPT file"
+        }
+    }
+}

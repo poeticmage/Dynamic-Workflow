@@ -1,0 +1,84 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures and constants: grid representation, tetromino shapes, gem colors, and scoring parameters.",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Structure Developer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino spawning, keyboard controls (move, rotate), gravity, locking into the grid, and conversion of locked tetromino blocks into colored gems.",
+            "agent_id": 1,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Control Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Build match-3 detection and clearing logic: scan the grid for gem matches, remove matched gems, apply gravity for falling gems, handle chain reactions, and add match-3 bonus scoring.",
+            "agent_id": 2,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Match-3 Mechanic Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Create Tetris line-clearing logic: detect full horizontal lines, clear them, collapse above gems, and award line-clear points.",
+            "agent_id": 3,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Line-Clearing Mechanic Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Develop the Pygame-based GUI and main game loop: render the grid, animations, current score, next tetromino preview, and integrate controls with mechanics modules.",
+            "agent_id": 4,
+            "next": [],
+            "prev": [
+                "task1",
+                "task2",
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "GUI Developer",
+            "output_format": "Python code"
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Generate a two-sentence tagline for a coffee shop, focusing on a unique selling proposition or brand identity.",
+            "agent_id": 6,
+            "next": [
+                "task1"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "email_agent",
+            "output_format": "Plain text"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Compose a one-paragraph Instagram caption for a coffee shop, incorporating the previously generated two-sentence tagline.",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "email_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

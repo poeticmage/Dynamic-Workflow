@@ -1,0 +1,98 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement a job description parser that extracts key skills and requirements into a structured JSON schema.",
+            "agent_id": 4,
+            "next": [
+                "task2",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "job_description_agent",
+            "output_format": "JSON"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement a resume parser that extracts candidate details (skills, experience, education) into a structured JSON schema.",
+            "agent_id": 2,
+            "next": [
+                "task2",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "JSON"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop the technical interview module: generate questions based on job and resume JSON and capture candidate responses.",
+            "agent_id": 2,
+            "next": [
+                "task3",
+                "task4"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "JSON"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Build an email automation component to send interview invites and follow-ups triggered by interview module events.",
+            "agent_id": 2,
+            "next": [],
+            "prev": [
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Create a scoring algorithm that evaluates candidate responses against expected answers and outputs scores in JSON.",
+            "agent_id": 2,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "JSON"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement a report generator that compiles job requirements, candidate profile, interview responses, and scores into a .txt evaluation report.",
+            "agent_id": 2,
+            "next": [],
+            "prev": [
+                "task0",
+                "task1",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "coding_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

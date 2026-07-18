@@ -1,0 +1,125 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: game grid representation, tetromino shape definitions, and colored gem representation",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task2",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Structure Designer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino spawning, movement, rotation, and collision detection logic",
+            "agent_id": 1,
+            "next": [
+                "task2",
+                "task4",
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Mechanics Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Implement lock-in mechanism to convert locked tetromino blocks into colored gems on the grid",
+            "agent_id": 2,
+            "next": [
+                "task3"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Grid Conversion Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Implement Tetris line-clearing and Bejeweled match-3 detection with cascading chain reactions and scoring updates",
+            "agent_id": 3,
+            "next": [
+                "task5",
+                "task6"
+            ],
+            "prev": [
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Clearing & Scoring Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement keyboard input handling for controlling tetromino movements and rotations",
+            "agent_id": 4,
+            "next": [
+                "task5",
+                "task6"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Input Controller Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement GUI rendering using Pygame: draw game grid, gems, active tetromino, next-piece preview, score display, and animations",
+            "agent_id": 5,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task1",
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "GUI Developer",
+            "output_format": "Python code"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Integrate all modules into the main game loop: manage drop timing, input polling, lock & clear triggers, and rendering calls",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task2",
+                "task3",
+                "task4",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "Game Loop Integrator",
+            "output_format": "Python code"
+        }
+    }
+}

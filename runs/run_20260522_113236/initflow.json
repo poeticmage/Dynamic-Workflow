@@ -1,0 +1,115 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement core data structures: grid representation, cell states, and tetromino shape definitions with rotation matrices.",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task2",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Structures Developer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Develop tetromino falling, collision detection, locking logic, and conversion of locked blocks into colored gems.",
+            "agent_id": 1,
+            "next": [
+                "task3"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Logic Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Implement match-3 gem detection and Tetris line-clearing logic, including chain reaction sequencing and score calculation.",
+            "agent_id": 2,
+            "next": [
+                "task3"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Match-Clear Logic Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Create the game state manager to sequence tetromino drops, gem/line clears, chain reactions, and bonus point updates.",
+            "agent_id": 3,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task1",
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Game State Manager",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Develop the keyboard input handler for moving, rotating, and dropping tetrominoes.",
+            "agent_id": 4,
+            "next": [
+                "task6"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Input Handler Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement the GUI renderer using Pygame: draw grid, current score, next piece preview, and manage animation frames.",
+            "agent_id": 5,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "GUI Renderer Developer",
+            "output_format": "Python code"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Integrate game state, input handler, and GUI renderer into a cohesive main loop with smooth animations and real-time updates.",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task3",
+                "task4",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "Integration Specialist",
+            "output_format": "Python code"
+        }
+    }
+}

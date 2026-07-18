@@ -1,0 +1,139 @@
+{
+  "description": "Workflow state before refinement process",
+  "timestamp": "2026-05-26T17:54:26.593980",
+  "task_id": "workflow_refinement",
+  "iteration": 1,
+  "data": {
+    "workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Implement a parser for the job description to extract key requirements and skills",
+        "agent_id": 1,
+        "next": [
+          "task3",
+          "task5"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\n[\n    \"Analyze the job description to extract key requirements and skills\",\n    \"Analyze the candidate resume to identify relevant experience and qualifications\",\n    \"Generate technical interview questions based on job requirements and candidate's resume\",\n    \"Conduct technical interview and record candidate responses\",\n    \"Score candidate responses based on predefined criteria\",\n    \"Send automated emails for interview scheduling and follow-up\",\n    \"Generate final evaluation report summarizing candidate's performance and suitability\"\n]\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "research_agent",
+        "output_format": "Python code"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Implement a resume parser to extract candidate qualifications and map them to job requirements",
+        "agent_id": 1,
+        "next": [
+          "task3",
+          "task5"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\n[\n    \"Parse candidate resume to extract information (skills, experience, education)\",\n    \"Analyze job description to identify required skills and experience\",\n    \"Map extracted resume information to job requirements\",\n    \"Assess candidate's qualification based on the mapping\",\n    \"Store the assessment result\"\n]\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "research_agent",
+        "output_format": "Python code"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Develop an email notification module to send emails at specified workflow stages",
+        "agent_id": 1,
+        "next": [
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\n[\n    \"Analyze the job description\",\n    \"Analyze the candidate resume\",\n    \"Conduct technical interview\",\n    \"Send emails as and when needed\",\n    \"Score candidate responses\",\n    \"Generate final evaluation report\"\n]\n```",
+              "feedback": "here are some feedbacks:\n- The current result only lists high-level workflow steps and does not implement the required email notification module.\n- We need a Python module/class that can send emails via SMTP at specified workflow stages, with configurable templates and SMTP settings.\n\nhere are the changes:\n```python\nimport smtplib\nfrom email.mime.text import MIMEText\nfrom email.mime.multipart import MIMEMultipart\n\nclass EmailNotifier:\n    \"\"\"\n    A module to send notification emails at specified workflow stages.\n    \"\"\"\n\n    def __init__(self, smtp_server, smtp_port, smtp_user, smtp_password, use_tls=True):\n        self.smtp_server = smtp_server\n        self.smtp_port = smtp_port\n        self.smtp_user = smtp_user\n        self.smtp_password = smtp_password\n        self.use_tls = use_tls\n\n        # Define email templates per workflow stage\n        self.templates = {\n            \"job_description_analyzed\": {\n                \"subject\": \"Job Description Analysis Complete\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"The job description for '{job_title}' has been analyzed.\\n\"\n                    \"Next, we'll analyze your resume.\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            },\n            \"resume_analyzed\": {\n                \"subject\": \"Resume Analysis Complete\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"We have completed analyzing your resume for '{job_title}'.\\n\"\n                    \"Up next: technical interview scheduling.\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            },\n            \"technical_interview_scheduled\": {\n                \"subject\": \"Technical Interview Scheduled\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"Your technical interview for '{job_title}' is scheduled on {interview_date}.\\n\"\n                    \"Please confirm your availability.\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            },\n            \"score_submitted\": {\n                \"subject\": \"Interview Score Submitted\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"Your interview has been scored.\\n\"\n                    \"Score: {score}\\n\\n\"\n                    \"Thank you for your time.\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            },\n            \"final_evaluation\": {\n                \"subject\": \"Final Evaluation Report\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"The final evaluation for '{job_title}' is complete.\\n\"\n                    \"Result: {result}\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            }\n        }\n\n    def send_email(self, recipient, subject, body, sender=None):\n        \"\"\"\n        Sends an email using SMTP.\n        \"\"\"\n        sender = sender or self.smtp_user\n        msg = MIMEMultipart()\n        msg[\"From\"] = sender\n        msg[\"To\"] = recipient\n        msg[\"Subject\"] = subject\n        msg.attach(MIMEText(body, \"plain\"))\n\n        server = smtplib.SMTP(self.smtp_server, self.smtp_port)\n        try:\n            if self.use_tls:\n                server.starttls()\n            server.login(self.smtp_user, self.smtp_password)\n            server.sendmail(sender, recipient, msg.as_string())\n        finally:\n            server.quit()\n\n    def notify(self, stage, recipient_email, context):\n        \"\"\"\n        Send a notification email for the given workflow stage.\n        `stage` must be one of the keys in self.templates.\n        `context` is a dict with template variables (e.g., name, job_title).\n        \"\"\"\n        template = self.templates.get(stage)\n        if not template:\n            raise ValueError(f\"No email template defined for stage '{stage}'\")\n\n        subject = template[\"subject\"]\n        body = template[\"body\"].format(**context)\n        self.send_email(recipient_email, subject, body)\n\n\n# Example usage\nif __name__ == \"__main__\":\n    # SMTP configuration (replace with real credentials in production)\n    notifier = EmailNotifier(\n        smtp_server=\"smtp.example.com\",\n        smtp_port=587,\n        smtp_user=\"no-reply@example.com\",\n        smtp_password=\"securepassword\",\n        use_tls=True\n    )\n\n    # Notify candidate that job description analysis is done\n    notifier.notify(\n        stage=\"job_description_analyzed\",\n        recipient_email=\"candidate@example.com\",\n        context={\n            \"name\": \"Alice\",\n            \"job_title\": \"Software Engineer\"\n        }\n    )\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```python\nimport smtplib\nfrom email.mime.text import MIMEText\nfrom email.mime.multipart import MIMEMultipart\n\nclass EmailNotifier:\n    \"\"\"\n    A module to send notification emails at specified workflow stages.\n    \"\"\"\n\n    def __init__(self, smtp_server, smtp_port, smtp_user, smtp_password, use_tls=True):\n        self.smtp_server = smtp_server\n        self.smtp_port = smtp_port\n        self.smtp_user = smtp_user\n        self.smtp_password = smtp_password\n        self.use_tls = use_tls\n\n        # Define email templates per workflow stage\n        self.templates = {\n            \"job_description_analyzed\": {\n                \"subject\": \"Job Description Analysis Complete\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"The job description for '{job_title}' has been analyzed.\\n\"\n                    \"Next, we'll analyze your resume.\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            },\n            \"resume_analyzed\": {\n                \"subject\": \"Resume Analysis Complete\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"We have completed analyzing your resume for '{job_title}'.\\n\"\n                    \"Up next: technical interview scheduling.\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            },\n            \"technical_interview_scheduled\": {\n                \"subject\": \"Technical Interview Scheduled\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"Your technical interview for '{job_title}' is scheduled on {interview_date}.\\n\"\n                    \"Please confirm your availability.\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            },\n            \"score_submitted\": {\n                \"subject\": \"Interview Score Submitted\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"Your interview has been scored.\\n\"\n                    \"Score: {score}\\n\\n\"\n                    \"Thank you for your time.\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            },\n            \"final_evaluation\": {\n                \"subject\": \"Final Evaluation Report\",\n                \"body\": (\n                    \"Hello {name},\\n\\n\"\n                    \"The final evaluation for '{job_title}' is complete.\\n\"\n                    \"Result: {result}\\n\\n\"\n                    \"Best regards,\\n\"\n                    \"Recruitment Team\"\n                )\n            }\n        }\n\n    def send_email(self, recipient, subject, body, sender=None):\n        \"\"\"\n        Sends an email using SMTP.\n        \"\"\"\n        sender = sender or self.smtp_user\n        msg = MIMEMultipart()\n        msg[\"From\"] = sender\n        msg[\"To\"] = recipient\n        msg[\"Subject\"] = subject\n        msg.attach(MIMEText(body, \"plain\"))\n\n        server = smtplib.SMTP(self.smtp_server, self.smtp_port)\n        try:\n            if self.use_tls:\n                server.starttls()\n            server.login(self.smtp_user, self.smtp_password)\n            server.sendmail(sender, recipient, msg.as_string())\n        finally:\n            server.quit()\n\n    def notify(self, stage, recipient_email, context):\n        \"\"\"\n        Send a notification email for the given workflow stage.\n        `stage` must be one of the keys in self.templates.\n        `context` is a dict with template variables (e.g., name, job_title).\n        \"\"\"\n        template = self.templates.get(stage)\n        if not template:\n            raise ValueError(f\"No email template defined for stage '{stage}'\")\n\n        subject = template[\"subject\"]\n        body = template[\"body\"].format(**context)\n        self.send_email(recipient_email, subject, body)\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "research_agent",
+        "output_format": "Python code"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Create a technical interview management component that generates questions and records candidate responses",
+        "agent_id": 1,
+        "next": [
+          "task4"
+        ],
+        "prev": [
+          "task0",
+          "task1",
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "research_agent",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Build a scoring engine to evaluate candidate responses against predefined criteria",
+        "agent_id": 1,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "research_agent",
+        "output_format": "Python code"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Implement the final evaluation report generator to compile scores and analysis into a summary",
+        "agent_id": 1,
+        "next": [],
+        "prev": [
+          "task0",
+          "task1",
+          "task4"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "research_agent",
+        "output_format": "Python code"
+      }
+    }
+  }
+}

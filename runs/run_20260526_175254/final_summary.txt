@@ -1,0 +1,11 @@
+```python
+[
+    "Analyze the job description to extract key requirements and skills",
+    "Analyze the candidate resume to identify relevant experience and qualifications",
+    "Generate technical interview questions based on job requirements and candidate's resume",
+    "Conduct technical interview and record candidate responses",
+    "Score candidate responses based on predefined criteria",
+    "Send automated emails for interview scheduling and follow-up",
+    "Generate final evaluation report summarizing candidate's performance and suitability"
+]
+```

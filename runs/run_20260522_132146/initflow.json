@@ -1,0 +1,132 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: grid representation, tetromino shapes, gem colors, and next-piece queue.",
+            "agent_id": 1,
+            "next": [
+                "task1",
+                "task6"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino mechanics: generation, rotation, movement, gravity drop, and locking into grid.",
+            "agent_id": 2,
+            "next": [
+                "task2",
+                "task3"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Implement keyboard input handling to control tetromino movement and rotation.",
+            "agent_id": 2,
+            "next": [
+                "task7"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Transform locked tetromino blocks into colored gems on the grid.",
+            "agent_id": 1,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Detect and clear full lines and match-3 gem clusters, implement chain reactions and bonus calculations.",
+            "agent_id": 2,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement scoring system to accumulate points from line clears, match-3 clears, and chain bonuses.",
+            "agent_id": 2,
+            "next": [
+                "task7"
+            ],
+            "prev": [
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Develop Pygame rendering module: draw grid, gems, active tetromino, next-piece preview, score, and animations.",
+            "agent_id": 2,
+            "next": [
+                "task7"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task7": {
+            "id": "task7",
+            "objective": "Implement main game loop: spawn tetrominoes, handle timing, apply input, update state (lock, transform, clear), update score, and invoke rendering.",
+            "agent_id": 2,
+            "next": [],
+            "prev": [
+                "task2",
+                "task5",
+                "task6"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        }
+    }
+}

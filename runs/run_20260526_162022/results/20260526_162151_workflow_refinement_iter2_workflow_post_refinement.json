@@ -1,0 +1,133 @@
+{
+  "description": "Workflow state after refinement process",
+  "timestamp": "2026-05-26T16:21:51.149723",
+  "task_id": "workflow_refinement",
+  "iteration": 2,
+  "data": {
+    "refined_workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Implement a resume and job-description analysis module that extracts skills, experiences, and performs a match score.",
+        "agent_id": 2,
+        "next": [
+          "task5",
+          "task4"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport re\n\nclass ResumeJobAnalyzer:\n    def __init__(self, job_description, resume):\n        self.job_description = job_description\n        self.resume = resume\n        self.job_keywords = self.extract_keywords(job_description)\n        self.resume_keywords = self.extract_keywords(resume)\n\n    def extract_keywords(self, text):\n        # Convert to lowercase and remove special characters\n        text = text.lower()\n        text = re.sub(r'[^\\w\\s]', '', text)\n\n        # Split into words and remove common stop words\n        stop_words = set(['and', 'the', 'a', 'an', 'in', 'on', 'is', 'it', 'to', 'of', 'for', 'with', 'are', 'as', 'at', 'by', 'from'])  # Expand stop words as needed\n        words = [word for word in text.split() if word not in stop_words]\n        return words\n\n    def calculate_match_score(self):\n        \"\"\"Calculates a match score based on keyword overlap and experience.\"\"\"\n        job_set = set(self.job_keywords)\n        resume_set = set(self.resume_keywords)\n\n        # Keyword matching\n        keyword_match_count = len(job_set.intersection(resume_set))\n        keyword_match_percentage = (keyword_match_count / len(job_set)) * 100 if len(job_set) > 0 else 0\n        keyword_match_percentage = round(keyword_match_percentage, 2)\n      \n        # Experience matching (Placeholder - requires more sophisticated parsing)\n        experience_score = self.analyze_experience()  # Out of 100\n        \n        # Combined score - adjust weights as needed\n        overall_match_score = (0.7 * keyword_match_percentage + 0.3 * experience_score)\n        \n        return overall_match_score\n\n    def analyze_experience(self):\n        \"\"\"Analyzes the experience section for relevant keywords and duration. Returns score out of 100\"\"\"\n        experience_score = 0\n        \n        # Placeholder implementation - Enhance with NLP techniques for better accuracy\n        # Look for keywords related to years of experience, project types, roles mentioned in job description\n        \n        years_of_experience = self.extract_experience_years()\n        \n        if years_of_experience >= 5:\n            experience_score = 80\n        elif years_of_experience >= 3:\n            experience_score = 60\n        elif years_of_experience >= 1:\n            experience_score = 40\n        else:\n            experience_score = 20\n\n        return experience_score\n        \n    def extract_experience_years(self):\n        \"\"\"Extracts the number of years of experience from the resume.  Return 0 if nothing found.\"\"\"\n        years = 0\n        # Simple regex to find \"X years\" or \"X+ years\"\n        match = re.search(r'(\\d+)\\+?\\syears', self.resume.lower())\n        if match:\n            try:\n              years = int(match.group(1))\n            except:\n              years = 0\n        return years\n\n    def get_resume_summary(self):\n         \"\"\"Returns a summary of the resume analysis.\"\"\"\n         return f\"Keyword match percentage: {round(self.calculate_match_score(), 2)}%\"\n\n\n    def run_analysis(self):\n        \"\"\"Runs the analysis and returns the results.\"\"\"\n        match_score = self.calculate_match_score()\n        resume_summary = self.get_resume_summary()\n\n        return {\n            \"match_score\": match_score,\n            \"resume_summary\": resume_summary,\n            \"job_keywords\": self.job_keywords,\n            \"resume_keywords\": self.resume_keywords\n        }\n\nif __name__ == '__main__':\n    # Example Usage\n    job_description = \"\"\"\n    Software Engineer - Python\n    We are looking for a skilled software engineer with 5+ years of experience in Python development.\n    Experience with Django, REST APIs, and database design is required.\n    Must have experience with Agile development methodologies.\n    \"\"\"\n\n    resume = \"\"\"\n    John Doe\n    Software Engineer\n\n    Summary:\n    Experienced software engineer with 7 years of experience in Python.\n\n    Skills:\n    Python, Django, REST APIs, SQL, Agile\n\n    Experience:\n    Software Engineer at ABC Company (2016-Present)\n    - Developed and maintained REST APIs using Django\n    - Designed and implemented database schemas\n    \"\"\"\n\n    analyzer = ResumeJobAnalyzer(job_description, resume)\n    analysis_result = analyzer.run_analysis()\n\n    print(f\"Match Score: {analysis_result['match_score']:.2f}%\")\n    print(f\"Resume Summary: {analysis_result['resume_summary']}\")\n    print(f\"Job Keywords: {analysis_result['job_keywords']}\")\n    print(f\"Resume Keywords: {analysis_result['resume_keywords']}\")\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Develop an interview question generator for technical and behavioral topics based on the role requirements.",
+        "agent_id": 2,
+        "next": [
+          "task2"
+        ],
+        "prev": [
+          "task4"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "Python code"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Build a follow-up question generation component that dynamically creates questions based on candidate responses.",
+        "agent_id": 2,
+        "next": [
+          "task3"
+        ],
+        "prev": [
+          "task1"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Implement an evaluation engine that scores candidate answers on relevance, depth, confidence, and technical accuracy across categories.",
+        "agent_id": 2,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Develop a recruiter email generator for sending interview invitations and follow-up messages.",
+        "agent_id": 2,
+        "next": [
+          "task1"
+        ],
+        "prev": [
+          "task0"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport smtplib\nfrom email.mime.text import MIMEText\nfrom datetime import datetime, timedelta\n\nclass EmailGenerator:\n    def __init__(self, smtp_server, smtp_port, sender_email, sender_password):\n        self.smtp_server = smtp_server\n        self.smtp_port = smtp_port\n        self.sender_email = sender_email\n        self.sender_password = sender_password\n\n    def create_invitation_email(self, recipient_email, candidate_name, role_name, interview_date, interview_time, interviewer_name, interview_details):\n        \"\"\"Generates an interview invitation email.\"\"\"\n        subject = f\"Interview Invitation for {role_name} at [Company Name]\"\n        body = f\"\"\"Dear {candidate_name},\n\nWe are pleased to invite you to an interview for the {role_name} position at [Company Name].\n\nDate: {interview_date}\nTime: {interview_time}\nInterviewer: {interviewer_name}\nDetails: {interview_details}\n\nPlease confirm your availability by replying to this email.\n\nWe look forward to speaking with you.\n\nSincerely,\n[Your Name]\n[Your Title]\n[Company Name]\n\"\"\"\n        return self.create_email(recipient_email, subject, body)\n\n    def create_followup_email(self, recipient_email, candidate_name, interviewer_name, role_name):\n        \"\"\"Generates a follow-up email after the interview.\"\"\"\n        subject = f\"Following Up on Your Interview for {role_name} at [Company Name]\"\n        body = f\"\"\"Dear {candidate_name},\n\nThank you for taking the time to interview for the {role_name} position at [Company Name] with {interviewer_name}.\n\nWe appreciate you sharing your experience and qualifications with us. We are currently reviewing all candidates and will be in touch soon regarding the next steps.\n\nSincerely,\n[Your Name]\n[Your Title]\n[Company Name]\n\"\"\"\n        return self.create_email(recipient_email, subject, body)\n\n    def create_rejection_email(self, recipient_email, candidate_name, role_name):\n        \"\"\"Generates a rejection email.\"\"\"\n        subject = f\"Update on Your Application for {role_name} at [Company Name]\"\n        body = f\"\"\"Dear {candidate_name},\n\nThank you for your interest in the {role_name} position at [Company Name]. We appreciate you taking the time to apply.\n\nWe have carefully reviewed your application and have decided to move forward with other candidates whose qualifications and experience are a closer match for the requirements of this role.\n\nWe wish you the best in your job search.\n\nSincerely,\n[Your Name]\n[Your Title]\n[Company Name]\n\"\"\"\n        return self.create_email(recipient_email, subject, body)\n\n    def create_offer_email(self, recipient_email, candidate_name, role_name, salary, start_date):\n      \"\"\"Generates an offer email.\"\"\"\n      subject = f\"Job Offer: {role_name} at [Company Name]\"\n      body = f\"\"\"Dear {candidate_name},\n\nWe are delighted to offer you the position of {role_name} at [Company Name]!\n\nWe were very impressed with your qualifications and experience during the interview process.\n\nHere are the details of the offer:\n\n* Role: {role_name}\n* Salary: {salary}\n* Start Date: {start_date}\n\nA formal offer letter with more details will follow shortly. Please let us know if you have any questions.\n\nWe are excited about the possibility of you joining our team!\n\nSincerely,\n[Your Name]\n[Your Title]\n[Company Name]\n\"\"\"\n      return self.create_email(recipient_email, subject, body)\n\n    def create_email(self, recipient_email, subject, body):\n        \"\"\"Creates and returns a MIMEText email object.\"\"\"\n        msg = MIMEText(body)\n        msg['Subject'] = subject\n        msg['From'] = self.sender_email\n        msg['To'] = recipient_email\n        return msg\n\n    def send_email(self, recipient_email, subject, body):\n        \"\"\"Sends an email.\"\"\"\n        msg = self.create_email(recipient_email, subject, body)\n        try:\n            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:\n                server.starttls()\n                server.login(self.sender_email, self.sender_password)\n                server.sendmail(self.sender_email, recipient_email, msg.as_string())\n            print(f\"Email sent to {recipient_email}\")\n        except Exception as e:\n            print(f\"Error sending email: {e}\")\n\n\nif __name__ == '__main__':\n    # Example Usage\n    smtp_server = 'smtp.gmail.com'  # Replace with your SMTP server\n    smtp_port = 587  # Replace with your SMTP port\n    sender_email = 'your_email@gmail.com'  # Replace with your email\n    sender_password = 'your_password'  # Replace with your password (or app password)\n\n    email_generator = EmailGenerator(smtp_server, smtp_port, sender_email, sender_password)\n\n    # Example: Sending an interview invitation\n    recipient_email = 'candidate@example.com'\n    candidate_name = 'Jane Smith'\n    role_name = 'Software Engineer'\n    interview_date = datetime.now() + timedelta(days=2)\n    interview_date_str = interview_date.strftime(\"%Y-%m-%d\")\n    interview_time = \"10:00 AM\"\n    interviewer_name = 'John Doe'\n    interview_details = \"Please join the Zoom meeting: [Zoom Link]\"\n\n    email_generator.send_email(recipient_email,\n                               f\"Interview Invitation for {role_name} at [Company Name]\",\n                               email_generator.create_invitation_email(recipient_email, candidate_name, role_name, interview_date_str, interview_time, interviewer_name, interview_details).get_payload()) #Fixed: Correctly pass recipient email, subject, and body\n\n    # Example: Sending a follow-up email\n    email_generator.send_email(recipient_email,\n                               f\"Following Up on Your Interview for {role_name} at [Company Name]\",\n                               email_generator.create_followup_email(recipient_email, candidate_name, interviewer_name, role_name).get_payload())\n    \n    # Example: Sending a rejection email\n    email_generator.send_email(recipient_email,\n                               f\"Update on Your Application for {role_name} at [Company Name]\",\n                               email_generator.create_rejection_email(recipient_email, candidate_name, role_name).get_payload())\n\n    # Example: Sending an offer email\n    email_generator.send_email(recipient_email,\n                               f\"Job Offer: {role_name} at [Company Name]\",\n                               email_generator.create_offer_email(recipient_email, candidate_name, role_name, \"$120,000\", \"2024-08-01\").get_payload())\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "Python code"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Implement a report generator that compiles resume-job match, interview summary, technical & behavioral assessments, strengths/weaknesses, and final recommendations into a .txt file.",
+        "agent_id": 2,
+        "next": [],
+        "prev": [
+          "task0",
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Plain text (.txt)"
+      }
+    },
+    "changes_summary": {
+      "tasks_before": 6,
+      "tasks_after": 6,
+      "net_change": 0
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data models: grid representation, tetromino shape definitions, gem color enums and basic state structures.",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Model Developer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino mechanics: spawning, movement (left/right/down), rotation, gravity tick, and locking into the grid.",
+            "agent_id": 1,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Mechanics Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Implement clearing logic: detect and remove filled Tetris lines, detect match-3 Bejeweled gem groups, trigger chain reactions, and update score.",
+            "agent_id": 2,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Clearing Logic Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Build the Pygame GUI: render grid cells as gems, display current tetromino, next-piece preview, score, and implement smooth animations for falling, locking, and clears.",
+            "agent_id": 3,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "GUI Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement keyboard input handling: map key events to tetromino controls (move, rotate, drop) and feed commands into the game logic.",
+            "agent_id": 4,
+            "next": [
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Input Handler Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Develop the main game loop: integrate tetromino mechanics, clearing logic, GUI rendering, and input handling into a cohesive Pygame runtime.",
+            "agent_id": 5,
+            "next": [],
+            "prev": [
+                "task1",
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "Game Loop Integrator",
+            "output_format": "Python code"
+        }
+    }
+}

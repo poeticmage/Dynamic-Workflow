@@ -1,0 +1,115 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Analyze the job description to extract key role requirements and evaluation criteria",
+            "agent_id": 4,
+            "next": [
+                "task2",
+                "task3",
+                "task6"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "job_description_agent",
+            "output_format": "Plain text"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Analyze the candidate resume to identify skills, experiences, and fit",
+            "agent_id": 5,
+            "next": [
+                "task2",
+                "task3",
+                "task6"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "resume_matching_agent",
+            "output_format": "Plain text"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Draft and send the interview invitation email to the candidate",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "email_agent",
+            "output_format": "Plain text"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Conduct the technical interview following the predefined question set",
+            "agent_id": 7,
+            "next": [
+                "task4",
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "interview_agent",
+            "output_format": "Plain text"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Score the candidate\u2019s responses against evaluation criteria",
+            "agent_id": 7,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "interview_agent",
+            "output_format": "Plain text"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Draft and send the post-interview follow-up email",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "email_agent",
+            "output_format": "Plain text"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Generate the final evaluation report combining analyses and scores",
+            "agent_id": 8,
+            "next": [],
+            "prev": [
+                "task0",
+                "task1",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "scoring_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

@@ -1,0 +1,140 @@
+{
+  "description": "Workflow state before refinement process",
+  "timestamp": "2026-05-27T17:00:10.145501",
+  "task_id": "workflow_refinement",
+  "iteration": 1,
+  "data": {
+    "workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Extract key evaluation criteria from the job description",
+        "agent_id": 4,
+        "next": [
+          "task2",
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```json\n{\n  \"job_description_evaluation_criteria\": [\n    \"Technical Skills\",\n    \"Problem-solving abilities\",\n    \"Communication skills\",\n    \"Experience\",\n    \"Cultural fit\",\n    \"Teamwork\",\n    \"Leadership\",\n    \"Adaptability\",\n    \"Specific technologies proficiency\",\n    \"Domain knowledge\"\n  ]\n}\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "job_description_agent",
+        "output_format": "JSON"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Extract candidate profile details from the resume",
+        "agent_id": 4,
+        "next": [
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```json\n{\n  \"steps\": [\n    \"Analyze the job description to identify required skills and experience.\",\n    \"Analyze the candidate resume to extract candidate profile details.\",\n    \"Conduct technical interview to assess candidate's technical skills.\",\n    \"Score candidate responses based on predefined criteria.\",\n    \"Send emails as and when needed for communication.\",\n    \"Generate final evaluation report summarizing candidate performance.\"\n  ]\n}\n```",
+              "feedback": "here are some feedbacks:\n- The output currently lists workflow steps rather than extracting candidate profile details from the resume.\n- The task asks specifically for a JSON containing the candidate’s profile information (e.g., name, contact details, education, work history, skills, certifications).\n- We need to provide a structured JSON object that reflects those details.\n\nhere are the changes:\n```json\n{\n  \"candidate_profile\": {\n    \"name\": \"John Doe\",\n    \"contact\": {\n      \"email\": \"john.doe@example.com\",\n      \"phone\": \"+1-555-123-4567\",\n      \"address\": \"123 Main St, Springfield, IL 62704\"\n    },\n    \"education\": [\n      {\n        \"degree\": \"Bachelor of Science in Computer Science\",\n        \"institution\": \"State University\",\n        \"start_date\": \"2016-08\",\n        \"end_date\": \"2020-05\",\n        \"gpa\": \"3.8\"\n      }\n    ],\n    \"work_experience\": [\n      {\n        \"job_title\": \"Software Engineer\",\n        \"company\": \"Tech Innovators Inc.\",\n        \"start_date\": \"2020-06\",\n        \"end_date\": \"2023-03\",\n        \"responsibilities\": [\n          \"Developed RESTful APIs in Java Spring Boot\",\n          \"Collaborated with front-end team using React.js\",\n          \"Optimized database queries in PostgreSQL for performance\"\n        ]\n      }\n    ],\n    \"skills\": [\n      \"Java\",\n      \"Spring Boot\",\n      \"RESTful APIs\",\n      \"React.js\",\n      \"PostgreSQL\",\n      \"Git\",\n      \"Docker\"\n    ],\n    \"certifications\": [\n      {\n        \"name\": \"Oracle Certified Professional, Java SE 11 Developer\",\n        \"date_obtained\": \"2021-09\"\n      }\n    ]\n  }\n}\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```json\n{\n  \"candidate_profile\": {\n    \"name\": \"Jane Smith\",\n    \"contact\": {\n      \"email\": \"jane.smith@email.com\",\n      \"phone\": \"555-555-5555\",\n      \"address\": \"123 Highland, Somecity, State\"\n    },\n    \"education\": [\n      {\n        \"degree\": \"Master of Science, Computer Science\",\n        \"institution\": \"Tech University\",\n        \"start_date\": \"2018-09\",\n        \"end_date\": \"2020-05\",\n        \"gpa\": \"4.0\"\n      },\n      {\n        \"degree\": \"Bachelor of Science, Software Engineering\",\n        \"institution\": \"State College\",\n        \"start_date\": \"2014-09\",\n        \"end_date\": \"2018-05\",\n        \"gpa\": \"3.7\"\n      }\n    ],\n    \"work_experience\": [\n      {\n        \"job_title\": \"Senior Software Engineer\",\n        \"company\": \"Acme Corp\",\n        \"start_date\": \"2020-06\",\n        \"end_date\": \"Present\",\n        \"responsibilities\": [\n          \"Lead a team of 5 engineers\",\n          \"Design and implement microservices\",\n          \"Deploy applications to AWS\"\n        ]\n      },\n      {\n        \"job_title\": \"Software Engineer\",\n        \"company\": \"Beta Inc\",\n        \"start_date\": \"2018-06\",\n        \"end_date\": \"2020-06\",\n        \"responsibilities\": [\n          \"Developed web applications using React\",\n          \"Wrote unit and integration tests\",\n          \"Participated in code reviews\"\n        ]\n      }\n    ],\n    \"skills\": [\n      \"Java\",\n      \"Python\",\n      \"JavaScript\",\n      \"React\",\n      \"AWS\",\n      \"Docker\",\n      \"Kubernetes\",\n      \"SQL\",\n      \"NoSQL\",\n      \"Git\"\n    ],\n    \"certifications\": [\n      {\n        \"name\": \"AWS Certified Solutions Architect – Associate\",\n        \"date_obtained\": \"2021-03\"\n      }\n    ],\n    \"projects\": [\n          {\n            \"project_name\": \"Personal Website\",\n            \"description\": \"Developed a personal website using React and deployed it to Netlify.\",\n            \"url\": \"https://example.com\"\n          }\n        ]\n  }\n}\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "job_description_agent",
+        "output_format": "JSON"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Develop scoring algorithm for candidate interview responses based on extracted criteria",
+        "agent_id": 2,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task0"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\ndef score_candidate_response(response, criteria_weights, keywords):\n    \"\"\"\n    Scores a candidate's interview response based on predefined criteria and keywords.\n\n    Args:\n        response (str): The candidate's interview response text.\n        criteria_weights (dict): A dictionary mapping evaluation criteria to their weights.\n                                  Example: {\"Technical Skills\": 0.25, \"Problem-solving abilities\": 0.20, ...}\n        keywords (dict): A dictionary mapping evaluation criteria to a list of relevant keywords.\n                         Example: {\"Technical Skills\": [\"python\", \"algorithm\", \"data structure\"], \"Problem-solving abilities\": [\"debugging\", \"optimization\", \"testing\"], ...}\n\n    Returns:\n        dict: A dictionary containing the scores for each evaluation criterion and the overall score.\n    \"\"\"\n\n    response = response.lower()\n    scores = {}\n    overall_score = 0\n\n    for criterion, weight in criteria_weights.items():\n        scores[criterion] = 0\n        if criterion in keywords:\n            relevant_keywords = keywords[criterion]\n            keyword_count = 0\n            for keyword in relevant_keywords:\n                if keyword in response:\n                    keyword_count += 1\n            scores[criterion] = keyword_count / len(relevant_keywords) if len(relevant_keywords) > 0 else 0\n        overall_score += scores[criterion] * weight\n\n    scores[\"overall_score\"] = overall_score\n    return scores\n\ndef example_usage():\n    \"\"\"\n    Provides an example of how to use the scoring function.\n    \"\"\"\n\n    example_response = \"I have extensive experience with Python and data structures. I also have experience in debugging and optimizing code.\"\n    example_criteria_weights = {\n        \"Technical Skills\": 0.4,\n        \"Problem-solving abilities\": 0.3,\n        \"Communication skills\": 0.1,\n        \"Experience\": 0.2\n    }\n    example_keywords = {\n        \"Technical Skills\": [\"python\", \"algorithm\", \"data structure\"],\n        \"Problem-solving abilities\": [\"debugging\", \"optimization\", \"testing\"],\n        \"Experience\": [\"years of experience\", \"project\", \"worked on\"]\n    }\n\n    scores = score_candidate_response(example_response, example_criteria_weights, example_keywords)\n    print(scores)\n\nif __name__ == \"__main__\":\n    example_usage()\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Develop technical interview module to conduct Q&A based on criteria and candidate profile",
+        "agent_id": 7,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "interview_agent",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Implement email notification module for sending interview invitations and follow-ups",
+        "agent_id": 2,
+        "next": [],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport smtplib\nfrom email.mime.text import MIMEText\nfrom email.mime.multipart import MIMEMultipart\n\nclass EmailNotification:\n    def __init__(self, sender_email, sender_password, smtp_server, smtp_port):\n        \"\"\"\n        Initializes the EmailNotification module.\n\n        Args:\n            sender_email (str): The email address of the sender.\n            sender_password (str): The password of the sender's email account.\n            smtp_server (str): The SMTP server address (e.g., 'smtp.gmail.com').\n            smtp_port (int): The SMTP port number (e.g., 587).\n        \"\"\"\n        self.sender_email = sender_email\n        self.sender_password = sender_password\n        self.smtp_server = smtp_server\n        self.smtp_port = smtp_port\n\n    def send_email(self, recipient_email, subject, body, is_html=False):\n        \"\"\"\n        Sends an email to the specified recipient.\n\n        Args:\n            recipient_email (str): The email address of the recipient.\n            subject (str): The subject of the email.\n            body (str): The body of the email.\n            is_html (bool): Indicates if the body is HTML formatted. Defaults to False.\n        \"\"\"\n        msg = MIMEMultipart()\n        msg['From'] = self.sender_email\n        msg['To'] = recipient_email\n        msg['Subject'] = subject\n\n        if is_html:\n            msg.attach(MIMEText(body, 'html'))\n        else:\n            msg.attach(MIMEText(body, 'plain'))\n\n        try:\n            server = smtplib.SMTP(self.smtp_server, self.smtp_port)\n            server.starttls()  # Secure the connection\n            server.login(self.sender_email, self.sender_password)\n            server.sendmail(self.sender_email, recipient_email, msg.as_string())\n            server.quit()\n            print(f\"Email sent successfully to {recipient_email}\")\n        except Exception as e:\n            print(f\"Error sending email: {e}\")\n\n    def send_interview_invitation(self, recipient_email, candidate_name, job_title, date_time, meeting_link):\n         \"\"\"\n         Sends an interview invitation email to the candidate.\n\n         Args:\n            recipient_email (str): The email address of the candidate.\n            candidate_name (str): The name of the candidate.\n            job_title (str): The title of the job the candidate is applying for.\n            date_time (str): The date and time of the interview.\n            meeting_link (str): The link to the online meeting.\n         \"\"\"\n\n         subject = f\"Interview Invitation for {job_title} at [Your Company]\"\n         body = f\"\"\"\n         Dear {candidate_name},\n\n         We are pleased to invite you to an interview for the {job_title} position at [Your Company].\n\n         Date and Time: {date_time}\n         Meeting Link: {meeting_link}\n\n         Please confirm your availability by replying to this email.\n\n         We look forward to speaking with you.\n\n         Sincerely,\n         [Your Name]\n         [Your Title]\n         [Your Company]\n         \"\"\"\n         self.send_email(recipient_email, subject, body)\n\n    def send_interview_followup(self, recipient_email, candidate_name):\n        \"\"\"\n        Sends a follow-up email to the candidate after the interview.\n\n        Args:\n            recipient_email (str): The email address of the candidate.\n            candidate_name (str): The name of the candidate.\n        \"\"\"\n        subject = \"Following Up on Your Interview at [Your Company]\"\n        body = f\"\"\"\n        Dear {candidate_name},\n\n        Thank you for taking the time to interview with us for the [Job Title] position.\n\n        We appreciate you sharing your experience and qualifications with us.  We are currently reviewing all candidates and will be in touch soon with an update on your application.\n\n        In the meantime, please do not hesitate to reach out if you have any questions.\n\n        Sincerely,\n        [Your Name]\n        [Your Title]\n        [Your Company]\n        \"\"\"\n        self.send_email(recipient_email, subject, body)\n\n    def send_rejection_email(self, recipient_email, candidate_name, job_title):\n        \"\"\"Sends a rejection email to a candidate.\n\n        Args:\n            recipient_email (str): The email address of the candidate.\n            candidate_name (str): The name of the candidate.\n            job_title (str): The job title the candidate applied for.\n        \"\"\"\n\n        subject = f\"Update on Your Application for {job_title} at [Your Company]\"\n        body = f\"\"\"\n        Dear {candidate_name},\n\n        Thank you for your interest in the {job_title} position at [Your Company] and for taking the time to interview with us.\n\n        After careful consideration, we have decided to move forward with other candidates whose qualifications and experience more closely align with the requirements of this role.\n\n        This was a difficult decision, as we were impressed with many aspects of your background. We wish you the best of luck in your job search.\n\n        Sincerely,\n        [Your Name]\n        [Your Title]\n        [Your Company]\n        \"\"\"\n        self.send_email(recipient_email, subject, body)\n\n    def send_offer_email(self, recipient_email, candidate_name, job_title, salary, start_date):\n        \"\"\"Sends an offer email to a candidate.\n\n        Args:\n            recipient_email (str): The email address of the candidate.\n            candidate_name (str): The name of the candidate.\n            job_title (str): The job title for the offer.\n            salary (str): The salary being offered.\n            start_date (str): The start date for the position.\n        \"\"\"\n\n        subject = f\"Job Offer: {job_title} at [Your Company]\"\n        body = f\"\"\"\n        Dear {candidate_name},\n\n        We are pleased to offer you the position of {job_title} at [Your Company]!\n\n        We were very impressed with your qualifications and believe you would be a valuable asset to our team.\n\n        Your starting salary will be {salary} per year, and your start date will be {start_date}.\n\n        Please review the attached offer letter for more details. We would appreciate it if you could let us know your decision by [Date].\n\n        We are excited about the possibility of you joining our team!\n\n        Sincerely,\n        [Your Name]\n        [Your Title]\n        [Your Company]\n        \"\"\"\n        self.send_email(recipient_email, subject, body)\n\n\n\nif __name__ == '__main__':\n    # Example Usage (Replace with your actual credentials and information)\n    sender_email = \"your_email@gmail.com\"  # Replace with your email address\n    sender_password = \"your_password\"  # Replace with your email password (or app password)\n    smtp_server = \"smtp.gmail.com\"  # Or your SMTP server\n    smtp_port = 587  # Or your SMTP port\n\n    email_module = EmailNotification(sender_email, sender_password, smtp_server, smtp_port)\n\n    # Example 1: Send an interview invitation\n    recipient_email = \"candidate@example.com\"\n    candidate_name = \"John Doe\"\n    job_title = \"Software Engineer\"\n    date_time = \"October 27, 2023, 10:00 AM\"\n    meeting_link = \"https://meet.google.com/xyz\"\n    email_module.send_interview_invitation(recipient_email, candidate_name, job_title, date_time, meeting_link)\n\n    # Example 2: Send an interview follow-up\n    email_module.send_interview_followup(recipient_email, candidate_name)\n\n    # Example 3: Send a rejection email\n    email_module.send_rejection_email(recipient_email, candidate_name, job_title)\n\n    # Example 4: Send an offer email\n    email_module.send_offer_email(recipient_email, candidate_name, job_title, \"$120,000\", \"November 15, 2023\")\n```\n",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Generate final evaluation report by combining interview transcripts and scored responses",
+        "agent_id": 8,
+        "next": [],
+        "prev": [
+          "task2",
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "scoring_agent",
+        "output_format": "Plain text"
+      }
+    }
+  }
+}

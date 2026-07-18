@@ -1,0 +1,124 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: Grid class, Tetromino shapes and rotation states, and Gem representation.",
+            "agent_id": 1,
+            "next": [
+                "task1",
+                "task2",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino movement, rotation, and collision detection within the grid.",
+            "agent_id": 2,
+            "next": [
+                "task2",
+                "task6"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Implement locking mechanism: place tetromino blocks into the grid and convert them into colored gems.",
+            "agent_id": 2,
+            "next": [
+                "task3",
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Implement clearing mechanics: detect and clear full lines (Tetris) and match-3 gem patterns with chain reactions.",
+            "agent_id": 2,
+            "next": [
+                "task4",
+                "task6"
+            ],
+            "prev": [
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Develop scoring system: calculate base points and bonus points from line clears and match-3 chains.",
+            "agent_id": 2,
+            "next": [
+                "task5",
+                "task6"
+            ],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement GUI rendering with Pygame: draw the game grid, gems, falling tetromino, score display, next-tetromino preview, and smooth animations.",
+            "agent_id": 2,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Assemble the main game loop: handle keyboard input, invoke movement, locking, clearing, scoring, and trigger GUI rendering each frame.",
+            "agent_id": 1,
+            "next": [],
+            "prev": [
+                "task1",
+                "task2",
+                "task3",
+                "task4",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 5,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        }
+    }
+}

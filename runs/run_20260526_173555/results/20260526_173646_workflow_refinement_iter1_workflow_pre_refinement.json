@@ -1,0 +1,147 @@
+{
+  "description": "Workflow state before refinement process",
+  "timestamp": "2026-05-26T17:36:46.336087",
+  "task_id": "workflow_refinement",
+  "iteration": 1,
+  "data": {
+    "workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Implement module to analyze job description and extract required skills, responsibilities, and criteria",
+        "agent_id": 2,
+        "next": [
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\n[\n    \"def analyze_job_description(job_description):\",\n    \"    \\\"\\\"\\\"Analyzes the job description and extracts required skills, responsibilities, and criteria.\\\"\\\"\\\"\",\n    \"    required_skills = []\",\n    \"    responsibilities = []\",\n    \"    criteria = {}\",\n    \"    # Placeholder for actual implementation using NLP or keyword extraction techniques\",\n    \"    # Example:\",\n    \"    # - Extract skills using NLP models (spaCy, NLTK) or regular expressions\",\n    \"    # - Identify key responsibilities from the job description text\",\n    \"    # - Extract criteria based on keywords like 'experience', 'education', 'certifications'\",\n    \"    # Example implementation (replace with actual logic):\",\n    \"    if 'Python' in job_description:\",\n    \"        required_skills.append('Python')\",\n    \"    if 'communication skills' in job_description:\",\n    \"        required_skills.append('communication skills')\",\n    \"    if 'software development' in job_description:\",\n    \"        responsibilities.append('software development')\",\n    \"    if 'teamwork' in job_description:\",\n    \"        responsibilities.append('teamwork')\",\n    \"    if 'years of experience' in job_description:\",\n    \"        criteria['experience'] = 'minimum X years'\",\n    \"    if 'degree' in job_description:\",\n    \"        criteria['education'] = 'Bachelor\\'s degree or higher'\",\n    \"    return required_skills, responsibilities, criteria\"\n]\n```",
+              "feedback": "here are some feedbacks:\n- The implementation is only a placeholder and lacks any real parsing logic.\n- It doesn’t handle structured sections (like “Skills:”, “Responsibilities:”, “Requirements:”) often found in job descriptions.\n- It doesn’t generalize beyond a few hard-coded keywords.\n- We should provide a basic but working extraction using regular expressions and simple heuristics.\n\nhere are the changes:\n```python\n[\n    \"import re\",\n    \"\",\n    \"def analyze_job_description(job_description: str):\",\n    \"    \\\"\\\"\\\"Analyzes the job description text and extracts required skills, responsibilities, and criteria sections.\",\n    \"    Returns three lists: skills, responsibilities, and criteria.\\\"\\\"\\\"\",\n    \"    # Define section headings and regex patterns\",\n    \"    section_patterns = {\",\n    \"        'skills': r'(?:required skills|skills required|skills):?\\\\s*(.*?)\\\\n{2,}',\",\n    \"        'responsibilities': r'(?:responsibilities|key responsibilities):?\\\\s*(.*?)\\\\n{2,}',\",\n    \"        'criteria': r'(?:requirements|qualifications|criteria):?\\\\s*(.*?)\\\\n{2,}'\",\n    \"    }\",\n    \"    results = {'skills': [], 'responsibilities': [], 'criteria': []}\",\n    \"\",\n    \"    # Normalize whitespace\",\n    \"    text = job_description + '\\\\n\\\\n'\",\n    \"\",\n    \"    for section, pattern in section_patterns.items():\",\n    \"        match = re.search(pattern, text, re.IGNORECASE | re.DOTALL)\",\n    \"        if match:\",\n    \"            block = match.group(1).strip()\",\n    \"            # Split by lines or commas\",\n    \"            lines = re.split(r'[\\\\n•\\\\-]+', block)\",\n    \"            for item in lines:\",\n    \"                item = item.strip(' :;,.')\",\n    \"                if item:\",\n    \"                    results[section].append(item)\",\n    \"\",\n    \"    # Fallback keyword-based extraction if sections not found\",\n    \"    if not results['skills']:\",\n    \"        keywords = ['Python', 'Java', 'communication', 'SQL', 'AWS']\",\n    \"        for kw in keywords:\",\n    \"            if re.search(r'\\\\b' + re.escape(kw) + r'\\\\b', text):\",\n    \"                results['skills'].append(kw)\",\n    \"\",\n    \"    return results['skills'], results['responsibilities'], results['criteria']\",\n]\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```python\nimport re\n\ndef analyze_job_description(job_description: str):\n    \"\"\"Analyzes the job description text and extracts required skills, responsibilities, and criteria sections.\n    Returns a dictionary with three keys: 'skills', 'responsibilities', and 'criteria', each containing a list of strings.\n    \"\"\"\n    # Define section headings and regex patterns\n    section_patterns = {\n        'skills': r'(?:required skills|skills required|skills|technical skills):?\\\\s*(.*?)(?=\\\\n{2,}|\\Z)',\n        'responsibilities': r'(?:responsibilities|key responsibilities|job duties):?\\\\s*(.*?)(?=\\\\n{2,}|\\Z)',\n        'criteria': r'(?:requirements|qualifications|criteria|experience needed):?\\\\s*(.*?)(?=\\\\n{2,}|\\Z)'\n    }\n    results = {'skills': [], 'responsibilities': [], 'criteria': []}\n\n    # Normalize whitespace\n    text = job_description + '\\\\n\\\\n'\n\n    for section, pattern in section_patterns.items():\n        match = re.search(pattern, text, re.IGNORECASE | re.DOTALL)\n        if match:\n            block = match.group(1).strip()\n            # Split by lines or common delimiters\n            lines = re.split(r'[\\\\n•\\\\-]+', block)\n            for item in lines:\n                item = item.strip(' :;,.').replace(\"*\", \"\")\n                if item:\n                    results[section].append(item)\n\n    # Fallback keyword-based extraction if sections are sparse or not found, focusing on skills\n    if not results['skills']:\n        keywords = ['Python', 'Java', 'communication', 'SQL', 'AWS', 'JavaScript', 'C++', 'C#', 'React', 'Angular', 'Node.js', 'Data Analysis', 'Machine Learning', 'Deep Learning', 'Cloud Computing', 'Project Management', 'Testing', 'DevOps'] # Expanded keyword list\n        for kw in keywords:\n            if re.search(r'\\\\b' + re.escape(kw) + r'\\\\b', text, re.IGNORECASE):\n                results['skills'].append(kw)\n\n    return results['skills'], results['responsibilities'], results['criteria']\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Implement module to analyze candidate resume and map experience to job requirements",
+        "agent_id": 3,
+        "next": [
+          "task3"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\n[\n    \"Parse resume content (text, PDF, etc.).\",\n    \"Extract key skills, experiences, and education.\",\n    \"Identify technologies, tools, and methodologies mentioned.\",\n    \"Quantify experience (years, projects, responsibilities).\",\n    \"Compare extracted skills and experience to job requirements.\",\n    \"Assign weights to different skills based on importance in job description.\",\n    \"Score candidate proficiency for each required skill.\",\n    \"Calculate overall resume match score.\",\n    \"Generate a report summarizing resume analysis and score.\",\n    \"Highlight areas of strength and weakness based on job requirements.\",\n    \"Store extracted information in structured format (e.g., JSON).\",\n    \"Provide justification for the match score and identified strengths/weaknesses.\"\n]\n```",
+              "feedback": "here are some feedbacks:\n- The current list focuses on resume parsing and scoring but omits parsing the **job description** itself, which is essential for mapping.\n- It lacks steps for **normalizing** skills (synonyms, variants) and using **semantic matching** (e.g., embeddings) to catch non-exact matches.\n- It does not explicitly link **each job requirement** to the corresponding resume evidence (i.e., detailed mapping).\n- It could benefit from a step to **parse and structure job requirements** before comparison.\n- We should add mention of using NLP libraries or models for improved semantic matching.\n\nhere are the changes:\n```python\n[\n    \"Parse job description text to extract and structure requirements (skills, years, responsibilities).\",\n    \"Normalize extracted job requirements (standardize terminology, handle synonyms and variants).\",\n    \"Parse resume content (TXT, PDF) to plain text.\",\n    \"Extract key resume elements: skills, experiences (with dates), education, and project descriptions.\",\n    \"Normalize resume skills using the same taxonomy as job requirements.\",\n    \"Perform exact match mapping between resume skills and job requirements.\",\n    \"Perform semantic similarity matching (e.g., using word embeddings or pretrained language models) to catch related skills.\",\n    \"For each requirement, collect all matching resume entries and quantify proficiency (years, project count, role level).\",\n    \"Assign weights to job requirements based on importance from the job description.\",\n    \"Calculate a per-requirement match score: weighted combination of exact and semantic match strengths.\",\n    \"Aggregate per-requirement scores into an overall resume–job match score.\",\n    \"Generate a detailed mapping report showing each job requirement, matched resume evidence, and individual scores.\",\n    \"Highlight strengths (high-scoring requirements) and gaps (unmatched or low scores).\",\n    \"Provide a JSON-serializable output with structured fields: requirements, matches, scores, overall_score.\",\n    \"Log and store parsed data and final results for downstream processing.\"\n]\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```python\n[\n    \"Parse job description text to extract and structure requirements (skills, years, responsibilities).\",\n    \"Normalize extracted job requirements (standardize terminology, handle synonyms and variants).\",\n    \"Parse resume content (TXT, PDF) to plain text.\",\n    \"Extract key resume elements: skills, experiences (with dates), education, and project descriptions.\",\n    \"Normalize resume skills using the same taxonomy as job requirements.\",\n    \"Perform exact match mapping between resume skills and job requirements.\",\n    \"Perform semantic similarity matching (e.g., using word embeddings or pretrained language models) to catch related skills.\",\n    \"For each requirement, collect all matching resume entries and quantify proficiency (years, project count, role level).\",\n    \"Assign weights to job requirements based on importance from the job description.\",\n    \"Calculate a per-requirement match score: weighted combination of exact and semantic match strengths.\",\n    \"Aggregate per-requirement scores into an overall resume–job match score.\",\n    \"Generate a detailed mapping report showing each job requirement, matched resume evidence, and individual scores.\",\n    \"Highlight strengths (high-scoring requirements) and gaps (unmatched or low scores).\",\n    \"Provide a JSON-serializable output with structured fields: requirements, matches, scores, overall_score.\",\n    \"Log and store parsed data and final results for downstream processing.\"\n]\n```\n",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "summary_agent",
+        "output_format": "Python code"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Implement email sending module to dispatch notifications and interview invites",
+        "agent_id": 3,
+        "next": [
+          "task3",
+          "task5"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\n[\n    \"Analyze the job description\",\n    \"Analyze the candidate resume\",\n    \"Conduct technical interview\",\n    \"Send emails as and when needed\",\n    \"Score candidate responses\",\n    \"Generate final evaluation report\"\n]\n```",
+              "feedback": "here are some feedbacks:\n- The current output just repeats the overall workflow list; it does not implement the required email‐sending functionality.\n- The task asks specifically for a Python code module to dispatch notifications and interview invites, which is missing.\n- We need functions (e.g. `send_email`, `send_notification`, `send_interview_invite`) with SMTP configuration and error handling.\n\nhere are the changes:\n```python\nimport smtplib\nfrom email.message import EmailMessage\nfrom typing import List, Dict\n\nclass EmailSender:\n    def __init__(self, smtp_server: str, smtp_port: int, username: str, password: str, use_tls: bool = True):\n        \"\"\"\n        Initialize the email sender with SMTP server details.\n        \"\"\"\n        self.smtp_server = smtp_server\n        self.smtp_port = smtp_port\n        self.username = username\n        self.password = password\n        self.use_tls = use_tls\n\n    def send_email(self, recipient: str, subject: str, body: str) -> bool:\n        \"\"\"\n        Sends a single email. Returns True if successful, False otherwise.\n        \"\"\"\n        try:\n            msg = EmailMessage()\n            msg[\"From\"] = self.username\n            msg[\"To\"] = recipient\n            msg[\"Subject\"] = subject\n            msg.set_content(body)\n\n            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:\n                if self.use_tls:\n                    server.starttls()\n                server.login(self.username, self.password)\n                server.send_message(msg)\n            print(f\"Email sent to {recipient} with subject '{subject}'\")\n            return True\n        except Exception as e:\n            print(f\"Failed to send email to {recipient}: {e}\")\n            return False\n\n    def send_notification(self, recipients: List[str], notification_subject: str, notification_body: str) -> Dict[str, bool]:\n        \"\"\"\n        Send a generic notification email to multiple recipients.\n        Returns a dict mapping each recipient to True/False based on success.\n        \"\"\"\n        results = {}\n        for email in recipients:\n            success = self.send_email(email, notification_subject, notification_body)\n            results[email] = success\n        return results\n\n    def send_interview_invite(self, candidate_email: str, candidate_name: str, interview_date: str, instructions: str) -> bool:\n        \"\"\"\n        Send an interview invitation to a single candidate.\n        \"\"\"\n        subject = f\"Interview Invitation for {candidate_name}\"\n        body = (\n            f\"Hello {candidate_name},\\n\\n\"\n            f\"You are invited to an interview on {interview_date}.\\n\"\n            f\"Instructions:\\n{instructions}\\n\\n\"\n            \"Please reply to confirm your availability.\\n\\n\"\n            \"Best regards,\\n\"\n            \"Recruitment Team\"\n        )\n        return self.send_email(candidate_email, subject, body)\n\n# Example usage\nif __name__ == \"__main__\":\n    smtp_config = {\n        \"smtp_server\": \"smtp.example.com\",\n        \"smtp_port\": 587,\n        \"username\": \"recruiter@example.com\",\n        \"password\": \"securepassword\",\n        \"use_tls\": True\n    }\n\n    email_sender = EmailSender(**smtp_config)\n\n    # Send a generic notification\n    notifications = email_sender.send_notification(\n        recipients=[\"applicant1@example.com\", \"applicant2@example.com\"],\n        notification_subject=\"Application Received\",\n        notification_body=\"Thank you for applying. We have received your application and will be in touch.\"\n    )\n    print(\"Notification results:\", notifications)\n\n    # Send an interview invite\n    invite_success = email_sender.send_interview_invite(\n        candidate_email=\"candidate@example.com\",\n        candidate_name=\"Jane Doe\",\n        interview_date=\"2024-07-01 10:00 AM\",\n        instructions=\"Please join the Zoom meeting with the link provided in the calendar invite.\"\n    )\n    print(\"Interview invite sent:\", invite_success)\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```python\nimport smtplib\nfrom email.message import EmailMessage\nfrom typing import List, Dict\n\nclass EmailSender:\n    def __init__(self, smtp_server: str, smtp_port: int, username: str, password: str, use_tls: bool = True):\n        \"\"\"\n        Initialize the email sender with SMTP server details.\n        \"\"\"\n        self.smtp_server = smtp_server\n        self.smtp_port = smtp_port\n        self.username = username\n        self.password = password\n        self.use_tls = use_tls\n\n    def send_email(self, recipient: str, subject: str, body: str) -> bool:\n        \"\"\"\n        Sends a single email. Returns True if successful, False otherwise.\n        \"\"\"\n        try:\n            msg = EmailMessage()\n            msg[\"From\"] = self.username\n            msg[\"To\"] = recipient\n            msg[\"Subject\"] = subject\n            msg.set_content(body)\n\n            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:\n                if self.use_tls:\n                    server.starttls()\n                server.login(self.username, self.password)\n                server.send_message(msg)\n            print(f\"Email sent to {recipient} with subject '{subject}'\")\n            return True\n        except Exception as e:\n            print(f\"Failed to send email to {recipient}: {e}\")\n            return False\n\n    def send_notification(self, recipients: List[str], notification_subject: str, notification_body: str) -> Dict[str, bool]:\n        \"\"\"\n        Send a generic notification email to multiple recipients.\n        Returns a dict mapping each recipient to True/False based on success.\n        \"\"\"\n        results = {}\n        for email in recipients:\n            success = self.send_email(email, notification_subject, notification_body)\n            results[email] = success\n        return results\n\n    def send_interview_invite(self, candidate_email: str, candidate_name: str, interview_date: str, instructions: str) -> bool:\n        \"\"\"\n        Send an interview invitation to a single candidate.\n        \"\"\"\n        subject = f\"Interview Invitation for {candidate_name}\"\n        body = (\n            f\"Hello {candidate_name},\\n\\n\"\n            f\"You are invited to an interview on {interview_date}.\\n\"\n            f\"Instructions:\\n{instructions}\\n\\n\"\n            \"Please reply to confirm your availability.\\n\\n\"\n            \"Best regards,\\n\"\n            \"Recruitment Team\"\n        )\n        return self.send_email(candidate_email, subject, body)\n\n# Example usage\nif __name__ == \"__main__\":\n    smtp_config = {\n        \"smtp_server\": \"smtp.example.com\",\n        \"smtp_port\": 587,\n        \"username\": \"recruiter@example.com\",\n        \"password\": \"securepassword\",\n        \"use_tls\": True\n    }\n\n    email_sender = EmailSender(**smtp_config)\n\n    # Send a generic notification\n    notifications = email_sender.send_notification(\n        recipients=[\"applicant1@example.com\", \"applicant2@example.com\"],\n        notification_subject=\"Application Received\",\n        notification_body=\"Thank you for applying. We have received your application and will be in touch.\"\n    )\n    print(\"Notification results:\", notifications)\n\n    # Send an interview invite\n    invite_success = email_sender.send_interview_invite(\n        candidate_email=\"candidate@example.com\",\n        candidate_name=\"Jane Doe\",\n        interview_date=\"2024-07-01 10:00 AM\",\n        instructions=\"Please join the Zoom meeting with the link provided in the calendar invite.\"\n    )\n    print(\"Interview invite sent:\", invite_success)\n```\n",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "summary_agent",
+        "output_format": "Python code"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Implement technical interview conductor module to present questions and capture responses",
+        "agent_id": 4,
+        "next": [
+          "task4"
+        ],
+        "prev": [
+          "task0",
+          "task1",
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "job_description_agent",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Implement scoring module to evaluate candidate responses against criteria",
+        "agent_id": 2,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Implement final evaluation report generator that compiles analysis, scores, and sends summary",
+        "agent_id": 3,
+        "next": [],
+        "prev": [
+          "task4",
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "summary_agent",
+        "output_format": "Python code"
+      }
+    }
+  }
+}

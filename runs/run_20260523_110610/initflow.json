@@ -1,0 +1,84 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: game grid, tetromino shapes, and mapping of tetromino blocks to gem colors.",
+            "agent_id": 1,
+            "next": [
+                "task1",
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino mechanics: random generation, rotation, lateral movement, soft/hard drop, locking into the grid and converting locked blocks into colored gems.",
+            "agent_id": 2,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop clearing logic: detect and clear match-3 gem patterns and full horizontal lines, handle chain reactions, and compute bonus scoring.",
+            "agent_id": 2,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Create the Pygame-based GUI module: render the grid, current score, next-tetromino preview, and smooth animations for falling and clearing.",
+            "agent_id": 1,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Assemble the main game loop: handle keyboard controls, invoke tetromino mechanics, apply clearing logic, update score, and drive the GUI rendering each frame.",
+            "agent_id": 1,
+            "next": [],
+            "prev": [
+                "task1",
+                "task2",
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        }
+    }
+}

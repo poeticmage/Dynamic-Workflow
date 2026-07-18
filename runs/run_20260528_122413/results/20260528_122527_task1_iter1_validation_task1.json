@@ -1,0 +1,14 @@
+{
+  "description": "Validation attempt 1 for task task1",
+  "timestamp": "2026-05-28T12:25:27.390128",
+  "task_id": "task1",
+  "iteration": 1,
+  "data": {
+    "validation_iteration": 1,
+    "result_being_validated": "```json\n{\n  \"candidate_details\": {\n    \"skills\": [],\n    \"experience\": [],\n    \"education\": []\n  }\n}\n```",
+    "validation_status": "failed",
+    "validation_feedback": "here are some feedbacks:\n1. The current JSON output is empty and does not demonstrate extraction of any resume details.\n2. The schema is too minimal—missing key fields such as personal/contact information and a summary.\n3. Without sample input, it’s unclear how the parser should populate the fields. You should either provide a sample resume to parse or produce a representative example.\n\nhere are the changes:\n```json\n{\n  \"candidate_details\": {\n    \"personal_details\": {\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"phone\": \"+1-234-567-8901\",\n      \"linkedin\": \"https://www.linkedin.com/in/johndoe\"\n    },\n    \"summary\": \"Seasoned software engineer with 5 years of experience in backend development, API design, and cloud infrastructure.\",\n    \"skills\": [\n      {\n        \"name\": \"Python\",\n        \"level\": \"Expert\"\n      },\n      {\n        \"name\": \"Java\",\n        \"level\": \"Intermediate\"\n      },\n      {\n        \"name\": \"AWS\",\n        \"level\": \"Intermediate\"\n      }\n    ],\n    \"experience\": [\n      {\n        \"position\": \"Senior Software Engineer\",\n        \"company\": \"Tech Innovations Inc.\",\n        \"start_date\": \"2019-07-01\",\n        \"end_date\": \"2023-05-31\",\n        \"responsibilities\": [\n          \"Designed and implemented RESTful APIs using Flask\",\n          \"Led migration of legacy systems to AWS\",\n          \"Mentored junior engineers and conducted code reviews\"\n        ]\n      },\n      {\n        \"position\": \"Software Engineer\",\n        \"company\": \"NextGen Solutions\",\n        \"start_date\": \"2017-01-15\",\n        \"end_date\": \"2019-06-30\",\n        \"responsibilities\": [\n          \"Developed microservices in Java Spring Boot\",\n          \"Integrated third-party payment gateways\",\n          \"Collaborated with cross-functional teams on product features\"\n        ]\n      }\n    ],\n    \"education\": [\n      {\n        \"degree\": \"B.Sc. Computer Science\",\n        \"institution\": \"State University\",\n        \"start_year\": 2012,\n        \"end_year\": 2016,\n        \"grade\": \"3.8/4.0\"\n      }\n    ]\n  }\n}\n```",
+    "validation_time": 12.285588026046753,
+    "task_history": []
+  }
+}

@@ -1,0 +1,27 @@
+```
+1. Analyze the job description to extract required skills (JavaScript, React.js, RESTful APIs), years of experience (3-5), and qualifications (Bachelor’s degree in Computer Science, AWS certification).
+2. Analyze the candidate's resume to extract skills (Python, Java, C++, JavaScript, SQL, Git, Docker, RESTful APIs, AWS, Django, PostgreSQL, Spring Boot, Angular, MySQL, Node.js, Express, Socket.io, MongoDB), experience, education, certifications (AWS Certified Solutions Architect – Associate, Oracle Certified Professional, Java SE 11 Developer), projects, awards, and publications.
+3. Conduct a technical interview, focusing on JavaScript, React.js, RESTful APIs, experience, and qualifications.
+4. Define scoring criteria for each interview question category (JavaScript, React.js, RESTful APIs, experience-based, qualifications-based).
+5. Establish a scoring scale (e.g., 1-5, with 1 being Unsatisfactory and 5 being Exceptional) for each criterion.
+6. Review recorded responses to the JavaScript interview questions.
+7. Score the candidate's JavaScript responses based on the predefined criteria and scoring scale.
+8. Record the scores for each JavaScript question.
+9. Review recorded responses to the React.js interview questions.
+10. Score the candidate's React.js responses based on the predefined criteria and scoring scale.
+11. Record the scores for each React.js question.
+12. Review recorded responses to the RESTful APIs interview questions.
+13. Score the candidate's RESTful APIs responses based on the predefined criteria and scoring scale.
+14. Record the scores for each RESTful APIs question.
+15. Review recorded responses to the experience-based interview questions.
+16. Score the candidate's experience-based responses based on the predefined criteria and scoring scale.
+17. Record the scores for each experience-based question.
+18. Review recorded responses to the qualifications-based interview questions.
+19. Score the candidate's qualifications-based responses based on the predefined criteria and scoring scale.
+20. Record the scores for each qualifications-based question.
+21. Calculate the total score for each category (JavaScript, React.js, RESTful APIs, experience-based, qualifications-based).
+22. Calculate the overall total score for the candidate by summing the category totals.
+23. Document any specific observations or justifications for assigned scores.
+24. Compile all analysis, scores, and feedback into a final evaluation report.
+25. Send emails as and when needed for scheduling interviews, providing feedback, or communicating the final decision.
+```

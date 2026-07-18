@@ -1,0 +1,93 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Extract key evaluation criteria from the job description",
+            "agent_id": 4,
+            "next": [
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "job_description_agent",
+            "output_format": "JSON"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Extract candidate profile details from the resume",
+            "agent_id": 4,
+            "next": [
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "job_description_agent",
+            "output_format": "JSON"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop scoring algorithm for candidate interview responses based on extracted criteria",
+            "agent_id": 2,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Develop technical interview module to conduct Q&A based on criteria and candidate profile",
+            "agent_id": 7,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "interview_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement email notification module for sending interview invitations and follow-ups",
+            "agent_id": 2,
+            "next": [],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Generate final evaluation report by combining interview transcripts and scored responses",
+            "agent_id": 8,
+            "next": [],
+            "prev": [
+                "task2",
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "scoring_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

@@ -1,0 +1,106 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: grid matrix, tetromino shapes with color mappings, and gem representation.",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Modeler",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino generation, movement, rotation, and collision detection against the grid.",
+            "agent_id": 1,
+            "next": [
+                "task2",
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Logic Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop lock-in logic: integrate falling tetromino blocks into the grid and convert them into colored gems.",
+            "agent_id": 2,
+            "next": [
+                "task3",
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Grid Integration Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Build clearing mechanics: detect and clear full lines (Tetris) and match-3 gem patterns, triggering chain reactions.",
+            "agent_id": 3,
+            "next": [
+                "task4",
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Clearing Algorithm Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Create scoring system: calculate points for line clears, gem matches, and bonus combos in chain reactions.",
+            "agent_id": 4,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Scoring System Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement Pygame GUI: render grid, falling pieces, gem animations, score display, next-piece preview, and keyboard controls.",
+            "agent_id": 5,
+            "next": [],
+            "prev": [
+                "task1",
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "GUI Developer",
+            "output_format": "Python code"
+        }
+    }
+}

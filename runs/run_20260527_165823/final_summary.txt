@@ -1,0 +1,71 @@
+```
+1. Analyze the job description to extract key requirements and evaluation criteria.
+   - Key criteria identified: 
+     - Technical Skills
+     - Problem-solving abilities
+     - Communication skills
+     - Experience
+     - Cultural fit
+     - Teamwork
+     - Leadership
+     - Adaptability
+     - Specific technologies proficiency
+     - Domain knowledge
+
+2. Analyze the candidate's resume to identify relevant skills, experience, and projects.
+   - Candidate Profile:
+     - Name: Jane Smith
+     - Contact: jane.smith@email.com, 555-555-5555, 123 Highland, Somecity, State
+     - Education:
+       - Master of Science, Computer Science from Tech University (GPA: 4.0)
+       - Bachelor of Science, Software Engineering from State College (GPA: 3.7)
+     - Work Experience:
+       - Senior Software Engineer at Acme Corp (2020-Present)
+         - Responsibilities included leading a team, designing and implementing microservices, and deploying applications to AWS.
+       - Software Engineer at Beta Inc (2018-2020)
+         - Responsibilities included developing web applications using React, writing tests, and participating in code reviews.
+     - Skills: Java, Python, JavaScript, React, AWS, Docker, Kubernetes, SQL, NoSQL, Git.
+     - Certifications: AWS Certified Solutions Architect – Associate (March 2021).
+     - Projects: Developed a personal website using React and deployed it to Netlify (URL: https://example.com).
+
+3. Use the job description criteria and candidate profile to generate technical interview questions using the `generate_technical_questions` function from the technical interview module.
+   - Generated Questions:
+     - Can you describe your experience with Java?
+     - Describe a complex technical problem you solved. What was your approach to ensure correctness and efficiency?
+     - You worked as a Senior Software Engineer at Acme Corp. Can you walk me through a significant project there and your technical approach?
+     - Regarding your project 'Personal Website', you mentioned: Developed a personal website using React and deployed it to Netlify. What architecture did you choose and why?
+     - Design a simple microservice for a real-time chat application. What components would you include and how would they interact?
+     - Tell me about a time you led or collaborated closely with a technical team. How did you ensure effective communication and delivery?
+     - How do you ensure clear and effective communication when explaining technical concepts to non-technical stakeholders?
+     - Tell me about a time you had to learn a new technology or process quickly. How did you approach it and what was the outcome?
+
+4. Conduct the technical interview by presenting the generated questions to the candidate and recording their responses using the `conduct_technical_interview` function.
+   - Collected Responses (example responses):
+     - [Response 1]
+     - [Response 2]
+     - [Response 3]
+     - [Response 4]
+     - [Response 5]
+     - [Response 6]
+     - [Response 7]
+     - [Response 8]
+
+5. Save the interview transcript (questions and answers) to a text file.
+   - Technical Interview Transcript saved to `technical_interview_transcript.txt`.
+
+6. For each candidate response, use the `score_candidate_response` function to generate a score based on predefined criteria weights and keywords aligned with the job description.
+   - Example scores generated for evaluation criteria:
+     - Technical Skills: 0.85
+     - Problem-solving abilities: 0.90
+     - Communication skills: 0.80
+     - Overall score: 0.825
+
+7. Combine the interview transcript and the scored responses into a final evaluation report.
+   - Final Evaluation Report includes:
+     - Questions asked, candidate responses, scores for each criterion, and the overall score.
+
+8. Rank the candidates based on their overall scores from the evaluation reports.
+
+9. Send emails to the candidates to inform them of the interview results.
+   - Email notifications sent for interview invitations and follow-ups as required.
+```

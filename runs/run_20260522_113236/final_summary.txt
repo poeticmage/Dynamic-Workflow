@@ -1,0 +1,374 @@
+```python
+import pygame
+import random
+from enum import Enum
+
+# Constants
+GRID_WIDTH = 10
+GRID_HEIGHT = 20
+BLOCK_SIZE = 30
+SCREEN_WIDTH = GRID_WIDTH * BLOCK_SIZE + 200
+SCREEN_HEIGHT = GRID_HEIGHT * BLOCK_SIZE
+GRID_LINE_COLOR = (50, 50, 50)
+EMPTY_COLOR = (30, 30, 30)
+SPAWN_X = GRID_WIDTH // 2 - 2
+SPAWN_Y = 0
+PREVIEW_POS = (GRID_WIDTH * BLOCK_SIZE + 20, 50)
+DROP_INTERVAL = 500
+LINE_CLEAR_SCORES = {1: 100, 2: 300, 3: 500, 4: 800}
+GEM_CLEAR_POINTS = 20
+CHAIN_BONUS_RATE = 0.5
+LINE_ANIM_FRAMES = 30
+MATCH_ANIM_FRAMES = 20
+
+class CellState(Enum):
+    EMPTY = 0
+    FILLED = 1
+
+BASE_SHAPES = {
+    "I": [[(0, 0), (1, 0), (2, 0), (3, 0)],
+          [(0, 0), (0, 1), (0, 2), (0, 3)]],
+    "J": [[(0, 1), (0, 0), (1, 0), (2, 0)],
+          [(0, 0), (1, 0), (0, 1), (0, 2)],
+          [(0, 2), (1, 2), (2, 2), (2, 1)],
+          [(1, 0), (1, 1), (1, 2), (0, 2)]],
+    "L": [[(0, 0), (1, 0), (2, 0), (2, 1)],
+          [(0, 0), (0, 1), (0, 2), (1, 0)],
+          [(0, 2), (0, 1), (1, 2), (2, 2)],
+          [(0, 2), (1, 2), (1, 1), (1, 0)]],
+    "O": [[(0, 0), (1, 0), (0, 1), (1, 1)]],
+    "S": [[(1, 0), (2, 0), (0, 1), (1, 1)],
+          [(0, 0), (0, 1), (1, 1), (1, 2)]],
+    "T": [[(0, 0), (1, 0), (2, 0), (1, 1)],
+          [(0, 0), (0, 1), (0, 2), (1, 1)],
+          [(1, 1), (0, 2), (1, 2), (2, 2)],
+          [(1, 0), (0, 1), (1, 1), (1, 2)]],
+    "Z": [[(0, 0), (1, 0), (1, 1), (2, 1)],
+          [(1, 0), (0, 1), (1, 1), (0, 2)]]
+}
+
+SHAPE_COLORS = {
+    "I": (0, 255, 255),
+    "J": (0, 0, 255),
+    "L": (255, 165, 0),
+    "O": (255, 255, 0),
+    "S": (0, 255, 0),
+    "T": (128, 0, 128),
+    "Z": (255, 0, 0)
+}
+
+class Cell:
+    def __init__(self):
+        self.state = CellState.EMPTY
+        self.color = None
+
+class Grid:
+    def __init__(self, w=GRID_WIDTH, h=GRID_HEIGHT):
+        self.width = w
+        self.height = h
+        self.cells = [[Cell() for _ in range(w)] for _ in range(h)]
+
+    def is_inside(self, x, y):
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def get_cell(self, x, y):
+        return self.cells[y][x]
+
+    def set_cell(self, x, y, state, color):
+        c = self.cells[y][x]
+        c.state = state
+        c.color = color
+
+class Tetromino:
+    def __init__(self, shape):
+        self.shape = shape
+        self.rotations = BASE_SHAPES[shape]
+        self.rotation_index = 0
+        self.blocks = list(self.rotations[0])
+        self.color = SHAPE_COLORS[shape]
+
+    def rotate(self):
+        self.rotation_index = (self.rotation_index + 1) % len(self.rotations)
+        self.blocks = list(self.rotations[self.rotation_index])
+
+    def get_blocks(self, x, y):
+        return [(x + bx, y + by) for bx, by in self.blocks]
+
+class GameState(Enum):
+    ACTIVE = 0
+    PAUSED = 1
+    GAME_OVER = 2
+
+class TetrisJeweled:
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Tetris Jeweled")
+        self.clock = pygame.time.Clock()
+        self.grid = Grid()
+        self.current = self._new_tetromino()
+        self.next_piece = self._new_tetromino()
+        self.x, self.y = SPAWN_X, SPAWN_Y
+        self.state = GameState.ACTIVE
+        self.score = 0
+        self.drop_speed = DROP_INTERVAL
+        self.last_drop = pygame.time.get_ticks()
+        self.animation_timer = 0
+        self.animation_type = None  # 'line' or 'match'
+        self.cleared_lines = []
+        self.match_positions = set()
+        self.spawn_pending = False
+        self.chain_count = 0
+
+    def _new_tetromino(self):
+        return Tetromino(random.choice(list(BASE_SHAPES.keys())))
+
+    def run(self):
+        running = True
+        while running:
+            dt = self.clock.tick(60)
+            for evt in pygame.event.get():
+                if evt.type == pygame.QUIT:
+                    running = False
+                elif evt.type == pygame.KEYDOWN:
+                    if evt.key == pygame.K_p:
+                        if self.state == GameState.ACTIVE:
+                            self.state = GameState.PAUSED
+                        elif self.state == GameState.PAUSED:
+                            self.state = GameState.ACTIVE
+                    elif self.state == GameState.ACTIVE and self.animation_timer == 0:
+                        if evt.key == pygame.K_LEFT:
+                            self._move(-1, 0)
+                        elif evt.key == pygame.K_RIGHT:
+                            self._move(1, 0)
+                        elif evt.key == pygame.K_DOWN:
+                            self._move(0, 1)
+                        elif evt.key == pygame.K_UP:
+                            self._rotate()
+                        elif evt.key == pygame.K_SPACE:
+                            self._hard_drop()
+            if self.state == GameState.ACTIVE:
+                self._update(dt)
+            self._render()
+            pygame.display.flip()
+        pygame.quit()
+
+    def _update(self, dt):
+        if self.animation_timer > 0:
+            self.animation_timer -= 1
+            if self.animation_timer == 0:
+                if self.animation_type == 'line':
+                    matches = self._detect_matches()
+                    if matches:
+                        self._start_match(matches)
+                    else:
+                        self._finish_cycle()
+                elif self.animation_type == 'match':
+                    self._clear_matches()
+                    matches = self._detect_matches()
+                    if matches:
+                        self._start_match(matches)
+                    else:
+                        self._finish_cycle()
+            return
+
+        now = pygame.time.get_ticks()
+        if now - self.last_drop >= self.drop_speed:
+            self._move(0, 1)
+            self.last_drop = now
+
+    def _move(self, dx, dy):
+        nx, ny = self.x + dx, self.y + dy
+        if self._valid(nx, ny, self.current):
+            self.x, self.y = nx, ny
+        elif dy != 0:
+            self._lock()
+
+    def _rotate(self):
+        old = self.current.rotation_index
+        self.current.rotate()
+        if not self._valid(self.x, self.y, self.current):
+            self.current.rotation_index = old
+            self.current.blocks = list(self.current.rotations[old])
+
+    def _hard_drop(self):
+        while self._valid(self.x, self.y + 1, self.current):
+            self.y += 1
+        self._lock()
+
+    def _valid(self, x, y, tet):
+        for bx, by in tet.get_blocks(x, y):
+            if not self.grid.is_inside(bx, by):
+                return False
+            if self.grid.get_cell(bx, by).state == CellState.FILLED:
+                return False
+        return True
+
+    def _lock(self):
+        for bx, by in self.current.get_blocks(self.x, self.y):
+            self.grid.set_cell(bx, by, CellState.FILLED, self.current.color)
+        self.spawn_pending = True
+        lines = [yy for yy in range(self.grid.height)
+                 if all(self.grid.get_cell(xx, yy).state == CellState.FILLED
+                        for xx in range(self.grid.width))]
+        if lines:
+            self._clear_lines(lines)
+            self.animation_type = 'line'
+            self.animation_timer = LINE_ANIM_FRAMES
+        else:
+            matches = self._detect_matches()
+            if matches:
+                self._start_match(matches)
+            else:
+                self._finish_cycle()
+
+    def _clear_lines(self, lines):
+        base = LINE_CLEAR_SCORES.get(len(lines), len(lines) * LINE_CLEAR_SCORES[1])
+        bonus = int(base * CHAIN_BONUS_RATE * self.chain_count)
+        self.score += base + bonus
+        self.chain_count += 1
+        self.cleared_lines = sorted(lines)
+        for y in self.cleared_lines:
+            for x in range(self.grid.width):
+                self.grid.set_cell(x, y, CellState.EMPTY, None)
+            for yy in range(y - 1, -1, -1):
+                for x in range(self.grid.width):
+                    c = self.grid.get_cell(x, yy)
+                    self.grid.set_cell(x, yy + 1, c.state, c.color)
+    
+    def _start_match(self, positions):
+        self.match_positions = positions
+        self.animation_type = 'match'
+        self.animation_timer = MATCH_ANIM_FRAMES
+
+    def _detect_matches(self):
+        visited = [[False]*self.grid.width for _ in range(self.grid.height)]
+        matches = set()
+        for y in range(self.grid.height):
+            for x in range(self.grid.width):
+                if not visited[y][x]:
+                    cell = self.grid.get_cell(x, y)
+                    if cell.state == CellState.FILLED:
+                        color = cell.color
+                        stack = [(x, y)]
+                        comp = []
+                        visited[y][x] = True
+                        while stack:
+                            cx, cy = stack.pop()
+                            comp.append((cx, cy))
+                            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                                nx, ny = cx + dx, cy + dy
+                                if (0 <= nx < self.grid.width and
+                                        0 <= ny < self.grid.height and
+                                        not visited[ny][nx]):
+                                    nc = self.grid.get_cell(nx, ny)
+                                    if nc.state == CellState.FILLED and nc.color == color:
+                                        visited[ny][nx] = True
+                                        stack.append((nx, ny))
+                        if len(comp) >= 3:
+                            matches.update(comp)
+        return matches
+
+    def _clear_matches(self):
+        count = len(self.match_positions)
+        base = count * GEM_CLEAR_POINTS
+        bonus = int(base * CHAIN_BONUS_RATE * self.chain_count)
+        self.score += base + bonus
+        self.chain_count += 1
+        for x, y in self.match_positions:
+            self.grid.set_cell(x, y, CellState.EMPTY, None)
+        for x in range(self.grid.width):
+            stack = [self.grid.get_cell(x, yy).color
+                     for yy in range(self.grid.height)
+                     if self.grid.get_cell(x, yy).state == CellState.FILLED]
+            for yy in range(self.grid.height - 1, -1, -1):
+                if stack:
+                    clr = stack.pop()
+                    self.grid.set_cell(x, yy, CellState.FILLED, clr)
+                else:
+                    self.grid.set_cell(x, yy, CellState.EMPTY, None)
+
+    def _finish_cycle(self):
+        self.animation_type = None
+        self.cleared_lines.clear()
+        self.match_positions.clear()
+        self.chain_count = 0
+        if self.spawn_pending:
+            self._spawn_next()
+            self.spawn_pending = False
+
+    def _spawn_next(self):
+        self.current = self.next_piece
+        self.next_piece = self._new_tetromino()
+        self.x, self.y = SPAWN_X, SPAWN_Y
+        if not self._valid(self.x, self.y, self.current):
+            self.state = GameState.GAME_OVER
+
+    def _render(self):
+        self.screen.fill((0, 0, 0))
+        self._draw_grid()
+        if self.state != GameState.GAME_OVER and self.animation_timer == 0:
+            self._draw_tetromino()
+        self._draw_next()
+        self._draw_score()
+        if self.state == GameState.PAUSED:
+            self._draw_overlay("Paused")
+        elif self.state == GameState.GAME_OVER:
+            self._draw_overlay("Game Over", final=True)
+
+    def _draw_grid(self):
+        for y in range(self.grid.height):
+            for x in range(self.grid.width):
+                cell = self.grid.get_cell(x, y)
+                rect = pygame.Rect(x*BLOCK_SIZE, y*BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+                color = EMPTY_COLOR
+                if self.animation_timer > 0:
+                    if self.animation_type == 'line' and y in self.cleared_lines:
+                        color = (255, 255, 255) if self.animation_timer % 2 == 0 else EMPTY_COLOR
+                    elif self.animation_type == 'match' and (x, y) in self.match_positions:
+                        color = (255, 255, 255) if self.animation_timer % 2 == 0 else EMPTY_COLOR
+                    elif cell.state == CellState.FILLED:
+                        color = cell.color
+                elif cell.state == CellState.FILLED:
+                    color = cell.color
+                pygame.draw.rect(self.screen, color, rect)
+                pygame.draw.rect(self.screen, GRID_LINE_COLOR, rect, 1)
+
+    def _draw_tetromino(self):
+        for bx, by in self.current.get_blocks(self.x, self.y):
+            rect = pygame.Rect(bx*BLOCK_SIZE, by*BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+            pygame.draw.rect(self.screen, self.current.color, rect)
+            pygame.draw.rect(self.screen, GRID_LINE_COLOR, rect, 1)
+
+    def _draw_next(self):
+        font = pygame.font.Font(None, 30)
+        lbl = font.render("Next:", True, (255, 255, 255))
+        self.screen.blit(lbl, (PREVIEW_POS[0], PREVIEW_POS[1] - 30))
+        for bx, by in self.next_piece.get_blocks(0, 0):
+            px = PREVIEW_POS[0] + bx * BLOCK_SIZE
+            py = PREVIEW_POS[1] + by * BLOCK_SIZE
+            rect = pygame.Rect(px, py, BLOCK_SIZE, BLOCK_SIZE)
+            pygame.draw.rect(self.screen, self.next_piece.color, rect)
+            pygame.draw.rect(self.screen, GRID_LINE_COLOR, rect, 1)
+
+    def _draw_score(self):
+        font = pygame.font.Font(None, 36)
+        txt = font.render(f"Score: {self.score}", True, (255, 255, 255))
+        self.screen.blit(txt, (PREVIEW_POS[0], PREVIEW_POS[1] + 150))
+
+    def _draw_overlay(self, text, final=False):
+        ov = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        ov.fill((0, 0, 0, 180))
+        self.screen.blit(ov, (0, 0))
+        font = pygame.font.Font(None, 72)
+        lbl = font.render(text, True, (255, 255, 255))
+        rect = lbl.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - (60 if final else 0)))
+        self.screen.blit(lbl, rect)
+        if final:
+            sub = pygame.font.Font(None, 48).render(f"Final Score: {self.score}", True, (255, 255, 255))
+            r2 = sub.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 60))
+            self.screen.blit(sub, r2)
+
+if __name__ == '__main__':
+    TetrisJeweled().run()
+```

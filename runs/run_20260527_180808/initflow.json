@@ -1,0 +1,113 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement module to parse and extract key requirements from the job description",
+            "agent_id": 4,
+            "next": [
+                "task2"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "job_description_agent",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement module to parse the candidate\u2019s resume and extract profile details",
+            "agent_id": 2,
+            "next": [
+                "task2",
+                "task6"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop algorithm to generate a tailored set of technical interview questions based on job requirements and candidate background",
+            "agent_id": 7,
+            "next": [
+                "task3"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "interview_agent",
+            "output_format": "JSON"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Build interview execution component to conduct the technical interview session and record responses",
+            "agent_id": 2,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task2",
+                "task6"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Create scoring engine to evaluate and score candidate interview responses according to predefined criteria",
+            "agent_id": 7,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "interview_agent",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Generate final evaluation report in .txt format summarizing scores and recommendations",
+            "agent_id": 8,
+            "next": [],
+            "prev": [
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "scoring_agent",
+            "output_format": "Plain text"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Implement email notification module for sending interview invites and follow-up messages",
+            "agent_id": 2,
+            "next": [
+                "task3"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        }
+    }
+}

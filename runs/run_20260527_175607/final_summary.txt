@@ -1,0 +1,87 @@
+```text
+1. Analyze Job Description:
+   - Output: 
+     Job Title: Workflow Planning Agent
+     Required Skills:
+       a. Technical Skills: 
+          - Natural Language Processing (NLP)
+          - Text Analysis
+          - Data Extraction
+       b. Soft Skills: 
+          - Analytical Skills
+          - Communication Skills
+          - Workflow Management
+     Preferred Skills:
+       a. Technical Skills: 
+          - Machine Learning (ML)
+          - Email Automation
+       b. Soft Skills: 
+          - Prioritization
+          - Adaptability
+     Years of Experience: 
+       - Minimum: 0 years
+       - Preferred: 1+ years
+     Educational Requirements: 
+       - Required: None specified
+       - Preferred: Bachelor's degree in Computer Science or related field
+     Key Responsibilities:
+       - Responsibility 1: Analyze job descriptions and candidate resumes.
+       - Responsibility 2: Plan and manage the workflow for candidate evaluation.
+       - Responsibility 3: Extract key information for each task.
+       - Responsibility 4: Send emails as needed.
+       - Responsibility 5: Score candidate responses and generate final evaluation report.
+     Evaluation Criteria:
+       a. Technical Assessments:
+          - Accuracy of job description and resume analysis.
+          - Efficiency of workflow planning.
+       b. Behavioral / Soft-Skills:
+          - Clarity and effectiveness of communication.
+          - Ability to prioritize tasks.
+       c. Cultural Fit:
+          - Alignment with task objectives and downstream goals.
+
+2. Analyze Candidate Resume:
+   - Candidate Resume Analysis Report:
+     Candidate Name: John Doe
+     Steps:
+     - Skills Extraction: Python, JavaScript, Java, Django, Flask, React, Node.js, PostgreSQL, MongoDB, AWS, Docker, Kubernetes, Git, Jenkins, RESTful APIs, Agile/Scrum.
+     - Experience:
+       - Software Engineer at Acme Corp: RESTful services in Django, UI improvements, CI/CD automation.
+       - Web Developer at Beta Solutions: Node.js microservices, AWS migration.
+     - Requirement Matching: Strong fit for job requirements.
+     - Gaps: Minor gaps in TypeScript and mobile app development.
+     - Scoring: Skills Alignment Score: 90/100, Experience Relevance Score: 85/100, Overall Match Score: 88/100.
+     - Overall Fit: Strong Fit.
+
+3. Send Interview Invitation Email:
+   - Subject Line: Interview Invitation - Workflow Planning Agent
+   - Email Body:
+     - Dear John Doe,
+     - We are pleased to invite you to an interview for the Workflow Planning Agent position at our company. The interview is scheduled for [Date] at [Time] via [Platform]. We will discuss your experience with NLP, text analysis, data extraction, and your approach to workflow management. 
+     - Please confirm your availability.
+     - Best regards, [Your Name/Company Name].
+
+4. Conduct Technical Interview:
+   - Questions asked:
+     - NLP Experience
+     - Text Analysis Approach
+     - Data Extraction Project
+     - Workflow Design
+     - Email Automation
+   - Candidate responses were recorded for scoring and evaluation.
+
+5. Score Candidate Responses:
+   - Evaluated candidate responses against predefined scoring criteria.
+   - Scores were assigned based on performance in technical skills, soft skills, and overall presentation.
+
+6. Generate Final Evaluation Report:
+   - Final Evaluation Report for John Doe:
+     I. Resume Analysis Summary:
+        - Skills Alignment Score: 90/100
+        - Experience Relevance Score: 85/100
+        - Overall Fit: Strong Fit.
+     II. Technical Interview Performance:
+        - Questions were summarized with candidate responses, scores, and rationales filled for each.
+     III. Overall Strengths and Areas for Improvement were noted.
+     IV. Final Recommendation and Justification provided in the report.
+```

@@ -1,0 +1,45 @@
+```
+Final Evaluation Report
+Date: 2024-06-16
+Position: Senior Data Engineer
+
+Candidate: [Candidate Name]
+
+Interview Panel:
+  - Lead Data Engineer: [Interviewer A]
+  - Senior Data Scientist: [Interviewer B]
+
+Scoring Breakdown:
+  - Technical Accuracy:             23 / 25
+  - Problem-Solving Approach:       23 / 25
+  - Communication & Clarity:        23 / 25
+  - Overall Total:                  69 / 75
+  - Percentage:                     92%
+
+Summary:
+The candidate demonstrated strong expertise in designing and optimizing data pipelines, and articulated their problem-solving approach clearly. Communication was concise and audience-aware.
+
+Strengths:
+  1. Deep understanding of batch and stream processing architectures.
+  2. Effective debugging and troubleshooting techniques for ETL workflows.
+  3. Clear, structured explanations of complex data concepts.
+
+Weaknesses:
+  1. Limited hands-on exposure to Azure Databricks and Azure Data Factory.
+  2. SQL query optimization for large-scale tables could be improved.
+
+Recommendations:
+  - Strongly recommend extending a formal offer for the Senior Data Engineer position.
+  - Contingent upon successful completion of reference checks and final compensation approval.
+  - Consider a focused onboarding tutorial on Azure data services.
+
+Next Steps:
+  1. Draft and send offer letter by 2024-06-18.
+  2. Schedule reference checks with provided contacts.
+  3. Design a 2-week Azure-focused onboarding session.
+
+Reviewer:
+  Name: [Your Name]
+  Title: Hiring Manager
+  Signature: ______________________
+```

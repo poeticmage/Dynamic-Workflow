@@ -1,0 +1,10 @@
+```python
+[
+    "Analyze job description to extract key requirements.",
+    "Candidate resume analyzed to extract personal information, education, work experience, and skills.",
+    "Defined a comprehensive set of interview questions based on job requirements and the candidate's profile.",
+    "Conducted technical interview presenting questions, capturing responses, and recording timing.",
+    "Evaluated candidate responses using a scoring engine, providing scores and rationales for each question.",
+    "Generated a final evaluation report summarizing job requirements, candidate profile, interview assessment, strengths, areas for improvement, and overall recommendation."
+]
+```

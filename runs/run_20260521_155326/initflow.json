@@ -1,0 +1,98 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: game grid representation, tetromino shapes, gem colors.",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task4"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Structure Specialist",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino mechanics: spawning, movement, rotation, collision detection, and locking into the grid.",
+            "agent_id": 1,
+            "next": [
+                "task2"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Mechanic Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Convert locked tetromino blocks into colored gem objects within the grid data structure.",
+            "agent_id": 2,
+            "next": [
+                "task3"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Gem Transformation Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Implement clearing mechanics: detect and clear completed lines (Tetris) and match-3 gem combos, handle chain reactions and update score.",
+            "agent_id": 3,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Clearing and Scoring Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Build GUI and input handling with Pygame: render grid, gems, falling tetrominoes, next-piece preview, score display, animations, and keyboard controls.",
+            "agent_id": 4,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "GUI and Input Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Create main game loop integrating modules: manage frame updates, falling logic, locking, clearing, and rendering.",
+            "agent_id": 5,
+            "next": [],
+            "prev": [
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Game Loop Integrator",
+            "output_format": "Python code"
+        }
+    }
+}

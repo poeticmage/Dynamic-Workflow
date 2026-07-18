@@ -1,0 +1,113 @@
+```text
+Candidate Evaluation Report
+
+Candidate: [Candidate Name - Replace with actual name]
+Date: [Date of Evaluation - Replace with actual date]
+Position: [Job Title - Replace with actual job title]
+
+I. Resume-Job Match Analysis:
+Match Score: [To be calculated based on the algorithm]
+Overall Assessment: [Assessment based on the match thresholds]
+
+Key Alignment Points:
+  - Experience: [List of top matched experience keywords and corresponding job responsibilities.]
+  - Skills: [List of matched skill keywords and indication of proficiency level (if available).]
+  - Education: [Matched degree names, majors, and institutions. Indication of relevance to the job.]
+  - Certifications: [Matched certification names and issuing organizations.]
+  - Projects: [List of projects that demonstrate key skills or experience related to the job description.]
+
+Detailed Analysis:
+  - Experience Match:
+    - Score: [Value - Float]
+    - Matched Keywords: [List of keywords matched in the experience section.]
+    - Unmatched Keywords: [List of keywords from the job description not found in the experience section.]
+  - Skills Match:
+    - Score: [Value - Float]
+    - Matched Keywords: [List of skills matched.]
+    - Unmatched Keywords: [List of required skills not found.]
+  - Education Match:
+    - Score: [Value - Float]
+    - Matched Keywords: [List of matched education details.]
+    - Unmatched Keywords: [List of required education details not found.]
+  - Certifications Match:
+    - Score: [Value - Float]
+    - Matched Keywords: [List of matched certifications.]
+    - Unmatched Keywords: [List of required certifications not found.]
+  - Projects Match:
+    - Score: [Value - Float]
+    - Matched Keywords: [List of keywords matched in the projects section.]
+    - Unmatched Keywords: [List of keywords from the job description not found in the projects section.]
+  - Overall Summary: [Summary of candidate's strengths and weaknesses based on the resume-job match. Highlights key areas of alignment and gaps.]
+
+Resume Match Recommendation: [String suggesting a course of action based on the match_score and detailed analysis]
+
+II. Interview Summary:
+[Summary of the interview process, including the flow, candidate's communication style, and overall impression.]
+
+III. Technical Assessment:
+  - Question 1: [Technical Question]
+    - Answer: [Candidate's Answer]
+    - Relevance: [Score - 0-5]
+    - Depth: [Score - 0-5]
+    - Confidence: [Score - 0-5]
+    - Technical Accuracy: [Score - 0-5]
+    - Overall Score: [Value - Float]
+    - Feedback: [String]
+
+  - Question 2: [Technical Question]
+    - Answer: [Candidate's Answer]
+    - Relevance: [Score - 0-5]
+    - Depth: [Score - 0-5]
+    - Confidence: [Score - 0-5]
+    - Technical Accuracy: [Score - 0-5]
+    - Overall Score: [Value - Float]
+    - Feedback: [String]
+
+  [Add more technical questions and answers as needed]
+
+Average Technical Assessment Score: [Value - Float]
+
+IV. Behavioral Assessment:
+  - Question 1: [Behavioral Question]
+    - Answer: [Candidate's Answer]
+    - Relevance: [Score - 0-5]
+    - Depth: [Score - 0-5]
+    - Confidence: [Score - 0-5]
+    - Technical Accuracy: [N/A]
+    - Overall Score: [Value - Float]
+    - Feedback: [String]
+
+  - Question 2: [Behavioral Question]
+    - Answer: [Candidate's Answer]
+    - Relevance: [Score - 0-5]
+    - Depth: [Score - 0-5]
+    - Confidence: [Score - 0-5]
+    - Technical Accuracy: [N/A]
+    - Overall Score: [Value - Float]
+    - Feedback: [String]
+
+  [Add more behavioral questions and answers as needed]
+
+Average Behavioral Assessment Score: [Value - Float]
+
+V. Strengths:
+[List of candidate's key strengths identified from resume analysis and interview performance.]
+
+VI. Weaknesses:
+[List of candidate's weaknesses identified from resume analysis and interview performance.]
+
+VII. Final Recommendation and Scoring Breakdown:
+  - Resume-Job Match Score: [Value - Float from 0.0 to 1.0]
+  - Average Technical Score: [Value - Float from 0.0 to 5.0]
+  - Average Behavioral Score: [Value - Float from 0.0 to 5.0]
+
+  - Weighted Resume Score: [Value - Calculated]
+  - Weighted Technical Score: [Value - Calculated]
+  - Weighted Behavioral Score: [Value - Calculated]
+
+  - Final Score: [Value - Float]
+
+  - Recommendation: [Strongly Recommend for Hire/Recommend for Hire/Consider for Further Evaluation/Not Recommended for Hire]
+
+Evaluator: [Your Name - Replace with the evaluator's name]
+```

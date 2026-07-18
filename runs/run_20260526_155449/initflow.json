@@ -1,0 +1,123 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define the database schema for job descriptions, candidate resumes, interview sessions, AI-generated questions, candidate responses, evaluation scores, email logs, and final reports.",
+            "agent_id": 3,
+            "next": [
+                "task2",
+                "task3",
+                "task4",
+                "task5",
+                "task6"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "summary_agent",
+            "output_format": "JSON schema"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Design the RESTful API specification (endpoints, request/response models) for core operations: ingesting jobs/resumes, orchestrating interviews, submitting responses, scoring, emailing, and retrieving reports.",
+            "agent_id": 2,
+            "next": [
+                "task2",
+                "task3",
+                "task4",
+                "task5",
+                "task6"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "OpenAPI YAML"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Implement the Resume\u2013Job Matching Module: parse and embed job descriptions and resumes, compute semantic similarity scores, and expose matching interface.",
+            "agent_id": 2,
+            "next": [
+                "task3",
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Python code (module)"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Build the Interview Orchestration Engine: manage dynamic question flows, call AI services to generate technical and behavioral questions (including follow-ups), and track session state.",
+            "agent_id": 2,
+            "next": [],
+            "prev": [
+                "task0",
+                "task1",
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "coding_agent",
+            "output_format": "Python code (module)"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Develop the Candidate Evaluation & Scoring Logic: analyze candidate responses for relevance, depth, confidence, and technical accuracy; compute composite scores across defined categories.",
+            "agent_id": 2,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Python code (module)"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Create the Email Generation Module: define templates and AI prompt flows for automated interview invitations and follow-up communications.",
+            "agent_id": 1,
+            "next": [],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "research_agent",
+            "output_format": "Python code (module)"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Implement the Final Report Generation Module: assemble resume-job match data, interview summaries, technical and behavioral assessments, strengths/weaknesses, and recommendations into a structured report.",
+            "agent_id": 2,
+            "next": [],
+            "prev": [
+                "task0",
+                "task1",
+                "task2",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "coding_agent",
+            "output_format": "Python code (module)"
+        }
+    }
+}

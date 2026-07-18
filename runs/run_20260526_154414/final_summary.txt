@@ -1,0 +1,368 @@
+```ppt
+<Presentation>
+  <Slide>
+    <Title>ICLR 2025 - Home</Title>
+    <Content>
+      <![CDATA[
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICLR 2025 - International Conference on Learning Representations</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1><span class="highlight">ICLR</span> 2025</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li class="current"><a href="index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="venue.html">Venue</a></li>
+                    <li><a href="#">Call for Papers</a></li>
+                    <li><a href="#">Registration</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="container">
+            <h1>International Conference on Learning Representations</h1>
+            <p>April 27, 2025 - May 1, 2025 | San Francisco, California, United States</p>
+        </div>
+    </section>
+
+    <section id="organizer">
+        <div class="container">
+            <h2>Organized by</h2>
+            <p>International Association for Learning Representations</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>ICLR 2025, All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>
+      ]]>
+    </Content>
+  </Slide>
+  <Slide>
+    <Title>ICLR 2025 - Schedule</Title>
+    <Content>
+      <![CDATA[
+<section id="schedule">
+    <div class="container">
+        <h2>Conference Schedule</h2>
+        <p>The ICLR 2025 conference schedule is detailed below. Please note that the schedule is subject to change.</p>
+
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Session</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>April 27, 2025 (Sunday)</td>
+                    <td>9:00 AM - 10:00 AM</td>
+                    <td>Opening Ceremony & Keynote</td>
+                    <td>Grand Ballroom</td>
+                </tr>
+                <tr>
+                    <td>April 27, 2025 (Sunday)</td>
+                    <td>10:30 AM - 12:00 PM</td>
+                    <td>Session 1: Deep Learning Fundamentals</td>
+                    <td>Room 101</td>
+                </tr>
+                <tr>
+                    <td>April 27, 2025 (Sunday)</td>
+                    <td>2:00 PM - 3:30 PM</td>
+                    <td>Session 2: Generative Models</td>
+                    <td>Room 102</td>
+                </tr>
+                <tr>
+                    <td>April 27, 2025 (Sunday)</td>
+                    <td>4:00 PM - 5:30 PM</td>
+                    <td>Poster Session 1</td>
+                    <td>Exhibition Hall</td>
+                </tr>
+                <tr>
+                    <td>April 28, 2025 (Monday)</td>
+                    <td>9:00 AM - 10:30 AM</td>
+                    <td>Session 3: Reinforcement Learning</td>
+                    <td>Room 103</td>
+                </tr>
+                <tr>
+                    <td>April 28, 2025 (Monday)</td>
+                    <td>11:00 AM - 12:30 PM</td>
+                    <td>Session 4: Natural Language Processing</td>
+                    <td>Room 104</td>
+                </tr>
+                 <tr>
+                    <td>April 28, 2025 (Monday)</td>
+                    <td>2:00 PM - 3:30 PM</td>
+                    <td>Session 5: Computer Vision</td>
+                    <td>Room 101</td>
+                </tr>
+                <tr>
+                    <td>April 28, 2025 (Monday)</td>
+                    <td>4:00 PM - 5:30 PM</td>
+                    <td>Poster Session 2</td>
+                    <td>Exhibition Hall</td>
+                </tr>
+                <tr>
+                    <td>April 29, 2025 (Tuesday)</td>
+                    <td>9:00 AM - 10:30 AM</td>
+                    <td>Session 6: Unsupervised Learning</td>
+                    <td>Room 102</td>
+                </tr>
+                <tr>
+                    <td>April 29, 2025 (Tuesday)</td>
+                    <td>11:00 AM - 12:30 PM</td>
+                    <td>Session 7: Representation Learning</td>
+                    <td>Room 103</td>
+                </tr>
+                <tr>
+                    <td>April 29, 2025 (Tuesday)</td>
+                    <td>2:00 PM - 3:30 PM</td>
+                    <td>Session 8: Deep Learning Applications</td>
+                    <td>Room 104</td>
+                </tr>
+                <tr>
+                    <td>April 29, 2025 (Tuesday)</td>
+                    <td>4:00 PM - 5:30 PM</td>
+                    <td>Workshop Session 1</td>
+                    <td>Workshop Room 1</td>
+                </tr>
+                <tr>
+                    <td>April 30, 2025 (Wednesday)</td>
+                    <td>9:00 AM - 10:30 AM</td>
+                    <td>Session 9: Bayesian Methods for Deep Learning</td>
+                    <td>Room 101</td>
+                </tr>
+                <tr>
+                    <td>April 30, 2025 (Wednesday)</td>
+                    <td>11:00 AM - 12:30 PM</td>
+                    <td>Session 10: Graph Neural Networks</td>
+                    <td>Room 102</td>
+                </tr>
+                <tr>
+                    <td>April 30, 2025 (Wednesday)</td>
+                    <td>2:00 PM - 3:30 PM</td>
+                    <td>Session 11: Transformers</td>
+                    <td>Room 103</td>
+                </tr>
+                <tr>
+                    <td>April 30, 2025 (Wednesday)</td>
+                    <td>4:00 PM - 5:30 PM</td>
+                    <td>Workshop Session 2</td>
+                    <td>Workshop Room 2</td>
+                </tr>
+                 <tr>
+                    <td>May 1, 2025 (Thursday)</td>
+                    <td>9:00 AM - 10:30 AM</td>
+                    <td>Session 12: Meta Learning</td>
+                    <td>Room 104</td>
+                </tr>
+                <tr>
+                    <td>May 1, 2025 (Thursday)</td>
+                    <td>11:00 AM - 12:30 PM</td>
+                    <td>Session 13: Continual Learning</td>
+                    <td>Room 101</td>
+                </tr>
+                <tr>
+                    <td>May 1, 2025 (Thursday)</td>
+                    <td>2:00 PM - 3:00 PM</td>
+                    <td>Closing Ceremony & Awards</td>
+                    <td>Grand Ballroom</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+      ]]>
+    </Content>
+  </Slide>
+  <Slide>
+    <Title>ICLR 2025 - Venue</Title>
+    <Content>
+      <![CDATA[
+<section id="venue">
+    <div class="container">
+        <h2>Venue</h2>
+        <p>The International Conference on Learning Representations (ICLR) 2025 will be held at:</p>
+        <address>
+            Moscone Center<br>
+            747 Howard St<br>
+            San Francisco, CA 94103<br>
+            United States
+        </address>
+        
+        <h3>Conference Location</h3>
+        <p>The Moscone Center is located in the heart of downtown San Francisco, within walking distance of major hotels, public transit, and local landmarks. ICLR 2025 attendees will find the location both convenient and accessible.</p>
+
+        <h3>Map</h3>
+        <div class="map-container">
+            <iframe
+                src="https://www.google.com/maps?q=Moscone+Center,+747+Howard+St,+San+Francisco,+CA+94103,+USA&output=embed"
+                width="600"
+                height="450"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</section>
+      ]]>
+    </Content>
+  </Slide>
+  <Slide>
+    <Title>ICLR 2025 - CSS Style</Title>
+    <Content>
+      <![CDATA[
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: #e8491d 3px solid;
+}
+
+header a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+header ul {
+    margin: 0;
+    padding: 0;
+}
+
+header li {
+    float: left;
+    display: inline;
+    padding: 0 20px 0 20px;
+}
+
+header #branding {
+    float: left;
+}
+
+header #branding h1 {
+    margin: 0;
+}
+
+header nav {
+    float: right;
+    margin-top: 10px;
+}
+
+header .highlight, header .current a {
+    color: #e8491d;
+    font-weight: bold;
+}
+
+header a:hover {
+    color: #ccc;
+    font-weight: bold;
+}
+
+/* Hero Section */
+#hero {
+    background: url('https://via.placeholder.com/1600x400') no-repeat center/cover;
+    color: #fff;
+    text-align: center;
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+#hero h1 {
+    font-size: 3em;
+    margin-top: -30px;
+    margin-bottom: 10px;
+}
+
+/* Organizer Section */
+#organizer {
+    padding: 20px;
+    background: #fff;
+    color: #333;
+    text-align: center;
+}
+
+/* Venue Section */
+#venue {
+    padding: 20px;
+    background: #f4f4f4;
+}
+
+#venue .map-container {
+    margin-top: 20px;
+}
+
+/* Schedule Section */
+#schedule {
+    padding: 20px;
+    background: #fff;
+}
+
+#schedule .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#schedule .schedule-table th, #schedule .schedule-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#schedule .schedule-table th {
+    background-color: #333;
+    color: white;
+}
+
+/* Footer */
+footer {
+    padding: 20px;
+    margin-top: 20px;
+    color: #fff;
+    background-color: #e8491d;
+    text-align: center;
+}
+      ]]>
+    </Content>
+  </Slide>
+</Presentation>
+```

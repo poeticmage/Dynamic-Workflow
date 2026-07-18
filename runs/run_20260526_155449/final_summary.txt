@@ -1,0 +1,217 @@
+```markdown
+# AI-Driven Interview and Candidate Evaluation System
+
+## 1. Overview
+This document outlines the implementation details for an AI-driven interview and candidate evaluation system designed to enhance recruitment workflows. The system includes functionality to analyze job descriptions and candidate resumes, conduct AI-generated interviews, and generate comprehensive evaluation reports for recruiters.
+
+## 2. Database Schema
+The database schema is designed to support essential data structures for the system.
+
+```json
+{
+  "schemas": {
+    "job_descriptions": {
+      "type": "object",
+      "properties": {
+        "job_id": {"type": "integer", "description": "Unique identifier for the job description", "primaryKey": true},
+        "title": {"type": "string", "description": "Job title"},
+        "description": {"type": "string", "description": "Full job description text"},
+        "requirements": {"type": "string", "description": "Job requirements"},
+        "responsibilities": {"type": "string", "description": "Job responsibilities"},
+        "department": {"type": "string", "description": "Department the job belongs to"},
+        "location": {"type": "string", "description": "Job location"},
+        "date_posted": {"type": "string", "format": "date", "description": "Date the job was posted"},
+        "embedding": {"type": "array", "items": {"type": "number"}, "description": "Vector embedding of the job description"}
+      },
+      "required": ["job_id", "title", "description"]
+    },
+    "candidate_resumes": {
+      "type": "object",
+      "properties": {
+        "candidate_id": {"type": "integer", "description": "Unique identifier for the candidate", "primaryKey": true},
+        "name": {"type": "string", "description": "Candidate's full name"},
+        "email": {"type": "string", "description": "Candidate's email address"},
+        "phone": {"type": "string", "description": "Candidate's phone number"},
+        "resume_text": {"type": "string", "description": "Full text of the candidate's resume"},
+        "skills": {"type": "array", "items": {"type": "string"}, "description": "List of skills extracted from the resume"},
+        "experience": {"type": "string", "description": "Candidate's work experience"},
+        "education": {"type": "string", "description": "Candidate's education details"},
+        "embedding": {"type": "array", "items": {"type": "number"}, "description": "Vector embedding of the resume"}
+      },
+      "required": ["candidate_id", "name", "email", "resume_text"]
+    },
+    ...
+  }
+}
+```
+
+## 3. API Specification
+The API facilitates the interaction between the client applications and the backend services, including endpoints for jobs, resumes, interviews, evaluations, and reports.
+
+```yaml
+openapi: 3.0.0
+info:
+  title: AI-Driven Interview and Candidate Evaluation System API
+  version: 1.0.0
+  description: RESTful API for managing jobs, resumes, interviews, evaluations, and reports.
+
+paths:
+  /jobs:
+    post:
+      summary: Ingest a new job description
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                job_title: { type: string }
+                job_description: { type: string }
+                ...
+      responses:
+        ...
+    get:
+      summary: Retrieve a list of all jobs
+      responses:
+        ...
+  /resumes:
+    post:
+      summary: Ingest a new candidate resume
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ...
+      responses:
+        ...
+  ...
+```
+
+## 4. Resume-Job Matching Module
+This module parses and embeds job descriptions and resumes, computes semantic similarity scores, and exposes a matching interface.
+
+```python
+import nltk
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+import re
+from typing import List, Tuple
+
+class ResumeJobMatcher:
+    def __init__(self, embedding_model=None):
+        self.embedding_model = embedding_model
+        self.stop_words = set(stopwords.words('english'))
+
+    def preprocess_text(self, text: str) -> str:
+        text = re.sub(r'[^\\w\\s]', '', text)
+        text = text.lower()
+        tokens = word_tokenize(text)
+        tokens = [w for w in tokens if not w in self.stop_words]
+        return " ".join(tokens)
+
+    def compute_similarity(self, embedding1: np.ndarray, embedding2: np.ndarray) -> float:
+        if np.linalg.norm(embedding1) == 0 or np.linalg.norm(embedding2) == 0:
+            return 0.0
+        return cosine_similarity(embedding1.reshape(1, -1), embedding2.reshape(1, -1))[0][0]
+
+    def match(self, job_description: str, resume_text: str) -> float:
+        preprocessed_job_description = self.preprocess_text(job_description)
+        preprocessed_resume_text = self.preprocess_text(resume_text)
+        
+        if self.embedding_model:
+            job_embedding = self.embedding_model.encode(preprocessed_job_description)
+            resume_embedding = self.embedding_model.encode(preprocessed_resume_text)
+        else:
+            raise ValueError("Embedding model not provided")
+
+        similarity_score = self.compute_similarity(job_embedding, resume_embedding)
+        return similarity_score
+
+    ...
+```
+
+## 5. Interview Orchestration Engine
+The orchestration engine manages dynamic interview flows, generates questions, and evaluates candidate responses.
+
+```python
+class InterviewOrchestrator:
+    def __init__(self, job_id: int, candidate_id: int, session_id: Optional[int], 
+                 question_generator: QuestionGenerator, evaluation_service: EvaluationService, 
+                 database_client: DatabaseClient):
+        self.job_id = job_id
+        self.candidate_id = candidate_id
+        self.session_id = session_id
+        self.question_generator = question_generator
+        self.evaluation_service = evaluation_service
+        self.database_client = database_client
+        ...
+
+    def start_interview(self) -> Dict[str, Any]:
+        ...
+
+    def submit_response(self, question_id: int, response: str) -> Dict[str, Any]:
+        ...
+
+    ...
+```
+
+## 6. Candidate Evaluation & Scoring Logic
+This component analyzes candidate responses for various attributes and computes scores.
+
+```python
+class CandidateEvaluator:
+    def __init__(self, config: ScoringConfig):
+        self.config = config
+        ...
+
+    def evaluate(self, response: str, expected_answer: str, job_description: str, question_type: QuestionType = QuestionType.TECHNICAL) -> Dict[str, float]:
+        ...
+```
+
+## 7. Email Generation Module
+Handles the generation of interview invitations and follow-up emails.
+
+```python
+class EmailGenerator:
+    def generate_invitation_email(self, candidate_email: str, job_title: str, interview_date: datetime.datetime, interviewer_name: str) -> Dict[str, str]:
+        ...
+```
+
+## 8. Final Report Generation Module
+Constructs the final evaluation report that includes a comprehensive analysis of the candidate's performance.
+
+```python
+class FinalReportGenerator:
+    def generate_markdown(self, data: ReportData) -> str:
+        ...
+```
+
+## 9. Example Usage
+The following snippets demonstrate the usage of key components in the system.
+
+### Starting an Interview
+```python
+interview_orchestrator = InterviewOrchestrator(...)
+first_question = interview_orchestrator.start_interview()
+```
+
+### Evaluating a Candidate Response
+```python
+evaluation_results = evaluator.evaluate(response, expected_answer, job_description)
+```
+
+### Generating a Final Report
+```python
+report_data = ReportData(...)
+report_generator = FinalReportGenerator()
+report_markdown = report_generator.generate_markdown(report_data)
+```
+``` 
+
+This documentation provides a comprehensive outline of your AI-driven interview system, detailing its architecture, components, and example implementations to facilitate production-ready deployments and integrations.

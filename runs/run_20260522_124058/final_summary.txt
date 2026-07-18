@@ -1,0 +1,558 @@
+```python
+import pygame
+import random
+from enum import Enum
+from dataclasses import dataclass
+from typing import List, Tuple, Optional, Dict
+
+# Enum and Data Classes for Colors, Gems and Tetrominos
+class Color(Enum):
+    CYAN = (0, 255, 255)
+    BLUE = (0, 0, 255)
+    ORANGE = (255, 165, 0)
+    YELLOW = (255, 255, 0)
+    GREEN = (0, 255, 0)
+    PURPLE = (128, 0, 128)
+    RED = (255, 0, 0)
+
+@dataclass
+class GemCell:
+    color: Color
+
+@dataclass
+class Tetromino:
+    shape_id: str
+    rotations: List[List[Tuple[int, int]]]
+    color: Color
+
+TETROMINO_SHAPES: Dict[str, Tetromino] = {
+    'I': Tetromino(
+        shape_id='I',
+        color=Color.CYAN,
+        rotations=[
+            [(0,1),(1,1),(2,1),(3,1)],
+            [(2,0),(2,1),(2,2),(2,3)],
+            [(0,2),(1,2),(2,2),(3,2)],
+            [(1,0),(1,1),(1,2),(1,3)],
+        ]
+    ),
+    'O': Tetromino(
+        shape_id='O',
+        color=Color.YELLOW,
+        rotations=[[(1,0),(2,0),(1,1),(2,1)]]
+    ),
+    'T': Tetromino(
+        shape_id='T',
+        color=Color.PURPLE,
+        rotations=[
+            [(1,0),(0,1),(1,1),(2,1)],
+            [(1,0),(1,1),(2,1),(1,2)],
+            [(0,1),(1,1),(2,1),(1,2)],
+            [(1,0),(0,1),(1,1),(1,2)],
+        ]
+    ),
+    'S': Tetromino(
+        shape_id='S',
+        color=Color.GREEN,
+        rotations=[
+            [(1,0),(2,0),(0,1),(1,1)],
+            [(1,0),(1,1),(2,1),(2,2)],
+        ]
+    ),
+    'Z': Tetromino(
+        shape_id='Z',
+        color=Color.RED,
+        rotations=[
+            [(0,0),(1,0),(1,1),(2,1)],
+            [(2,0),(1,1),(2,1),(1,2)],
+        ]
+    ),
+    'J': Tetromino(
+        shape_id='J',
+        color=Color.BLUE,
+        rotations=[
+            [(0,0),(0,1),(1,1),(2,1)],
+            [(1,0),(2,0),(1,1),(1,2)],
+            [(0,1),(1,1),(2,1),(2,2)],
+            [(1,0),(1,1),(0,2),(1,2)],
+        ]
+    ),
+    'L': Tetromino(
+        shape_id='L',
+        color=Color.ORANGE,
+        rotations=[
+            [(2,0),(0,1),(1,1),(2,1)],
+            [(1,0),(1,1),(1,2),(2,2)],
+            [(0,1),(1,1),(2,1),(0,2)],
+            [(0,0),(1,0),(1,1),(1,2)],
+        ]
+    ),
+}
+
+class Grid:
+    def __init__(self, width: int = 10, height: int = 20):
+        self.width = width
+        self.height = height
+        self.cells: List[List[Optional[GemCell]]] = [
+            [None for _ in range(self.width)] for _ in range(self.height)
+        ]
+
+    def is_inside(self, x: int, y: int) -> bool:
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def get_cell(self, x: int, y: int) -> Optional[GemCell]:
+        if not self.is_inside(x, y):
+            return None
+        return self.cells[y][x]
+
+    def set_cell(self, x: int, y: int, gem: GemCell) -> None:
+        if self.is_inside(x, y):
+            self.cells[y][x] = gem
+
+    def clear_cell(self, x: int, y: int) -> None:
+        if self.is_inside(x, y):
+            self.cells[y][x] = None
+
+    def reset(self) -> None:
+        for y in range(self.height):
+            for x in range(self.width):
+                self.cells[y][x] = None
+
+# Tetromino Management
+class TetrominoManager:
+    def __init__(self, grid: Grid):
+        self.grid = grid
+        self.current_tetromino: Optional[Tetromino] = None
+        self.current_rotation: int = 0
+        self.x: int = 0
+        self.y: int = 0
+        self.new_tetromino()
+
+    def new_tetromino(self) -> None:
+        self.current_tetromino = random.choice(list(TETROMINO_SHAPES.values()))
+        self.current_rotation = 0
+        self.x = self.grid.width // 2 - 2  # Center the tetromino
+        self.y = 0
+
+        if self.check_collision(self.x, self.y, self.current_rotation):
+            self.grid.reset()  # Game over if new tetromino can't fit
+            self.current_tetromino = None  # Indicate game over
+
+    def rotate(self) -> None:
+        if self.current_tetromino is None:
+            return
+        new_rotation = (self.current_rotation + 1) % len(self.current_tetromino.rotations)
+        if not self.check_collision(self.x, self.y, new_rotation):
+            self.current_rotation = new_rotation
+
+    def move(self, dx: int) -> None:
+        if self.current_tetromino is None:
+            return
+        if not self.check_collision(self.x + dx, self.y, self.current_rotation):
+            self.x += dx
+
+    def move_down(self) -> bool:
+        if self.current_tetromino is None:
+            return False
+
+        if not self.check_collision(self.x, self.y + 1, self.current_rotation):
+            self.y += 1
+            return False
+        else:
+            self.lock_tetromino()
+            return True
+
+    def check_collision(self, x: int, y: int, rotation: int) -> bool:
+        if self.current_tetromino is None:
+            return True
+
+        for cell_x, cell_y in self.current_tetromino.rotations[rotation]:
+            grid_x = x + cell_x
+            grid_y = y + cell_y
+
+            if not self.grid.is_inside(grid_x, grid_y):
+                return True  # Out of bounds
+
+            if grid_y >= 0 and self.grid.get_cell(grid_x, grid_y) is not None:
+                return True  # Collision with existing gem
+
+        return False
+
+    def lock_tetromino(self) -> None:
+        if self.current_tetromino is None:
+            return
+
+        for cell_x, cell_y in self.current_tetromino.rotations[self.current_rotation]:
+            grid_x = self.x + cell_x
+            grid_y = self.y + cell_y
+            if self.grid.is_inside(grid_x, grid_y):
+                self.grid.set_cell(grid_x, grid_y, GemCell(self.current_tetromino.color))
+        self.new_tetromino()
+
+    def get_tetromino_cells(self) -> Optional[List[Tuple[int, int, Color]]]:
+        if self.current_tetromino is None:
+            return None
+
+        cells: List[Tuple[int, int, Color]] = []
+        for cell_x, cell_y in self.current_tetromino.rotations[self.current_rotation]:
+            grid_x = self.x + cell_x
+            grid_y = self.y + cell_y
+            if self.grid.is_inside(grid_x, grid_y) and grid_y >= 0:
+                cells.append((grid_x, grid_y, self.current_tetromino.color))
+        return cells
+
+# Clearing and Scoring Mechanics
+class ClearingManager:
+    def __init__(self, grid: Grid):
+        self.grid = grid
+        self.score = 0
+
+    def clear_lines(self) -> int:
+        full_rows = [y for y in range(self.grid.height)
+                     if all(self.grid.get_cell(x, y) is not None for x in range(self.grid.width))]
+        if not full_rows:
+            return 0
+
+        for x in range(self.grid.width):
+            column_cells = [self.grid.get_cell(x, y) for y in range(self.grid.height)
+                             if y not in full_rows]
+            new_col = [None] * len(full_rows) + column_cells
+            for y, cell in enumerate(new_col):
+                self.grid.set_cell(x, y, cell)
+        return len(full_rows)
+
+    def find_matches(self) -> List[Tuple[int, int]]:
+        matches = set()
+
+        # Horizontal runs
+        for y in range(self.grid.height):
+            x = 0
+            while x < self.grid.width - 2:
+                cell = self.grid.get_cell(x, y)
+                if cell is None:
+                    x += 1
+                    continue
+                run_color = cell.color
+                run_length = 1
+                while x + run_length < self.grid.width and \
+                      self.grid.get_cell(x + run_length, y) and \
+                      self.grid.get_cell(x + run_length, y).color == run_color:
+                    run_length += 1
+                if run_length >= 3:
+                    for rx in range(x, x + run_length):
+                        matches.add((rx, y))
+                x += run_length
+
+        # Vertical runs
+        for x in range(self.grid.width):
+            y = 0
+            while y < self.grid.height - 2:
+                cell = self.grid.get_cell(x, y)
+                if cell is None:
+                    y += 1
+                    continue
+                run_color = cell.color
+                run_length = 1
+                while y + run_length < self.grid.height and \
+                      self.grid.get_cell(x, y + run_length) and \
+                      self.grid.get_cell(x, y + run_length).color == run_color:
+                    run_length += 1
+                if run_length >= 3:
+                    for ry in range(y, y + run_length):
+                        matches.add((x, ry))
+                y += run_length
+        return list(matches)
+
+    def clear_matches(self) -> int:
+        matches = self.find_matches()
+        if not matches:
+            return 0
+        for x, y in matches:
+            self.grid.set_cell(x, y, None)
+        return len(matches)
+
+    def resolve_chains(self) -> int:
+        total_gain = 0
+        chain_level = 0
+
+        while True:
+            chain_level += 1
+            multiplier = 1.0 + 0.5 * (chain_level - 1)
+
+            lines = self.clear_lines()
+            if lines > 0:
+                gain = int(lines * 100 * multiplier)
+                self.score += gain
+                total_gain += gain
+
+            gems = self.clear_matches()
+            if gems > 0:
+                gain = int(gems * 10 * multiplier)
+                self.score += gain
+                total_gain += gain
+
+            if lines == 0 and gems == 0:
+                break
+
+        return total_gain
+
+# Tetromino Generator
+class TetrominoGenerator:
+    def __init__(self, preview_size: int = 5):
+        self.preview_size: int = preview_size
+        self._bag: List[str] = []
+        self._queue: List[Tetromino] = []
+        self._fill_bag()
+        self._fill_queue()
+
+    def _fill_bag(self) -> None:
+        self._bag = list(TETROMINO_SHAPES.keys())
+        random.shuffle(self._bag)
+
+    def _generate_tetromino(self) -> Tetromino:
+        if not self._bag:
+            self._fill_bag()
+        shape_id = self._bag.pop()
+        return Tetromino(shape_id=shape_id, rotations=TETROMINO_SHAPES[shape_id].rotations, color=TETROMINO_SHAPES[shape_id].color)
+
+    def _fill_queue(self) -> None:
+        while len(self._queue) < self.preview_size:
+            self._queue.append(self._generate_tetromino())
+
+    def get_next_tetromino(self) -> Tetromino:
+        if not self._queue:
+            self._fill_queue()
+        next_piece = self._queue.pop(0)
+        self._queue.append(self._generate_tetromino())
+        return next_piece
+
+    def peek_next_tetromino(self, index: int = 0) -> Optional[Tetromino]:
+        if 0 <= index < len(self._queue):
+            return self._queue[index]
+        return None
+
+    def get_preview_queue(self) -> List[Tetromino]:
+        return list(self._queue)
+
+# GUI Renderer
+class GUIRenderer:
+    def __init__(
+        self,
+        grid: Grid,
+        tetromino_generator: TetrominoGenerator,
+        cell_size: int = 30,
+        grid_x_offset: int = 50,
+        grid_y_offset: int = 50,
+        preview_x_offset: int = 350,
+        preview_y_offset: int = 50
+    ):
+        self.grid = grid
+        self.tetromino_generator = tetromino_generator
+        self.cell_size = cell_size
+        self.grid_x_offset = grid_x_offset
+        self.grid_y_offset = grid_y_offset
+        self.preview_x_offset = preview_x_offset
+        self.preview_y_offset = preview_y_offset
+
+        self.screen: Optional[pygame.Surface] = None
+        self.font: Optional[pygame.font.Font] = None
+
+    def initialize_screen(self, width: int, height: int):
+        pygame.init()
+        self.screen = pygame.display.set_mode((width, height))
+        pygame.display.set_caption("Tetris Bejeweled")
+        self.font = pygame.font.Font(None, 36)
+
+    def draw_grid(self):
+        for y in range(self.grid.height):
+            for x in range(self.grid.width):
+                cell = self.grid.get_cell(x, y)
+                rect = pygame.Rect(
+                    self.grid_x_offset + x * self.cell_size,
+                    self.grid_y_offset + y * self.cell_size,
+                    self.cell_size,
+                    self.cell_size
+                )
+                if cell:
+                    pygame.draw.rect(self.screen, cell.color.value, rect)
+                    pygame.draw.rect(self.screen, (50, 50, 50), rect, 1)
+                else:
+                    pygame.draw.rect(self.screen, (128, 128, 128), rect, 1)
+
+    def draw_tetromino(self, tetromino: Tetromino, rotation_index: int, x_grid: int, y_grid: int):
+        shape = tetromino.rotations[rotation_index]
+        for dx, dy in shape:
+            gx, gy = x_grid + dx, y_grid + dy
+            if self.grid.is_inside(gx, gy):
+                rect = pygame.Rect(
+                    self.grid_x_offset + gx * self.cell_size,
+                    self.grid_y_offset + gy * self.cell_size,
+                    self.cell_size,
+                    self.cell_size
+                )
+                pygame.draw.rect(self.screen, tetromino.color.value, rect)
+                pygame.draw.rect(self.screen, (50, 50, 50), rect, 1)
+
+    def draw_next_piece_preview(self):
+        preview_queue = self.tetromino_generator.get_preview_queue()
+        for i, tetromino in enumerate(preview_queue):
+            shape = tetromino.rotations[0]  # fixed orientation for preview
+            base_x = self.preview_x_offset
+            base_y = self.preview_y_offset + i * 3 * self.cell_size
+            for dx, dy in shape:
+                rect = pygame.Rect(
+                    base_x + dx * self.cell_size,
+                    base_y + dy * self.cell_size,
+                    self.cell_size,
+                    self.cell_size
+                )
+                pygame.draw.rect(self.screen, tetromino.color.value, rect)
+                pygame.draw.rect(self.screen, (50, 50, 50), rect, 1)
+
+    def draw_score(self, score: int):
+        text = f"Score: {score}"
+        text_surf = self.font.render(text, True, (255, 255, 255))
+        self.screen.blit(text_surf, (self.preview_x_offset, self.preview_y_offset + 4 * self.cell_size))
+
+    def render(
+        self,
+        active_tetromino: Tetromino,
+        active_x: int,
+        active_y: int,
+        active_rotation: int,
+        score: int
+    ):
+        self.screen.fill((0, 0, 0))  # Clear screen
+        self.draw_grid()
+        self.draw_tetromino(active_tetromino, active_rotation, active_x, active_y)
+        self.draw_next_piece_preview()
+        self.draw_score(score)
+        pygame.display.flip()
+
+# Game Loop Integrator
+class TetrisBejeweledGame:
+    def __init__(
+        self,
+        width: int = 10,
+        height: int = 20,
+        cell_size: int = 30,
+        drop_speed: int = 500,
+        fps: int = 60,
+    ):
+        pygame.init()
+        self.width = width
+        self.height = height
+        self.cell_size = cell_size
+
+        # Core components
+        self.grid = Grid(width, height)
+        self.tetromino_generator = TetrominoGenerator()
+        self.tetromino_manager = TetrominoManager(self.grid)
+        self.clearing_manager = ClearingManager(self.grid)
+        self.gui_renderer = GUIRenderer(self.grid, self.tetromino_generator, cell_size=cell_size)
+
+        # Window setup
+        side_panel = 200
+        self.screen_width = width * cell_size + side_panel
+        self.screen_height = height * cell_size
+        self.gui_renderer.initialize_screen(self.screen_width, self.screen_height)
+        pygame.display.set_caption("Tetris Bejeweled")
+
+        # Timing & game state
+        self.clock = pygame.time.Clock()
+        self.fps = fps
+        self.drop_speed = drop_speed
+        self.drop_timer = 0
+        self.score = 0
+        self.game_over = False
+
+        # Spawn the first tetromino
+        self.tetromino_manager.new_tetromino()
+        self._sync_active()
+
+    def _sync_active(self):
+        self.active = self.tetromino_manager.current_tetromino
+        self.active_x = self.tetromino_manager.x
+        self.active_y = self.tetromino_manager.y
+        self.active_rot = self.tetromino_manager.current_rotation
+
+    def handle_input(self):
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                self.game_over = True
+            elif ev.type == pygame.KEYDOWN:
+                if ev.key == pygame.K_LEFT:
+                    self.tetromino_manager.move(-1)
+                    self._sync_active()
+                elif ev.key == pygame.K_RIGHT:
+                    self.tetromino_manager.move(1)
+                    self._sync_active()
+                elif ev.key == pygame.K_UP:
+                    self.tetromino_manager.rotate()
+                    self._sync_active()
+                elif ev.key == pygame.K_DOWN:
+                    self.drop_speed = 50  # soft drop increase speed
+                elif ev.key == pygame.K_SPACE:
+                    while self.tetromino_manager.move_down():  # hard drop
+                        pass
+                    self.lock_tetromino()
+        # reset soft-drop when DOWN is released
+        keys = pygame.key.get_pressed()
+        if not keys[pygame.K_DOWN]:
+            self.drop_speed = 500
+
+    def update(self):
+        if self.game_over:
+            return
+
+        if self.tetromino_manager.current_tetromino is None:
+            self.tetromino_manager.new_tetromino()
+            self._sync_active()
+
+        self.drop_timer += self.clock.get_time()
+        if self.drop_timer >= self.drop_speed:
+            self.drop_timer -= self.drop_speed
+            if not self.tetromino_manager.move_down():
+                self.lock_tetromino()
+            self._sync_active()
+
+    def lock_tetromino(self):
+        self.tetromino_manager.lock_tetromino()
+
+        cleared = self.clearing_manager.clear_lines()
+        matched = self.clearing_manager.find_matches()
+        if cleared or matched:
+            self.gui_renderer.handle_animations(
+                clear_lines=cleared,
+                matched_cells=matched
+            )
+
+        gained = self.clearing_manager.resolve_chains()
+        self.score += gained
+
+        if self.tetromino_manager.current_tetromino is None:
+            self.game_over = True
+
+    def draw(self):
+        self.gui_renderer.render(
+            active_tetromino=self.active,
+            active_x=self.active_x,
+            active_y=self.active_y,
+            active_rotation=self.active_rot,
+            score=self.score
+        )
+
+    def run(self):
+        while not self.game_over:
+            self.handle_input()
+            self.update()
+            self.draw()
+            pygame.display.flip()
+
+        print(f"Game Over! Final Score: {self.score}")
+        pygame.quit()
+
+if __name__ == "__main__":
+    game = TetrisBejeweledGame()
+    game.run()
+```

@@ -1,0 +1,10 @@
+```python
+[
+    "Analyze the job description",
+    "Analyze the candidate resume",
+    "Conduct technical interview",
+    "Send emails as and when needed",
+    "Score candidate responses",
+    "Generate final evaluation report"
+]
+```

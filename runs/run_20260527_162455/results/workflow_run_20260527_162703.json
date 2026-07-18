@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-05-27T16:27:03.328767",
+  "description": "Complete workflow execution for: You are a workflow planning agent.\nYour task is to...",
+  "data": {
+    "task": "You are a workflow planning agent.\nYour task is to:\n-\"Analyze the job description\",\n    \"Analyze the candidate resume\",\n    \"Conduct technical interview\",\n    \"Send emails as and when needed\",\n    \"Score candidate responses\",\n    \"Generate final evaluation report\"\n\nReturn the output as a Python list of strings.\n\n\n",
+    "workflow": {
+      "tasks": {}
+    },
+    "summary": "```python\n[\n    \"Analyze the job description\",\n    \"Analyze the candidate resume\",\n    \"Conduct technical interview\",\n    \"Send emails as and when needed\",\n    \"Score candidate responses\",\n    \"Generate final evaluation report\"\n]\n```",
+    "execution_summary": {
+      "timestamp": "2026-05-27T16:27:03.328627",
+      "overall_task": "You are a workflow planning agent.\nYour task is to:\n-\"Analyze the job description\",\n    \"Analyze the candidate resume\",\n    \"Conduct technical interview\",\n    \"Send emails as and when needed\",\n    \"Score candidate responses\",\n    \"Generate final evaluation report\"\n\nReturn the output as a Python list of strings.\n\n\n",
+      "total_tasks": 0,
+      "completed_tasks": 0,
+      "failed_tasks": 0,
+      "total_duration_seconds": 126.29078507423401,
+      "agents_used": 0,
+      "summary_result_length": 233
+    }
+  }
+}

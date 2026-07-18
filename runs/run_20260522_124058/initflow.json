@@ -1,0 +1,121 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures for the game: grid representation, tetromino shape definitions, and gem cell representation.",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task3",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Structures Developer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino falling, movement, rotation, and locking logic, transforming locked tetrominoes into colored gems.",
+            "agent_id": 1,
+            "next": [
+                "task2",
+                "task4",
+                "task6"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Mechanics Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Implement clearing mechanics for Tetris line clears and Bejeweled match-3 clears, including chain reactions and bonus scoring.",
+            "agent_id": 2,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Clearing & Scoring Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Develop tetromino generator and next-piece preview logic following Tetris randomization rules.",
+            "agent_id": 3,
+            "next": [
+                "task5",
+                "task6"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetromino Generator Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement keyboard input handling for controlling tetromino movement, rotation, and dropping.",
+            "agent_id": 4,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Input Controls Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Build GUI rendering module using Pygame: display game grid, current gems, active tetromino, next-piece preview, and score with animations.",
+            "agent_id": 5,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "GUI Rendering Developer",
+            "output_format": "Python code"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Integrate core mechanics, input handling, generator, clearing logic, and GUI into the main game loop.",
+            "agent_id": 6,
+            "next": [],
+            "prev": [
+                "task2",
+                "task3",
+                "task4",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "Game Loop Integrator",
+            "output_format": "Python code"
+        }
+    }
+}

@@ -1,0 +1,132 @@
+{
+  "description": "Workflow state after refinement process",
+  "timestamp": "2026-05-27T16:53:38.432280",
+  "task_id": "workflow_refinement",
+  "iteration": 2,
+  "data": {
+    "refined_workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Implement a Job Description Analyzer that parses and structures job requirements into a machine-readable format",
+        "agent_id": 4,
+        "next": [
+          "task2",
+          "task4"
+        ],
+        "prev": [],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "Python code"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Develop a Resume Analyzer that extracts candidate skills, experience, and education into structured data",
+        "agent_id": 2,
+        "next": [
+          "task2",
+          "task4"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport re\nimport json\n\ndef analyze_resume(resume_text):\n    \"\"\"\n    Analyzes a resume to extract skills, experience, and education into a structured format.\n\n    Args:\n        resume_text (str): The text content of the resume.\n\n    Returns:\n        dict: A dictionary containing extracted information, including:\n            - skills (list): A list of skills extracted from the resume.\n            - experience (list): A list of work experiences, each containing job title, company, dates, and description.\n            - education (list): A list of educational qualifications, each containing institution, degree, and dates.\n    \"\"\"\n\n    skills = extract_skills(resume_text)\n    experience = extract_experience(resume_text)\n    education = extract_education(resume_text)\n\n    resume_data = {\n        \"skills\": skills,\n        \"experience\": experience,\n        \"education\": education\n    }\n\n    return resume_data\n\n\ndef extract_skills(resume_text):\n    \"\"\"\n    Extracts skills from the resume text.\n\n    Args:\n        resume_text (str): The text content of the resume.\n\n    Returns:\n        list: A list of skills.\n    \"\"\"\n    # Define keywords and patterns for skill extraction (expand as needed)\n    skill_keywords = [\"Python\", \"Java\", \"C++\", \"JavaScript\", \"SQL\", \"AWS\", \"Azure\", \"GCP\", \"Machine Learning\", \"Data Science\", \"Project Management\"] #Example keywords\n    skills = []\n    for keyword in skill_keywords:\n        if re.search(r'\\b' + re.escape(keyword) + r'\\b', resume_text, re.IGNORECASE):\n            skills.append(keyword)\n    return skills\n\n\ndef extract_experience(resume_text):\n    \"\"\"\n    Extracts work experience from the resume text.\n\n    Args:\n        resume_text (str): The text content of the resume.\n\n    Returns:\n        list: A list of dictionaries, each representing a work experience.\n    \"\"\"\n    # Define patterns for experience extraction (improve regex as needed)\n    experience_pattern = re.compile(\n        r\"(?P<job_title>(?:[A-Za-z]+ ?)+)\\n\"  # Job Title\n        r\"(?P<company>(?:[A-Za-z]+ ?)+)\\n\"  # Company Name\n        r\"(?P<dates>(?:[A-Za-z]+ ?)+,?(?: ?[A-Za-z]+)? ?[-–] ?(?:[A-Za-z]+)?(?: ?[A-Za-z]+)?)\\n\"  # Dates\n        r\"(?P<description>(?:.|\\n)*?)(?=\\n(?:[A-Za-z]+ ?)+\\n(?:[A-Za-z]+ ?)+\\n(?:[A-Za-z]+ ?)+,?(?: ?[A-Za-z]+)? ?[-–] ?(?:[A-Za-z]+)?(?: ?[A-Za-z]+)?|\\n(?:[A-Za-z]+ ?)+,?(?: ?[A-Za-z]+)? ?[-–] ?(?:[A-Za-z]+)?(?: ?[A-Za-z]+)?)\", # Description, stop before the next experience section,\n        re.MULTILINE\n    )\n\n    experiences = []\n    for match in experience_pattern.finditer(resume_text):\n        experience = {\n            \"job_title\": match.group(\"job_title\").strip(),\n            \"company\": match.group(\"company\").strip(),\n            \"dates\": match.group(\"dates\").strip(),\n            \"description\": match.group(\"description\").strip()\n        }\n        experiences.append(experience)\n    return experiences\n\n\ndef extract_education(resume_text):\n    \"\"\"\n    Extracts education information from the resume text.\n\n    Args:\n        resume_text (str): The text content of the resume.\n\n    Returns:\n        list: A list of dictionaries, each representing an educational qualification.\n    \"\"\"\n    # Define patterns for education extraction (improve regex as needed)\n    education_pattern = re.compile(\n        r\"(?P<institution>(?:[A-Za-z]+ ?)+)\\n\"\n        r\"(?P<degree>(?:[A-Za-z]+ ?)+)\\n\"\n        r\"(?P<dates>(?:[A-Za-z]+ ?)+,?(?: ?[A-Za-z]+)? ?[-–] ?(?:[A-Za-z]+)?(?: ?[A-Za-z]+)?(?: ?[A-Za-z]+)?)\\n\",\n        re.MULTILINE\n    )\n\n    education_list = []\n    for match in education_pattern.finditer(resume_text):\n        education = {\n            \"institution\": match.group(\"institution\").strip(),\n            \"degree\": match.group(\"degree\").strip(),\n            \"dates\": match.group(\"dates\").strip()\n        }\n        education_list.append(education)\n    return education_list\n\n\nif __name__ == '__main__':\n    # Example Usage (Replace with actual resume text)\n    resume_text = \"\"\"\n    John Doe\n    john.doe@example.com\n    123-456-7890\n\n    Summary\n    Experienced software engineer with a passion for developing innovative solutions.\n\n    Skills\n    Python, Java, C++, JavaScript, SQL, AWS\n\n    Experience\n    Software Engineer\n    Acme Corp\n    2020 - Present\n    - Developed and maintained web applications using Python and JavaScript.\n    - Designed and implemented REST APIs.\n    - Worked with AWS cloud services.\n\n    Data Scientist\n    Beta Corp\n    2018 - 2020\n    - Developed machine learning models using Python.\n    - Analyzed large datasets to identify trends and insights.\n\n    Education\n    University of Example\n    Bachelor of Science in Computer Science\n    2014 - 2018\n\n    Stanford University\n    Master of Science in Data Science\n    2018 - 2020\n    \"\"\"\n\n    resume_data = analyze_resume(resume_text)\n\n    # Output to JSON for structured format\n    with open(\"resume_data.json\", \"w\") as f:\n        json.dump(resume_data, f, indent=4)\n\n    print(\"Resume analysis complete.  Data saved to resume_data.json\")\n```\n",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Build an Interview Module that generates technical questions dynamically based on structured JD and resume data",
+        "agent_id": 7,
+        "next": [
+          "task5",
+          "task3",
+          "task4"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "interview_agent",
+        "output_format": "Python code"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Create an Email Automation component to send templated messages at key workflow events",
+        "agent_id": 2,
+        "next": [],
+        "prev": [
+          "task2",
+          "task5"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 2,
+        "agent": "",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Implement a Response Scorer that evaluates candidate answers against JD and resume criteria",
+        "agent_id": 8,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task0",
+          "task1",
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 2,
+        "agent": "",
+        "output_format": "Python code"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Develop a Report Generator that compiles analysis summaries, interview questions, and scores into a final .txt evaluation",
+        "agent_id": 2,
+        "next": [
+          "task3"
+        ],
+        "prev": [
+          "task2",
+          "task4"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 2,
+        "agent": "coding_agent",
+        "output_format": "Plain text"
+      }
+    },
+    "changes_summary": {
+      "tasks_before": 6,
+      "tasks_after": 6,
+      "net_change": 0
+    }
+  }
+}

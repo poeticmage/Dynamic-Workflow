@@ -1,0 +1,131 @@
+{
+  "description": "Workflow state before refinement process",
+  "timestamp": "2026-05-27T16:53:12.731522",
+  "task_id": "workflow_refinement",
+  "iteration": 1,
+  "data": {
+    "workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Implement a Job Description Analyzer that parses and structures job requirements into a machine‐readable format",
+        "agent_id": 4,
+        "next": [
+          "task2",
+          "task4"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nclass JobDescriptionAnalyzer:\n    def __init__(self, job_description):\n        self.job_description = job_description\n        self.structured_data = {}\n\n    def parse_job_description(self):\n        # Placeholder for parsing logic\n        # This will be replaced with actual parsing using NLP techniques\n        # and keyword extraction to identify key requirements, skills, etc.\n        self.structured_data = {\n            \"title\": self.extract_title(),\n            \"summary\": self.extract_summary(),\n            \"responsibilities\": self.extract_responsibilities(),\n            \"qualifications\": self.extract_qualifications(),\n            \"skills\": self.extract_skills(),\n            \"experience\": self.extract_experience(),\n            \"education\": self.extract_education()\n        }\n        return self.structured_data\n\n    def extract_title(self):\n        # Placeholder for title extraction logic\n        return \"Software Engineer\"  # Example\n\n    def extract_summary(self):\n        # Placeholder for summary extraction logic\n        return \"Seeking a skilled software engineer...\"  # Example\n\n    def extract_responsibilities(self):\n         # Placeholder for responsibilities extraction logic\n        return [\"Develop and maintain software\", \"Write clean code\"]  # Example\n\n    def extract_qualifications(self):\n        # Placeholder for qualifications extraction logic\n        return [\"Bachelor's degree in CS\", \"3+ years experience\"]  # Example\n\n    def extract_skills(self):\n        # Placeholder for skills extraction logic\n        return [\"Python\", \"Java\", \"SQL\"]  # Example\n\n    def extract_experience(self):\n        # Placeholder for experience extraction logic\n        return \"3+ years of software development experience\" #Example\n\n    def extract_education(self):\n        # Placeholder for education extraction logic\n        return \"Bachelor's degree in Computer Science or related field\" #Example\n\n    def get_structured_data(self):\n        return self.structured_data\n\n# Example usage (assuming job_description is a string containing the job description):\n# analyzer = JobDescriptionAnalyzer(job_description)\n# structured_job_data = analyzer.parse_job_description()\n# print(structured_job_data)\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "job_description_agent",
+        "output_format": "Python code"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Develop a Resume Analyzer that extracts candidate skills, experience, and education into structured data",
+        "agent_id": 2,
+        "next": [
+          "task2",
+          "task4"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport re\nimport json\n\ndef analyze_resume(resume_text):\n    \"\"\"\n    Analyzes a resume to extract skills, experience, and education into a structured format.\n\n    Args:\n        resume_text (str): The text content of the resume.\n\n    Returns:\n        dict: A dictionary containing extracted information, including:\n            - skills (list): A list of skills extracted from the resume.\n            - experience (list): A list of work experiences, each containing job title, company, dates, and description.\n            - education (list): A list of educational qualifications, each containing institution, degree, and dates.\n    \"\"\"\n\n    skills = extract_skills(resume_text)\n    experience = extract_experience(resume_text)\n    education = extract_education(resume_text)\n\n    resume_data = {\n        \"skills\": skills,\n        \"experience\": experience,\n        \"education\": education\n    }\n\n    return resume_data\n\n\ndef extract_skills(resume_text):\n    \"\"\"\n    Extracts skills from the resume text.\n\n    Args:\n        resume_text (str): The text content of the resume.\n\n    Returns:\n        list: A list of skills.\n    \"\"\"\n    # Define keywords and patterns for skill extraction (expand as needed)\n    skill_keywords = [\"Python\", \"Java\", \"C++\", \"JavaScript\", \"SQL\", \"AWS\", \"Azure\", \"GCP\", \"Machine Learning\", \"Data Science\", \"Project Management\"] #Example keywords\n    skills = []\n    for keyword in skill_keywords:\n        if re.search(r'\\b' + re.escape(keyword) + r'\\b', resume_text, re.IGNORECASE):\n            skills.append(keyword)\n    return skills\n\n\ndef extract_experience(resume_text):\n    \"\"\"\n    Extracts work experience from the resume text.\n\n    Args:\n        resume_text (str): The text content of the resume.\n\n    Returns:\n        list: A list of dictionaries, each representing a work experience.\n    \"\"\"\n    # Define patterns for experience extraction (improve regex as needed)\n    experience_pattern = re.compile(\n        r\"(?P<job_title>(?:[A-Za-z]+ ?)+)\\n\"  # Job Title\n        r\"(?P<company>(?:[A-Za-z]+ ?)+)\\n\"  # Company Name\n        r\"(?P<dates>(?:[A-Za-z]+ ?)+,?(?: ?[A-Za-z]+)? ?[-–] ?(?:[A-Za-z]+)?(?: ?[A-Za-z]+)?)\\n\"  # Dates\n        r\"(?P<description>(?:.|\\n)*?)(?=\\n(?:[A-Za-z]+ ?)+\\n(?:[A-Za-z]+ ?)+\\n(?:[A-Za-z]+ ?)+,?(?: ?[A-Za-z]+)? ?[-–] ?(?:[A-Za-z]+)?(?: ?[A-Za-z]+)?|\\n(?:[A-Za-z]+ ?)+,?(?: ?[A-Za-z]+)? ?[-–] ?(?:[A-Za-z]+)?(?: ?[A-Za-z]+)?)\", # Description, stop before the next experience section,\n        re.MULTILINE\n    )\n\n    experiences = []\n    for match in experience_pattern.finditer(resume_text):\n        experience = {\n            \"job_title\": match.group(\"job_title\").strip(),\n            \"company\": match.group(\"company\").strip(),\n            \"dates\": match.group(\"dates\").strip(),\n            \"description\": match.group(\"description\").strip()\n        }\n        experiences.append(experience)\n    return experiences\n\n\ndef extract_education(resume_text):\n    \"\"\"\n    Extracts education information from the resume text.\n\n    Args:\n        resume_text (str): The text content of the resume.\n\n    Returns:\n        list: A list of dictionaries, each representing an educational qualification.\n    \"\"\"\n    # Define patterns for education extraction (improve regex as needed)\n    education_pattern = re.compile(\n        r\"(?P<institution>(?:[A-Za-z]+ ?)+)\\n\"\n        r\"(?P<degree>(?:[A-Za-z]+ ?)+)\\n\"\n        r\"(?P<dates>(?:[A-Za-z]+ ?)+,?(?: ?[A-Za-z]+)? ?[-–] ?(?:[A-Za-z]+)?(?: ?[A-Za-z]+)?(?: ?[A-Za-z]+)?)\\n\",\n        re.MULTILINE\n    )\n\n    education_list = []\n    for match in education_pattern.finditer(resume_text):\n        education = {\n            \"institution\": match.group(\"institution\").strip(),\n            \"degree\": match.group(\"degree\").strip(),\n            \"dates\": match.group(\"dates\").strip()\n        }\n        education_list.append(education)\n    return education_list\n\n\nif __name__ == '__main__':\n    # Example Usage (Replace with actual resume text)\n    resume_text = \"\"\"\n    John Doe\n    john.doe@example.com\n    123-456-7890\n\n    Summary\n    Experienced software engineer with a passion for developing innovative solutions.\n\n    Skills\n    Python, Java, C++, JavaScript, SQL, AWS\n\n    Experience\n    Software Engineer\n    Acme Corp\n    2020 - Present\n    - Developed and maintained web applications using Python and JavaScript.\n    - Designed and implemented REST APIs.\n    - Worked with AWS cloud services.\n\n    Data Scientist\n    Beta Corp\n    2018 - 2020\n    - Developed machine learning models using Python.\n    - Analyzed large datasets to identify trends and insights.\n\n    Education\n    University of Example\n    Bachelor of Science in Computer Science\n    2014 - 2018\n\n    Stanford University\n    Master of Science in Data Science\n    2018 - 2020\n    \"\"\"\n\n    resume_data = analyze_resume(resume_text)\n\n    # Output to JSON for structured format\n    with open(\"resume_data.json\", \"w\") as f:\n        json.dump(resume_data, f, indent=4)\n\n    print(\"Resume analysis complete.  Data saved to resume_data.json\")\n```\n",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Build an Interview Module that generates technical questions dynamically based on structured JD and resume data",
+        "agent_id": 7,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "interview_agent",
+        "output_format": "Python code"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Create an Email Automation component to send templated messages at key workflow events",
+        "agent_id": 2,
+        "next": [],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport smtplib\nfrom email.mime.multipart import MIMEMultipart\nfrom email.mime.text import MIMEText\n\nclass EmailAutomation:\n    def __init__(self, smtp_server, smtp_port, sender_email, sender_password):\n        \"\"\"\n        Initializes the EmailAutomation component.\n\n        Args:\n            smtp_server (str): The SMTP server address.\n            smtp_port (int): The SMTP port number.\n            sender_email (str): The sender's email address.\n            sender_password (str): The sender's email password.  Consider using environment variables for security.\n        \"\"\"\n        self.smtp_server = smtp_server\n        self.smtp_port = smtp_port\n        self.sender_email = sender_email\n        self.sender_password = sender_password\n        self.server = None  # Initialize server attribute\n\n    def connect(self):\n        \"\"\"\n        Connects to the SMTP server.\n        \"\"\"\n        try:\n            self.server = smtplib.SMTP(self.smtp_server, self.smtp_port)\n            self.server.starttls()  # Secure the connection\n            self.server.login(self.sender_email, self.sender_password)\n            print(\"Email server connection established.\")\n        except Exception as e:\n            print(f\"Error connecting to email server: {e}\")\n            self.server = None # Ensure server is None if connection fails\n\n\n    def disconnect(self):\n         \"\"\"\n         Disconnects to the SMTP server.\n         \"\"\"\n         if self.server:\n            self.server.quit()\n            print(\"Email server connection disconnected.\")\n\n    def send_email(self, recipient_email, subject, body, cc_email=None, bcc_email=None):\n        \"\"\"\n        Sends an email.\n\n        Args:\n            recipient_email (str): The recipient's email address.\n            subject (str): The email subject.\n            body (str): The email body (plain text or HTML).\n            cc_email (str, optional): CC recipient email address. Defaults to None.\n            bcc_email (str, optional): BCC recipient email address. Defaults to None.\n\n        Returns:\n            bool: True if the email was sent successfully, False otherwise.\n        \"\"\"\n        if not self.server:\n            print(\"Not connected to email server.  Call connect() first.\")\n            return False\n\n        msg = MIMEMultipart()\n        msg['From'] = self.sender_email\n        msg['To'] = recipient_email\n        msg['Subject'] = subject\n\n        if cc_email:\n            msg['Cc'] = cc_email\n        if bcc_email:\n            msg['Bcc'] = bcc_email\n\n        msg.attach(MIMEText(body, 'plain'))  # Or 'html' for HTML emails\n\n        try:\n            recipients = [recipient_email]\n            if cc_email:\n                recipients.append(cc_email)\n            if bcc_email:\n                recipients.append(bcc_email)\n\n            self.server.sendmail(self.sender_email, recipients, msg.as_string())\n            print(f\"Email sent successfully to {recipient_email}\")\n            return True\n        except Exception as e:\n            print(f\"Error sending email: {e}\")\n            return False\n\n    def create_template(self, template_name, subject_template, body_template):\n        \"\"\"\n        Stores email templates for future use.\n        (This implementation just stores them in memory, consider a file or database)\n\n        Args:\n            template_name (str): The name of the template.\n            subject_template (str): The template for the subject.\n            body_template (str): The template for the body.\n        \"\"\"\n        if not hasattr(self, 'templates'):\n            self.templates = {}  # Initialize the templates dictionary if it doesn't exist\n\n        self.templates[template_name] = {'subject': subject_template, 'body': body_template}\n        print(f\"Template '{template_name}' created and stored.\")\n\n    def send_templated_email(self, recipient_email, template_name, template_data, cc_email=None, bcc_email=None):\n        \"\"\"\n        Sends an email using a stored template.\n\n        Args:\n            recipient_email (str): The recipient's email address.\n            template_name (str): The name of the template to use.\n            template_data (dict): A dictionary of data to insert into the template.\n            cc_email (str, optional): CC recipient email address. Defaults to None.\n            bcc_email (str, optional): BCC recipient email address. Defaults to None.\n\n        Returns:\n            bool: True if the email was sent successfully, False otherwise.\n        \"\"\"\n        if not hasattr(self, 'templates') or template_name not in self.templates:\n            print(f\"Template '{template_name}' not found.\")\n            return False\n\n        template = self.templates[template_name]\n        subject = template['subject'].format(**template_data)\n        body = template['body'].format(**template_data)\n        return self.send_email(recipient_email, subject, body, cc_email, bcc_email)\n\n\n\nif __name__ == '__main__':\n    # Example Usage (Replace with your actual credentials and server details)\n    smtp_server = 'your_smtp_server.com'  # Replace with your SMTP server address\n    smtp_port = 587  # Replace with your SMTP port number (e.g., 587 for TLS)\n    sender_email = 'your_email@example.com'  # Replace with your email address\n    sender_password = 'your_email_password'  # Replace with your email password (use environment variables in production!)\n\n    email_automation = EmailAutomation(smtp_server, smtp_port, sender_email, sender_password)\n\n    # Connect to the email server\n    email_automation.connect()\n\n    # 1. Sending a Simple Email\n    recipient_email = 'recipient@example.com'\n    subject = 'Test Email'\n    body = 'This is a test email sent using the EmailAutomation component.'\n    email_automation.send_email(recipient_email, subject, body)\n\n    # 2. Creating and Using a Template\n    email_automation.create_template(\n        'interview_invitation',\n        'Interview Invitation for {candidate_name}',\n        'Dear {candidate_name},\\n\\nYou are invited to an interview on {date} at {time}.\\n\\nSincerely,\\nThe Hiring Team'\n    )\n\n    template_data = {'candidate_name': 'John Doe', 'date': '2023-12-25', 'time': '10:00 AM'}\n    email_automation.send_templated_email(recipient_email, 'interview_invitation', template_data)\n\n\n    # 3. Sending Email With CC and BCC\n    email_automation.send_email(\n        recipient_email='primary_recipient@example.com',\n        subject='Important Announcement',\n        body='This is an important announcement email.',\n        cc_email='cc_recipient@example.com',\n        bcc_email='bcc_recipient@example.com'\n    )\n    # Disconnect from the email server\n    email_automation.disconnect()\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Implement a Response Scorer that evaluates candidate answers against JD and resume criteria",
+        "agent_id": 8,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "scoring_agent",
+        "output_format": "Python code"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Develop a Report Generator that compiles analysis summaries, interview questions, and scores into a final .txt evaluation",
+        "agent_id": 2,
+        "next": [],
+        "prev": [
+          "task2",
+          "task4"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 2,
+        "agent": "coding_agent",
+        "output_format": "Plain text"
+      }
+    }
+  }
+}

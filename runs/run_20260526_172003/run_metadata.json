@@ -1,0 +1,11 @@
+{
+  "run_id": "20260526_172003",
+  "start_time": "2026-05-26T17:20:03.296816",
+  "overall_task": "Perform interview and candidate evaluation for a candidate.\n- Analyze job descriptions and candidate resumes\n- Conduct  interviews with technical and behavioral questions\n- Ask follow-up questions based on candidate responses\n- Evaluate candidate answers for relevance, depth, confidence, and technical accuracy\n- Score candidates across multiple evaluation categories\n- Generate recruiter communication emails such as interview invitations and follow-ups\n- Produce a final candidate evaluation report containing:\n    - Resume-job match analysis\n    - Interview summary\n    - Technical assessment\n    - Behavioral assessment\n    - Strengths and weaknesses\n    - Final recommendation and scoring breakdown\n\nFinal output: Evaluation report of candidate in .txt",
+  "configuration": {
+    "candidate_graphs": 5,
+    "refine_threshold": 3,
+    "max_refine_itt": 5,
+    "max_validation_itt": 5
+  }
+}

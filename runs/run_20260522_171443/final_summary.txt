@@ -1,0 +1,415 @@
+```python
+import pygame
+import random
+from enum import Enum, auto
+from typing import List, Tuple
+
+# Grid dimensions
+GRID_WIDTH = 10
+GRID_HEIGHT = 20
+CELL_SIZE = 30
+
+# Window dimensions
+WINDOW_WIDTH = GRID_WIDTH * CELL_SIZE + 200  # Add space for score and next piece
+WINDOW_HEIGHT = GRID_HEIGHT * CELL_SIZE
+
+# Frame rate and gravity
+FPS = 60
+FALL_DELAY = 500  # milliseconds between automatic drops
+
+class CellState(Enum):
+    EMPTY = auto()
+    FALLING = auto()
+    GEM = auto()
+
+class GemColor(Enum):
+    RED = 0
+    GREEN = 1
+    BLUE = 2
+    YELLOW = 3
+    CYAN = 4
+    MAGENTA = 5
+    ORANGE = 6
+
+COLOR_MAP = {
+    GemColor.RED: (255, 0, 0),
+    GemColor.GREEN: (0, 255, 0),
+    GemColor.BLUE: (0, 0, 255),
+    GemColor.YELLOW: (255, 255, 0),
+    GemColor.CYAN: (0, 255, 255),
+    GemColor.MAGENTA: (255, 0, 255),
+    GemColor.ORANGE: (255, 165, 0),
+    'EMPTY': (0, 0, 0),
+    'FALLING': (100, 100, 100),
+}
+
+class Cell:
+    def __init__(self, state: CellState = CellState.EMPTY, color: GemColor = None):
+        self.state = state
+        self.color = color
+
+    def reset(self):
+        self.state = CellState.EMPTY
+        self.color = None
+
+    def is_empty(self) -> bool:
+        return self.state == CellState.EMPTY
+
+    def is_falling(self) -> bool:
+        return self.state == CellState.FALLING
+
+    def is_gem(self) -> bool:
+        return self.state == CellState.GEM
+
+def create_grid(width: int = GRID_WIDTH, height: int = GRID_HEIGHT) -> List[List[Cell]]:
+    return [[Cell() for _ in range(width)] for _ in range(height)]
+
+# Tetromino shape definitions (4x4 matrices, values are 0 or 1)
+TETROMINO_SHAPES = {
+    "I": [
+        [0,0,0,0],
+        [1,1,1,1],
+        [0,0,0,0],
+        [0,0,0,0]
+    ],
+    "J": [
+        [0,0,0,0],
+        [1,1,1,0],
+        [0,0,1,0],
+        [0,0,0,0]
+    ],
+    "L": [
+        [0,0,0,0],
+        [1,1,1,0],
+        [1,0,0,0],
+        [0,0,0,0]
+    ],
+    "O": [
+        [0,0,0,0],
+        [0,1,1,0],
+        [0,1,1,0],
+        [0,0,0,0]
+    ],
+    "S": [
+        [0,0,0,0],
+        [0,1,1,0],
+        [1,1,0,0],
+        [0,0,0,0]
+    ],
+    "T": [
+        [0,0,0,0],
+        [1,1,1,0],
+        [0,1,0,0],
+        [0,0,0,0]
+    ],
+    "Z": [
+        [0,0,0,0],
+        [1,1,0,0],
+        [0,1,1,0],
+        [0,0,0,0]
+    ],
+}
+
+# Tetromino-to-color mapping (for falling blocks)
+TETROMINO_COLOR_MAP = {
+    "I": GemColor.CYAN,
+    "J": GemColor.BLUE,
+    "L": GemColor.ORANGE,
+    "O": GemColor.YELLOW,
+    "S": GemColor.GREEN,
+    "T": GemColor.MAGENTA,
+    "Z": GemColor.RED,
+}
+
+class Tetromino:
+    def __init__(self, shape_key: str):
+        self.shape_key = shape_key
+        self.matrix = [row[:] for row in TETROMINO_SHAPES[shape_key]]
+        self.color = TETROMINO_COLOR_MAP[shape_key]
+        # Spawn at top-center
+        self.x = GRID_WIDTH // 2 - 2
+        self.y = 0
+
+    def rotate(self):
+        # Rotate 90° CW
+        self.matrix = [list(row) for row in zip(*self.matrix[::-1])]
+
+    def get_cells(self) -> List[Tuple[int,int]]:
+        cells = []
+        for dy in range(4):
+            for dx in range(4):
+                if self.matrix[dy][dx]:
+                    cells.append((self.x + dx, self.y + dy))
+        return cells
+
+    def place_on_grid(self, grid: List[List[Cell]]):
+        for x, y in self.get_cells():
+            if 0 <= x < GRID_WIDTH and 0 <= y < GRID_HEIGHT:
+                grid[y][x].state = CellState.FALLING
+                grid[y][x].color = self.color
+    
+    def clear_from_grid(self, grid: List[List[Cell]]):
+        for x, y in self.get_cells():
+            if 0 <= x < GRID_WIDTH and 0 <= y < GRID_HEIGHT:
+                grid[y][x].reset()
+
+    def collides(self, grid: List[List[Cell]], dx: int = 0, dy: int = 0) -> bool:
+        for x, y in self.get_cells():
+            nx, ny = x + dx, y + dy
+            # Boundary checks
+            if nx < 0 or nx >= GRID_WIDTH or ny >= GRID_HEIGHT:
+                return True
+            # Only check collisions inside visible grid
+            if ny >= 0:
+                cell = grid[ny][nx]
+                if not cell.is_empty() and not cell.is_falling():
+                    return True
+        return False
+
+    def lock_into_grid(self, grid: List[List[Cell]]):
+        for x, y in self.get_cells():
+            if 0 <= x < GRID_WIDTH and 0 <= y < GRID_HEIGHT:
+                grid[y][x].state = CellState.GEM
+                grid[y][x].color = self.color
+
+def clear_falling(grid: List[List[Cell]]):
+    for row in grid:
+        for cell in row:
+            if cell.state == CellState.FALLING:
+                cell.reset()
+
+class GameState:
+    def __init__(self):
+        self.grid = create_grid()
+        self.current_tetromino = None
+        self.next_tetromino = self._new_tetromino()
+        self.score = 0
+        self.game_over = False
+        self.spawn_tetromino()  # spawn & place first piece
+
+    def _new_tetromino(self) -> Tetromino:
+        return Tetromino(random.choice(list(TETROMINO_SHAPES.keys())))
+
+    def spawn_tetromino(self) -> bool:
+        clear_falling(self.grid)
+        self.current_tetromino = self.next_tetromino
+        self.next_tetromino = self._new_tetromino()
+        # Reset position
+        self.current_tetromino.x = GRID_WIDTH // 2 - 2
+        self.current_tetromino.y = 0
+        if self.current_tetromino.collides(self.grid):
+            self.game_over = True
+            return False
+        self.current_tetromino.place_on_grid(self.grid)
+        return True
+
+    def move_tetromino_down(self) -> bool:
+        if not self.current_tetromino.collides(self.grid, dy=1):
+            self.current_tetromino.clear_from_grid(self.grid)
+            self.current_tetromino.y += 1
+            self.current_tetromino.place_on_grid(self.grid)
+            return True
+        return False
+
+    def move_tetromino_sideways(self, dx: int):
+        if not self.current_tetromino.collides(self.grid, dx=dx):
+            self.current_tetromino.clear_from_grid(self.grid)
+            self.current_tetromino.x += dx
+            self.current_tetromino.place_on_grid(self.grid)
+
+    def rotate_tetromino(self):
+        original = [row[:] for row in self.current_tetromino.matrix]
+        self.current_tetromino.clear_from_grid(self.grid)
+        self.current_tetromino.rotate()
+        if self.current_tetromino.collides(self.grid):
+            self.current_tetromino.matrix = original
+        self.current_tetromino.place_on_grid(self.grid)
+
+    def hard_drop(self):
+        while self.move_tetromino_down():
+            pass
+
+    def lock_and_spawn(self):
+        self.current_tetromino.lock_into_grid(self.grid)
+        self.spawn_tetromino()
+
+    def tick(self):
+        clear_falling(self.grid)
+        if not self.move_tetromino_down():
+            self.lock_and_spawn()
+            self.clear_lines_and_matches()
+            if self.game_over:
+                return
+        else:
+            self.current_tetromino.place_on_grid(self.grid)
+
+    def clear_lines_and_matches(self):
+        lines_cleared = self.clear_lines()
+        matches_cleared = self.clear_matches()
+        # Award points based on lines and matches cleared
+        self.score += lines_cleared * 100
+        self.score += matches_cleared * 50
+        # Trigger chain reactions (recursively clear until no more matches)
+        if lines_cleared > 0 or matches_cleared > 0:
+            self.apply_gravity()
+            self.clear_lines_and_matches()
+
+    def clear_lines(self) -> int:
+        lines_cleared = 0
+        for y in range(GRID_HEIGHT):
+            if all(self.grid[y][x].is_gem() for x in range(GRID_WIDTH)):
+                # Clear the line
+                for x in range(GRID_WIDTH):
+                    self.grid[y][x].reset()
+                # Move down all rows above the cleared line
+                for yy in range(y, 0, -1):
+                    for x in range(GRID_WIDTH):
+                        self.grid[yy][x].state = self.grid[yy-1][x].state
+                        self.grid[yy][x].color = self.grid[yy-1][x].color
+                # Clear the top line
+                for x in range(GRID_WIDTH):
+                    self.grid[0][x].reset()
+                lines_cleared += 1
+        return lines_cleared
+
+    def clear_matches(self) -> int:
+        matches_cleared = 0
+        matches = self.find_matches()
+        for x, y in matches:
+            self.grid[y][x].reset()
+            matches_cleared += 1
+        return matches_cleared
+
+    def find_matches(self) -> List[Tuple[int, int]]:
+        matches = set()
+
+        # Horizontal matches
+        for y in range(GRID_HEIGHT):
+            for x in range(GRID_WIDTH - 2):
+                if (self.grid[y][x].is_gem() and
+                        self.grid[y][x].color == self.grid[y][x + 1].color == self.grid[y][x + 2].color):
+                    color = self.grid[y][x].color
+                    match_length = 3
+                    while x + match_length < GRID_WIDTH and self.grid[y][x + match_length].is_gem() and self.grid[y][x + match_length].color == color:
+                        match_length += 1
+                    for i in range(match_length):
+                        matches.add((x + i, y))
+
+        # Vertical matches
+        for x in range(GRID_WIDTH):
+            for y in range(GRID_HEIGHT - 2):
+                if (self.grid[y][x].is_gem() and
+                        self.grid[y][x].color == self.grid[y + 1][x].color == self.grid[y + 2][x].color):
+                    color = self.grid[y][x].color
+                    match_length = 3
+                    while y + match_length < GRID_HEIGHT and self.grid[y + match_length][x].is_gem() and self.grid[y + match_length][x].color == color:
+                        match_length += 1
+                    for i in range(match_length):
+                        matches.add((x, y + i))
+
+        return list(matches)
+
+    def apply_gravity(self):
+        """Collapse all gems downward in each column."""
+        for x in range(GRID_WIDTH):
+            stack = []
+            for y in range(GRID_HEIGHT):
+                if self.grid[y][x].is_gem():
+                    stack.append(self.grid[y][x].color)
+            for y in range(GRID_HEIGHT - 1, -1, -1):
+                if stack:
+                    color = stack.pop()
+                    self.grid[y][x].state = CellState.GEM
+                    self.grid[y][x].color = color
+                else:
+                    self.grid[y][x].reset()
+
+class GameGUI:
+    def __init__(self, game_state: GameState):
+        pygame.init()
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        pygame.display.set_caption("TetrisBejeweled")
+        self.clock = pygame.time.Clock()
+        self.font = pygame.font.Font(None, 30)
+        self.gs = game_state
+        self.last_fall = pygame.time.get_ticks()
+
+    def render_grid(self):
+        for y in range(GRID_HEIGHT):
+            for x in range(GRID_WIDTH):
+                cell = self.gs.grid[y][x]
+                if cell.state == CellState.EMPTY:
+                    color = COLOR_MAP['EMPTY']
+                elif cell.state == CellState.FALLING:
+                    color = COLOR_MAP['FALLING']
+                else:
+                    color = COLOR_MAP[cell.color]
+                rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+                pygame.draw.rect(self.screen, color, rect)
+                pygame.draw.rect(self.screen, (50, 50, 50), rect, 1)
+
+    def render_score(self):
+        text = self.font.render(f"Score: {self.gs.score}", True, (255, 255, 255))
+        self.screen.blit(text, (GRID_WIDTH * CELL_SIZE + 20, 20))
+
+    def render_next(self):
+        text = self.font.render("Next:", True, (255, 255, 255))
+        self.screen.blit(text, (GRID_WIDTH * CELL_SIZE + 20, 80))
+        mino = self.gs.next_tetromino
+        for ry in range(4):
+            for rx in range(4):
+                if mino.matrix[ry][rx]:
+                    x = GRID_WIDTH * CELL_SIZE + 20 + rx * CELL_SIZE
+                    y = 120 + ry * CELL_SIZE
+                    rect = pygame.Rect(x, y, CELL_SIZE, CELL_SIZE)
+                    pygame.draw.rect(self.screen, COLOR_MAP[mino.color], rect)
+                    pygame.draw.rect(self.screen, (50, 50, 50), rect, 1)
+
+    def render(self):
+        self.screen.fill((0, 0, 0))
+        self.render_grid()
+        self.render_score()
+        self.render_next()
+        pygame.display.flip()
+
+    def run(self):
+        running = True
+        while running:
+            now = pygame.time.get_ticks()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+                elif event.type == pygame.KEYDOWN:
+                    if self.gs.game_over:
+                        continue
+                    if event.key == pygame.K_LEFT:
+                        self.gs.move_tetromino_sideways(-1)
+                    elif event.key == pygame.K_RIGHT:
+                        self.gs.move_tetromino_sideways(1)
+                    elif event.key == pygame.K_UP:
+                        self.gs.rotate_tetromino()
+                    elif event.key == pygame.K_DOWN:
+                        # soft drop: faster gravity
+                        self.gs.tick()
+                    elif event.key == pygame.K_SPACE:
+                        self.gs.hard_drop()
+
+            # automatic gravity
+            if not self.gs.game_over and now - self.last_fall > FALL_DELAY:
+                self.gs.tick()
+                self.last_fall = now
+
+            self.render()
+            if self.gs.game_over:
+                over_text = self.font.render("Game Over", True, (255, 0, 0))
+                self.screen.blit(over_text, (WINDOW_WIDTH // 2 - 50, WINDOW_HEIGHT // 2))
+                pygame.display.flip()
+            self.clock.tick(FPS)
+        pygame.quit()
+
+if __name__ == "__main__":
+    game = GameState()
+    gui = GameGUI(game)
+    gui.run()
+```

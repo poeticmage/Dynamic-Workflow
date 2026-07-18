@@ -1,0 +1,140 @@
+{
+  "description": "Workflow state before refinement process",
+  "timestamp": "2026-05-26T16:21:46.646678",
+  "task_id": "workflow_refinement",
+  "iteration": 1,
+  "data": {
+    "workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Implement a resume and job-description analysis module that extracts skills, experiences, and performs a match score.",
+        "agent_id": 2,
+        "next": [
+          "task5",
+          "task4"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport re\n\nclass ResumeJobAnalyzer:\n    def __init__(self, job_description, resume):\n        self.job_description = job_description\n        self.resume = resume\n        self.job_keywords = self.extract_keywords(job_description)\n        self.resume_keywords = self.extract_keywords(resume)\n\n    def extract_keywords(self, text):\n        # Convert to lowercase and remove special characters\n        text = text.lower()\n        text = re.sub(r'[^\\w\\s]', '', text)\n\n        # Split into words and remove common stop words\n        stop_words = set(['and', 'the', 'a', 'an', 'in', 'on', 'is', 'it', 'to', 'of', 'for', 'with', 'are', 'as', 'at', 'by', 'from'])  # Expand stop words as needed\n        words = [word for word in text.split() if word not in stop_words]\n        return words\n\n    def calculate_match_score(self):\n        \"\"\"Calculates a match score based on keyword overlap and experience.\"\"\"\n        job_set = set(self.job_keywords)\n        resume_set = set(self.resume_keywords)\n\n        # Keyword matching\n        keyword_match_count = len(job_set.intersection(resume_set))\n        keyword_match_percentage = (keyword_match_count / len(job_set)) * 100 if len(job_set) > 0 else 0\n        keyword_match_percentage = round(keyword_match_percentage, 2)\n      \n        # Experience matching (Placeholder - requires more sophisticated parsing)\n        experience_score = self.analyze_experience()  # Out of 100\n        \n        # Combined score - adjust weights as needed\n        overall_match_score = (0.7 * keyword_match_percentage + 0.3 * experience_score)\n        \n        return overall_match_score\n\n    def analyze_experience(self):\n        \"\"\"Analyzes the experience section for relevant keywords and duration. Returns score out of 100\"\"\"\n        experience_score = 0\n        \n        # Placeholder implementation - Enhance with NLP techniques for better accuracy\n        # Look for keywords related to years of experience, project types, roles mentioned in job description\n        \n        years_of_experience = self.extract_experience_years()\n        \n        if years_of_experience >= 5:\n            experience_score = 80\n        elif years_of_experience >= 3:\n            experience_score = 60\n        elif years_of_experience >= 1:\n            experience_score = 40\n        else:\n            experience_score = 20\n\n        return experience_score\n        \n    def extract_experience_years(self):\n        \"\"\"Extracts the number of years of experience from the resume.  Return 0 if nothing found.\"\"\"\n        years = 0\n        # Simple regex to find \"X years\" or \"X+ years\"\n        match = re.search(r'(\\d+)\\+?\\syears', self.resume.lower())\n        if match:\n            try:\n              years = int(match.group(1))\n            except:\n              years = 0\n        return years\n\n    def get_resume_summary(self):\n         \"\"\"Returns a summary of the resume analysis.\"\"\"\n         return f\"Keyword match percentage: {round(self.calculate_match_score(), 2)}%\"\n\n\n    def run_analysis(self):\n        \"\"\"Runs the analysis and returns the results.\"\"\"\n        match_score = self.calculate_match_score()\n        resume_summary = self.get_resume_summary()\n\n        return {\n            \"match_score\": match_score,\n            \"resume_summary\": resume_summary,\n            \"job_keywords\": self.job_keywords,\n            \"resume_keywords\": self.resume_keywords\n        }\n\nif __name__ == '__main__':\n    # Example Usage\n    job_description = \"\"\"\n    Software Engineer - Python\n    We are looking for a skilled software engineer with 5+ years of experience in Python development.\n    Experience with Django, REST APIs, and database design is required.\n    Must have experience with Agile development methodologies.\n    \"\"\"\n\n    resume = \"\"\"\n    John Doe\n    Software Engineer\n\n    Summary:\n    Experienced software engineer with 7 years of experience in Python.\n\n    Skills:\n    Python, Django, REST APIs, SQL, Agile\n\n    Experience:\n    Software Engineer at ABC Company (2016-Present)\n    - Developed and maintained REST APIs using Django\n    - Designed and implemented database schemas\n    \"\"\"\n\n    analyzer = ResumeJobAnalyzer(job_description, resume)\n    analysis_result = analyzer.run_analysis()\n\n    print(f\"Match Score: {analysis_result['match_score']:.2f}%\")\n    print(f\"Resume Summary: {analysis_result['resume_summary']}\")\n    print(f\"Job Keywords: {analysis_result['job_keywords']}\")\n    print(f\"Resume Keywords: {analysis_result['resume_keywords']}\")\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Develop an interview question generator for technical and behavioral topics based on the role requirements.",
+        "agent_id": 2,
+        "next": [
+          "task2"
+        ],
+        "prev": [
+          "task4"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "Python code"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Build a follow-up question generation component that dynamically creates questions based on candidate responses.",
+        "agent_id": 2,
+        "next": [
+          "task3"
+        ],
+        "prev": [
+          "task1"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\ndef generate_follow_up_questions(candidate_response, previous_question, topic, depth=1):\n    \"\"\"\n    Generates follow-up questions based on a candidate's response.\n\n    Args:\n        candidate_response (str): The candidate's answer to the previous question.\n        previous_question (str): The question that elicited the response.\n        topic (str): The general topic of the interview question.\n        depth (int):  The desired depth/specificity of the follow-up question. Higher depth means more specific.\n\n    Returns:\n        list: A list of follow-up questions (strings).  Returns an empty list if no follow-up questions can be generated.\n    \"\"\"\n\n    follow_up_questions = []\n\n    # Basic examples; can be expanded with more sophisticated logic\n    # (e.g., using NLP to analyze the response and identify areas for further probing).\n\n    if depth == 1:\n        if \"experience\" in topic.lower() or \"project\" in topic.lower():\n            follow_up_questions.append(\"Can you elaborate on a specific challenge you faced during that experience/project and how you overcame it?\")\n        elif \"algorithm\" in topic.lower() or \"data structure\" in topic.lower():\n            follow_up_questions.append(\"What are the time and space complexity trade-offs of using that algorithm/data structure in this scenario?\")\n        elif \"behavioral\" in topic.lower() or \"conflict\" in topic.lower():\n            follow_up_questions.append(\"What was the outcome, and what did you learn from the situation?\")\n        else:\n             follow_up_questions.append(\"Could you provide more details about that?\")\n\n\n    elif depth == 2: # Requires deeper understanding of the response\n        if \"challenge\" in candidate_response.lower() and \"overcame\" in candidate_response.lower():\n            follow_up_questions.append(\"What alternative solutions did you consider before deciding on your final approach?\")\n            follow_up_questions.append(\"How did you measure the success of your solution?\")\n        elif \"time complexity\" in candidate_response.lower() or \"space complexity\" in candidate_response.lower():\n            follow_up_questions.append(\"How does the complexity change with different input sizes or data distributions?\")\n        elif \"learned\" in candidate_response.lower():\n            follow_up_questions.append(\"How have you applied that learning in subsequent projects or situations?\")\n        else:\n            follow_up_questions.append(\"Can you give a concrete example to illustrate your point?\")\n\n    # Add more depth levels and condition based on keywords/concepts in candidate_response\n    # using NLP techniques for a more advanced implementation.\n\n    return follow_up_questions\n\n\nif __name__ == '__main__':\n    # Example Usage\n    candidate_response1 = \"I worked on a project where we used a dynamic programming approach to solve a complex optimization problem. We faced some challenges with memory management.\"\n    previous_question1 = \"Tell me about a challenging project you worked on.\"\n    topic1 = \"Project Experience\"\n    follow_up_questions1 = generate_follow_up_questions(candidate_response1, previous_question1, topic1)\n    print(f\"Follow-up questions for response 1: {follow_up_questions1}\")\n\n    candidate_response2 = \"I had a conflict with a team member. I addressed it by communicating directly and finding a compromise.\"\n    previous_question2 = \"Tell me about a time you had a conflict with a colleague.\"\n    topic2 = \"Behavioral - Conflict Resolution\"\n    follow_up_questions2 = generate_follow_up_questions(candidate_response2, previous_question2, topic2, depth=2)\n    print(f\"Follow-up questions for response 2 (depth=2): {follow_up_questions2}\")\n\n    candidate_response3 = \"I have experience with different sorting algorithms. Merge sort is often a good choice.\"\n    previous_question3 = \"What sorting algorithms are you familiar with?\"\n    topic3 = \"Algorithms\"\n    follow_up_questions3 = generate_follow_up_questions(candidate_response3, previous_question3, topic3, depth=1)\n    print(f\"Follow-up questions for response 3: {follow_up_questions3}\")\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Implement an evaluation engine that scores candidate answers on relevance, depth, confidence, and technical accuracy across categories.",
+        "agent_id": 2,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task2"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nclass EvaluationEngine:\n    \"\"\"\n    Evaluates candidate answers based on relevance, depth, confidence, and technical accuracy.\n    \"\"\"\n\n    def __init__(self, scoring_weights=None):\n        \"\"\"\n        Initializes the EvaluationEngine with optional scoring weights.\n\n        Args:\n            scoring_weights (dict, optional): A dictionary specifying the weights for each evaluation criterion.\n                                             Defaults to equal weights if None.  Example: {'relevance': 0.3, 'depth': 0.3, 'confidence': 0.2, 'accuracy': 0.2}\n        \"\"\"\n        if scoring_weights is None:\n            self.scoring_weights = {'relevance': 0.25, 'depth': 0.25, 'confidence': 0.25, 'accuracy': 0.25}\n        else:\n            self.scoring_weights = scoring_weights\n\n        self.validate_scoring_weights()\n\n    def validate_scoring_weights(self):\n        \"\"\"\n        Validates that the scoring weights sum up to 1.\n        Raises a ValueError if the weights are invalid.\n        \"\"\"\n        total_weight = sum(self.scoring_weights.values())\n        if not abs(total_weight - 1.0) < 1e-6:  # Using a small tolerance for floating-point comparison\n            raise ValueError(\"Scoring weights must sum up to 1.0\")\n\n    def score_answer(self, answer, expected_answer, question_type=\"technical\"):\n        \"\"\"\n        Scores a candidate's answer based on several criteria.\n\n        Args:\n            answer (str): The candidate's answer.\n            expected_answer (str): The ideal answer or a rubric for scoring.\n            question_type (str): The type of question (\"technical\" or \"behavioral\").  Affects the scoring criteria.\n\n        Returns:\n            dict: A dictionary containing the scores for each criterion and the overall score.\n        \"\"\"\n\n        relevance_score = self.evaluate_relevance(answer, expected_answer)\n        depth_score = self.evaluate_depth(answer, expected_answer, question_type)\n        confidence_score = self.evaluate_confidence(answer)\n        accuracy_score = self.evaluate_accuracy(answer, expected_answer, question_type)\n\n        overall_score = (\n            self.scoring_weights['relevance'] * relevance_score +\n            self.scoring_weights['depth'] * depth_score +\n            self.scoring_weights['confidence'] * confidence_score +\n            self.scoring_weights['accuracy'] * accuracy_score\n        )\n\n        return {\n            'relevance': relevance_score,\n            'depth': depth_score,\n            'confidence': confidence_score,\n            'accuracy': accuracy_score,\n            'overall': overall_score\n        }\n\n    def evaluate_relevance(self, answer, expected_answer):\n        \"\"\"\n        Evaluates the relevance of the answer to the question.\n        This is a placeholder and should be improved with NLP techniques.\n\n        Args:\n            answer (str): The candidate's answer.\n            expected_answer (str): The ideal answer or a rubric for scoring.\n\n        Returns:\n            float: A score between 0 and 1 representing the relevance.\n        \"\"\"\n        # Simple keyword matching as a starting point\n        expected_keywords = set(expected_answer.lower().split())\n        answer_keywords = set(answer.lower().split())\n        common_keywords = expected_keywords.intersection(answer_keywords)\n\n        relevance_score = len(common_keywords) / max(len(expected_keywords), 1)  # Avoid division by zero\n\n        return min(relevance_score, 1.0) # Ensure score is within 0-1 range\n\n    def evaluate_depth(self, answer, expected_answer, question_type):\n        \"\"\"\n        Evaluates the depth of the answer.\n        This is a placeholder and should be improved with more sophisticated analysis.\n\n        Args:\n            answer (str): The candidate's answer.\n            expected_answer (str): The ideal answer or a rubric for scoring.\n            question_type (str): The type of question (\"technical\" or \"behavioral\").\n\n        Returns:\n            float: A score between 0 and 1 representing the depth.\n        \"\"\"\n\n        answer_length = len(answer.split())\n        expected_length = len(expected_answer.split()) # rough estimate of expected answer length\n\n        if question_type == \"technical\":\n             depth_score = min(answer_length / max(expected_length,10) , 1.0)  # Scale by a factor\n\n        elif question_type == \"behavioral\":\n            depth_score = min(answer_length / max(expected_length, 20), 1.0) # Behavioral answers often require more context\n        else:\n            depth_score = 0.5 # default if question type is unrecognized\n\n        return depth_score\n\n    def evaluate_confidence(self, answer):\n        \"\"\"\n        Evaluates the confidence level expressed in the answer.\n        This is a placeholder and could be improved with sentiment analysis or tone detection.\n\n        Args:\n            answer (str): The candidate's answer.\n\n        Returns:\n            float: A score between 0 and 1 representing the confidence.\n        \"\"\"\n        # Simple check for hedging language\n        hedging_words = [\"I think\", \"I believe\", \"maybe\", \"perhaps\", \"I'm not sure\", \"I guess\"]\n        hedging_count = sum([1 for word in hedging_words if word in answer.lower()])\n        confidence_score = 1.0 - min(hedging_count * 0.2, 1.0)  # Penalize for each hedging word\n\n        return confidence_score\n\n    def evaluate_accuracy(self, answer, expected_answer, question_type):\n        \"\"\"\n        Evaluates the technical accuracy of the answer.\n\n        Args:\n            answer (str): The candidate's answer.\n            expected_answer (str): The ideal answer or a rubric for scoring.\n            question_type (str): The type of question.\n\n        Returns:\n            float: A score between 0 and 1 representing the accuracy.\n        \"\"\"\n        if question_type == \"technical\":\n            # This is a simplified example.  Ideally, you would parse the answer and compare it against known facts.\n            expected_keywords = set(expected_answer.lower().split())\n            answer_keywords = set(answer.lower().split())\n            correct_keywords = expected_keywords.intersection(answer_keywords)\n            accuracy_score = len(correct_keywords) / max(len(expected_keywords), 1)\n        else:\n            # For behavioral questions, accuracy is less relevant, so assign a default value.\n            accuracy_score = 0.8  # Assume generally truthful\n\n        return min(accuracy_score, 1.0)  # Ensure score is within the valid range\n\nif __name__ == '__main__':\n    # Example Usage\n    engine = EvaluationEngine()\n\n    # Technical Question Example\n    technical_question = \"What is the difference between a stack and a queue?\"\n    candidate_answer_technical = \"A stack is LIFO and a queue is FIFO.\"\n    expected_answer_technical = \"Stack: LIFO (Last In, First Out). Queue: FIFO (First In, First Out).\"\n    technical_scores = engine.score_answer(candidate_answer_technical, expected_answer_technical, question_type=\"technical\")\n    print(\"Technical Question Scores:\", technical_scores)\n\n    # Behavioral Question Example\n    behavioral_question = \"Tell me about a time you failed.\"\n    candidate_answer_behavioral = \"I once missed a deadline because I underestimated the workload. I learned to plan better.\"\n    expected_answer_behavioral = \"Situation: Briefly describe the situation. Task: What was your responsibility? Action: What steps did you take? Result: What was the outcome? What did you learn?\"\n    behavioral_scores = engine.score_answer(candidate_answer_behavioral, expected_answer_behavioral, question_type=\"behavioral\")\n    print(\"Behavioral Question Scores:\", behavioral_scores)\n\n    # Example with custom weights\n    custom_engine = EvaluationEngine(scoring_weights={'relevance': 0.4, 'depth': 0.3, 'confidence': 0.1, 'accuracy': 0.2})\n    technical_scores_custom = custom_engine.score_answer(candidate_answer_technical, expected_answer_technical, question_type=\"technical\")\n    print(\"Technical Question Scores with Custom Weights:\", technical_scores_custom)\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Develop a recruiter email generator for sending interview invitations and follow-up messages.",
+        "agent_id": 2,
+        "next": [
+          "task1"
+        ],
+        "prev": [
+          "task0"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\nimport smtplib\nfrom email.mime.text import MIMEText\nfrom datetime import datetime, timedelta\n\nclass EmailGenerator:\n    def __init__(self, smtp_server, smtp_port, sender_email, sender_password):\n        self.smtp_server = smtp_server\n        self.smtp_port = smtp_port\n        self.sender_email = sender_email\n        self.sender_password = sender_password\n\n    def create_invitation_email(self, recipient_email, candidate_name, role_name, interview_date, interview_time, interviewer_name, interview_details):\n        \"\"\"Generates an interview invitation email.\"\"\"\n        subject = f\"Interview Invitation for {role_name} at [Company Name]\"\n        body = f\"\"\"Dear {candidate_name},\n\nWe are pleased to invite you to an interview for the {role_name} position at [Company Name].\n\nDate: {interview_date}\nTime: {interview_time}\nInterviewer: {interviewer_name}\nDetails: {interview_details}\n\nPlease confirm your availability by replying to this email.\n\nWe look forward to speaking with you.\n\nSincerely,\n[Your Name]\n[Your Title]\n[Company Name]\n\"\"\"\n        return self.create_email(recipient_email, subject, body)\n\n    def create_followup_email(self, recipient_email, candidate_name, interviewer_name, role_name):\n        \"\"\"Generates a follow-up email after the interview.\"\"\"\n        subject = f\"Following Up on Your Interview for {role_name} at [Company Name]\"\n        body = f\"\"\"Dear {candidate_name},\n\nThank you for taking the time to interview for the {role_name} position at [Company Name] with {interviewer_name}.\n\nWe appreciate you sharing your experience and qualifications with us. We are currently reviewing all candidates and will be in touch soon regarding the next steps.\n\nSincerely,\n[Your Name]\n[Your Title]\n[Company Name]\n\"\"\"\n        return self.create_email(recipient_email, subject, body)\n\n    def create_rejection_email(self, recipient_email, candidate_name, role_name):\n        \"\"\"Generates a rejection email.\"\"\"\n        subject = f\"Update on Your Application for {role_name} at [Company Name]\"\n        body = f\"\"\"Dear {candidate_name},\n\nThank you for your interest in the {role_name} position at [Company Name]. We appreciate you taking the time to apply.\n\nWe have carefully reviewed your application and have decided to move forward with other candidates whose qualifications and experience are a closer match for the requirements of this role.\n\nWe wish you the best in your job search.\n\nSincerely,\n[Your Name]\n[Your Title]\n[Company Name]\n\"\"\"\n        return self.create_email(recipient_email, subject, body)\n\n    def create_offer_email(self, recipient_email, candidate_name, role_name, salary, start_date):\n      \"\"\"Generates an offer email.\"\"\"\n      subject = f\"Job Offer: {role_name} at [Company Name]\"\n      body = f\"\"\"Dear {candidate_name},\n\nWe are delighted to offer you the position of {role_name} at [Company Name]!\n\nWe were very impressed with your qualifications and experience during the interview process.\n\nHere are the details of the offer:\n\n* Role: {role_name}\n* Salary: {salary}\n* Start Date: {start_date}\n\nA formal offer letter with more details will follow shortly. Please let us know if you have any questions.\n\nWe are excited about the possibility of you joining our team!\n\nSincerely,\n[Your Name]\n[Your Title]\n[Company Name]\n\"\"\"\n      return self.create_email(recipient_email, subject, body)\n\n    def create_email(self, recipient_email, subject, body):\n        \"\"\"Creates and returns a MIMEText email object.\"\"\"\n        msg = MIMEText(body)\n        msg['Subject'] = subject\n        msg['From'] = self.sender_email\n        msg['To'] = recipient_email\n        return msg\n\n    def send_email(self, recipient_email, subject, body):\n        \"\"\"Sends an email.\"\"\"\n        msg = self.create_email(recipient_email, subject, body)\n        try:\n            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:\n                server.starttls()\n                server.login(self.sender_email, self.sender_password)\n                server.sendmail(self.sender_email, recipient_email, msg.as_string())\n            print(f\"Email sent to {recipient_email}\")\n        except Exception as e:\n            print(f\"Error sending email: {e}\")\n\n\nif __name__ == '__main__':\n    # Example Usage\n    smtp_server = 'smtp.gmail.com'  # Replace with your SMTP server\n    smtp_port = 587  # Replace with your SMTP port\n    sender_email = 'your_email@gmail.com'  # Replace with your email\n    sender_password = 'your_password'  # Replace with your password (or app password)\n\n    email_generator = EmailGenerator(smtp_server, smtp_port, sender_email, sender_password)\n\n    # Example: Sending an interview invitation\n    recipient_email = 'candidate@example.com'\n    candidate_name = 'Jane Smith'\n    role_name = 'Software Engineer'\n    interview_date = datetime.now() + timedelta(days=2)\n    interview_date_str = interview_date.strftime(\"%Y-%m-%d\")\n    interview_time = \"10:00 AM\"\n    interviewer_name = 'John Doe'\n    interview_details = \"Please join the Zoom meeting: [Zoom Link]\"\n\n    email_generator.send_email(recipient_email,\n                               f\"Interview Invitation for {role_name} at [Company Name]\",\n                               email_generator.create_invitation_email(recipient_email, candidate_name, role_name, interview_date_str, interview_time, interviewer_name, interview_details).get_payload()) #Fixed: Correctly pass recipient email, subject, and body\n\n    # Example: Sending a follow-up email\n    email_generator.send_email(recipient_email,\n                               f\"Following Up on Your Interview for {role_name} at [Company Name]\",\n                               email_generator.create_followup_email(recipient_email, candidate_name, interviewer_name, role_name).get_payload())\n    \n    # Example: Sending a rejection email\n    email_generator.send_email(recipient_email,\n                               f\"Update on Your Application for {role_name} at [Company Name]\",\n                               email_generator.create_rejection_email(recipient_email, candidate_name, role_name).get_payload())\n\n    # Example: Sending an offer email\n    email_generator.send_email(recipient_email,\n                               f\"Job Offer: {role_name} at [Company Name]\",\n                               email_generator.create_offer_email(recipient_email, candidate_name, role_name, \"$120,000\", \"2024-08-01\").get_payload())\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "",
+        "output_format": "Python code"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Implement a report generator that compiles resume-job match, interview summary, technical & behavioral assessments, strengths/weaknesses, and final recommendations into a .txt file.",
+        "agent_id": 2,
+        "next": [],
+        "prev": [
+          "task0",
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Plain text (.txt)"
+      }
+    }
+  }
+}

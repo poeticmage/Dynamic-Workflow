@@ -9,3 +9,8 @@ config.py
 /venv
 .python-version
 CLAUDE.md
+
+!runs/**/run_metadata.json
+!runs/**/initflow.json
+!runs/**/results/*.json
+!runs/**/final_summary.txt

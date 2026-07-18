@@ -1,0 +1,149 @@
+{
+  "description": "Workflow state before refinement process",
+  "timestamp": "2026-05-28T12:26:08.461141",
+  "task_id": "workflow_refinement",
+  "iteration": 1,
+  "data": {
+    "workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Implement a job description parser that extracts key skills and requirements into a structured JSON schema.",
+        "agent_id": 4,
+        "next": [
+          "task2",
+          "task5"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```json\n{\n  \"job_title\": null,\n  \"seniority_level\": null,\n  \"department\": null,\n  \"employment_type\": null,\n  \"location / remote_policy\": null,\n  \"required_skills\": [],\n  \"preferred_skills\": [],\n  \"required_experience_years\": null,\n  \"educational_requirements\": null,\n  \"key_responsibilities\": [],\n  \"compensation_range\": null,\n  \"flags\": []\n}\n```",
+              "feedback": "here are some feedbacks  \n- The current result is just an empty template with nulls and no structure or typing information.  \n- We need a self-contained JSON Schema that defines each field’s type, description, and any required constraints so downstream code can validate parsed output.  \n\nhere are the changes  \n```json\n{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"JobDescription\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"job_title\": {\n      \"type\": \"string\",\n      \"description\": \"The official title of the job opening.\"\n    },\n    \"seniority_level\": {\n      \"type\": \"string\",\n      \"enum\": [\"Intern\", \"Entry\", \"Mid\", \"Senior\", \"Lead\", \"Director\", \"Executive\"],\n      \"description\": \"The level of seniority required.\"\n    },\n    \"department\": {\n      \"type\": \"string\",\n      \"description\": \"The department or team name.\"\n    },\n    \"employment_type\": {\n      \"type\": \"string\",\n      \"enum\": [\"Full-time\", \"Part-time\", \"Contract\", \"Temporary\", \"Internship\"],\n      \"description\": \"Type of employment.\"\n    },\n    \"location\": {\n      \"type\": \"string\",\n      \"description\": \"Office location or city.\"\n    },\n    \"remote_policy\": {\n      \"type\": \"string\",\n      \"enum\": [\"On-site\", \"Hybrid\", \"Remote\"],\n      \"description\": \"Work location policy.\"\n    },\n    \"required_skills\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"List of skills that are mandatory.\"\n    },\n    \"preferred_skills\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"List of skills that are nice to have.\"\n    },\n    \"required_experience_years\": {\n      \"type\": \"integer\",\n      \"minimum\": 0,\n      \"description\": \"Minimum years of relevant experience.\"\n    },\n    \"educational_requirements\": {\n      \"type\": \"string\",\n      \"description\": \"Degree or certification requirements.\"\n    },\n    \"key_responsibilities\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"Primary duties and responsibilities.\"\n    },\n    \"compensation_range\": {\n      \"type\": \"string\",\n      \"description\": \"Salary or pay range (e.g., \\\"$80k-$100k\\\").\"\n    },\n    \"flags\": {\n      \"type\": \"array\",\n      \"items\": { \"type\": \"string\" },\n      \"description\": \"Any special flags or notes (e.g., \\\"Urgent\\\").\"\n    }\n  },\n  \"required\": [\n    \"job_title\",\n    \"seniority_level\",\n    \"employment_type\",\n    \"location\",\n    \"required_skills\"\n  ],\n  \"additionalProperties\": false\n}\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```json\n{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"JobDescription\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"job_title\": {\n      \"type\": \"string\",\n      \"description\": \"The official title of the job opening.\"\n    },\n    \"seniority_level\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"Intern\",\n        \"Entry\",\n        \"Mid\",\n        \"Senior\",\n        \"Lead\",\n        \"Director\",\n        \"Executive\"\n      ],\n      \"description\": \"The level of seniority required.\"\n    },\n    \"department\": {\n      \"type\": \"string\",\n      \"description\": \"The department or team name.\"\n    },\n    \"employment_type\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"Full-time\",\n        \"Part-time\",\n        \"Contract\",\n        \"Temporary\",\n        \"Internship\"\n      ],\n      \"description\": \"Type of employment.\"\n    },\n    \"location\": {\n      \"type\": \"string\",\n      \"description\": \"Office location or city.\"\n    },\n    \"remote_policy\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"On-site\",\n        \"Hybrid\",\n        \"Remote\"\n      ],\n      \"description\": \"Work location policy.\"\n    },\n    \"required_skills\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"List of skills that are mandatory.\"\n    },\n    \"preferred_skills\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"List of skills that are nice to have.\"\n    },\n    \"required_experience_years\": {\n      \"type\": \"integer\",\n      \"minimum\": 0,\n      \"description\": \"Minimum years of relevant experience.\"\n    },\n    \"educational_requirements\": {\n      \"type\": \"string\",\n      \"description\": \"Degree or certification requirements.\"\n    },\n    \"key_responsibilities\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Primary duties and responsibilities.\"\n    },\n    \"compensation_range\": {\n      \"type\": \"string\",\n      \"description\": \"Salary or pay range (e.g., \\\"$80k-$100k\\\").\"\n    },\n    \"flags\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Any special flags or notes (e.g., \\\"Urgent\\\").\"\n    }\n  },\n  \"required\": [\n    \"job_title\",\n    \"seniority_level\",\n    \"employment_type\",\n    \"location\",\n    \"required_skills\"\n  ],\n  \"additionalProperties\": false\n}\n```\n",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "job_description_agent",
+        "output_format": "JSON"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Implement a resume parser that extracts candidate details (skills, experience, education) into a structured JSON schema.",
+        "agent_id": 2,
+        "next": [
+          "task2",
+          "task5"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```json\n{\n  \"candidate_details\": {\n    \"skills\": [],\n    \"experience\": [],\n    \"education\": []\n  }\n}\n```",
+              "feedback": "here are some feedbacks:\n1. The current JSON output is empty and does not demonstrate extraction of any resume details.\n2. The schema is too minimal—missing key fields such as personal/contact information and a summary.\n3. Without sample input, it’s unclear how the parser should populate the fields. You should either provide a sample resume to parse or produce a representative example.\n\nhere are the changes:\n```json\n{\n  \"candidate_details\": {\n    \"personal_details\": {\n      \"full_name\": \"John Doe\",\n      \"email\": \"john.doe@example.com\",\n      \"phone\": \"+1-234-567-8901\",\n      \"linkedin\": \"https://www.linkedin.com/in/johndoe\"\n    },\n    \"summary\": \"Seasoned software engineer with 5 years of experience in backend development, API design, and cloud infrastructure.\",\n    \"skills\": [\n      {\n        \"name\": \"Python\",\n        \"level\": \"Expert\"\n      },\n      {\n        \"name\": \"Java\",\n        \"level\": \"Intermediate\"\n      },\n      {\n        \"name\": \"AWS\",\n        \"level\": \"Intermediate\"\n      }\n    ],\n    \"experience\": [\n      {\n        \"position\": \"Senior Software Engineer\",\n        \"company\": \"Tech Innovations Inc.\",\n        \"start_date\": \"2019-07-01\",\n        \"end_date\": \"2023-05-31\",\n        \"responsibilities\": [\n          \"Designed and implemented RESTful APIs using Flask\",\n          \"Led migration of legacy systems to AWS\",\n          \"Mentored junior engineers and conducted code reviews\"\n        ]\n      },\n      {\n        \"position\": \"Software Engineer\",\n        \"company\": \"NextGen Solutions\",\n        \"start_date\": \"2017-01-15\",\n        \"end_date\": \"2019-06-30\",\n        \"responsibilities\": [\n          \"Developed microservices in Java Spring Boot\",\n          \"Integrated third-party payment gateways\",\n          \"Collaborated with cross-functional teams on product features\"\n        ]\n      }\n    ],\n    \"education\": [\n      {\n        \"degree\": \"B.Sc. Computer Science\",\n        \"institution\": \"State University\",\n        \"start_year\": 2012,\n        \"end_year\": 2016,\n        \"grade\": \"3.8/4.0\"\n      }\n    ]\n  }\n}\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```json\n{\n  \"candidate_details\": {\n    \"personal_details\": {\n      \"full_name\": \"Jane Smith\",\n      \"email\": \"jane.smith@email.com\",\n      \"phone\": \"+1-555-123-4567\",\n      \"linkedin\": \"linkedin.com/in/janesmith\"\n    },\n    \"summary\": \"Highly motivated data scientist with 3+ years of experience in machine learning, data analysis, and statistical modeling. Proven ability to develop and implement effective solutions to complex business problems.\",\n    \"skills\": [\n      {\n        \"name\": \"Python\",\n        \"level\": \"Expert\"\n      },\n      {\n        \"name\": \"Machine Learning\",\n        \"level\": \"Expert\"\n      },\n      {\n        \"name\": \"Data Analysis\",\n        \"level\": \"Proficient\"\n      },\n      {\n        \"name\": \"SQL\",\n        \"level\": \"Proficient\"\n      },\n      {\n        \"name\": \"Deep Learning\",\n        \"level\": \"Intermediate\"\n      },\n      {\n        \"name\": \"Cloud Computing (AWS)\",\n        \"level\": \"Intermediate\"\n      }\n    ],\n    \"experience\": [\n      {\n        \"position\": \"Data Scientist\",\n        \"company\": \"Acme Corp\",\n        \"start_date\": \"2020-06-01\",\n        \"end_date\": \"2023-08-15\",\n        \"responsibilities\": [\n          \"Developed and deployed machine learning models for fraud detection, resulting in a 20% reduction in fraudulent transactions.\",\n          \"Conducted data analysis to identify key business insights and trends.\",\n          \"Collaborated with cross-functional teams to implement data-driven solutions.\",\n          \"Built data pipelines for efficient data processing and storage.\"\n        ]\n      },\n      {\n        \"position\": \"Data Analyst\",\n        \"company\": \"Beta Inc.\",\n        \"start_date\": \"2019-01-02\",\n        \"end_date\": \"2020-05-31\",\n        \"responsibilities\": [\n          \"Performed data analysis to support business decision-making.\",\n          \"Created dashboards and reports to visualize key performance indicators.\",\n          \"Assisted in the development of machine learning models.\"\n        ]\n      }\n    ],\n    \"education\": [\n      {\n        \"degree\": \"M.Sc. Data Science\",\n        \"institution\": \"University of California, Berkeley\",\n        \"start_year\": 2017,\n        \"end_year\": 2018,\n        \"grade\": \"3.9/4.0\"\n      },\n      {\n        \"degree\": \"B.Sc. Statistics\",\n        \"institution\": \"University of Michigan\",\n        \"start_year\": 2013,\n        \"end_year\": \"2016\",\n        \"grade\": \"3.7/4.0\"\n      }\n    ],\n    \"projects\": [\n      {\n        \"name\": \"Customer Churn Prediction\",\n        \"description\": \"Developed a machine learning model to predict customer churn with 85% accuracy.\",\n        \"skills\": [\"Python\", \"Machine Learning\", \"Data Analysis\"]\n      }\n    ],\n    \"certifications\": [\n      {\n        \"name\": \"AWS Certified Machine Learning Specialist\",\n        \"issuing_organization\": \"Amazon Web Services\",\n        \"issue_date\": \"2022-12-01\"\n      }\n    ]\n  }\n}\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "JSON"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Develop the technical interview module: generate questions based on job and resume JSON and capture candidate responses.",
+        "agent_id": 2,
+        "next": [
+          "task3",
+          "task4"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```txt\n1. Analyze the job description using the JSON schema from task0 to understand the required skills, experience, and responsibilities.\n2. Analyze the candidate's resume using the JSON schema from task1 to identify their skills, experience, and education.\n3. Create a list of technical interview questions based on the job description's required skills and the candidate's resume. Prioritize questions that assess the candidate's proficiency in the required skills, especially those listed as \"expert\" or \"proficient\" in the resume.\n4. Structure the interview questions to cover different aspects such as theoretical knowledge, practical application, and problem-solving abilities. Include questions that require the candidate to explain concepts, write code snippets, and debug existing code.\n5. Send an email to the candidate with the interview schedule and instructions (using task3).\n6. Conduct the technical interview, asking the prepared questions and recording the candidate's responses. Ensure to note the time taken for each response and any clarifications needed.\n7. Score each candidate's response using the scoring algorithm from task4, considering the accuracy, completeness, and clarity of the answer.\n8. Generate a final evaluation report that includes the candidate's scores for each question, an overall score, and a summary of their strengths and weaknesses.\n9. Store the interview data, candidate responses, scores, and evaluation report in a structured format (e.g., JSON).\n10. Send a follow-up email to the candidate with the interview results (using task3).\n```",
+              "feedback": "here are some feedbacks:\n- The output is in plain text steps rather than the required JSON format.\n- It does not actually generate interview questions or placeholders for capturing candidate responses.\n- It lacks structure for linking questions to skills, tracking response times, and storing responses.\n\nhere are the changes:\n```json\n{\n  \"interviewModule\": {\n    \"jobDescriptionId\": \"JOB12345\",\n    \"candidateId\": \"CAND67890\",\n    \"questions\": [\n      {\n        \"questionId\": \"Q1\",\n        \"skill\": \"JavaScript\",\n        \"level\": \"expert\",\n        \"type\": \"theoretical\",\n        \"prompt\": \"Explain the event loop in JavaScript and how it handles asynchronous operations.\",\n        \"response\": \"\",\n        \"timeTakenSeconds\": null,\n        \"score\": null\n      },\n      {\n        \"questionId\": \"Q2\",\n        \"skill\": \"Node.js\",\n        \"level\": \"proficient\",\n        \"type\": \"practical\",\n        \"prompt\": \"Write a function in Node.js to read a JSON file asynchronously and log its contents.\",\n        \"response\": \"\",\n        \"timeTakenSeconds\": null,\n        \"score\": null\n      },\n      {\n        \"questionId\": \"Q3\",\n        \"skill\": \"Databases\",\n        \"level\": \"expert\",\n        \"type\": \"problem-solving\",\n        \"prompt\": \"Design a schema in MongoDB for a multi-tenant application and explain your indexing strategy.\",\n        \"response\": \"\",\n        \"timeTakenSeconds\": null,\n        \"score\": null\n      },\n      {\n        \"questionId\": \"Q4\",\n        \"skill\": \"Debugging\",\n        \"level\": \"proficient\",\n        \"type\": \"practical\",\n        \"prompt\": \"Here is a snippet of code that throws an undefined variable error. Identify and fix the bug:\\n\\n```js\\nfunction calculate(a, b) {\\n  return sum + a + b;\\n}\\n```\",\n        \"response\": \"\",\n        \"timeTakenSeconds\": null,\n        \"score\": null\n      },\n      {\n        \"questionId\": \"Q5\",\n        \"skill\": \"REST API\",\n        \"level\": \"proficient\",\n        \"type\": \"theoretical\",\n        \"prompt\": \"What are the key differences between REST and GraphQL? When would you choose one over the other?\",\n        \"response\": \"\",\n        \"timeTakenSeconds\": null,\n        \"score\": null\n      }\n    ],\n    \"metadata\": {\n      \"scheduledAt\": null,\n      \"conductedAt\": null,\n      \"interviewer\": \"Jane Doe\"\n    }\n  }\n}\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```json\n{\n  \"interviewModule\": {\n    \"jobDescription\": {\n      \"job_title\": \"Data Scientist\",\n      \"seniority_level\": \"Mid\",\n      \"department\": \"Research\",\n      \"employment_type\": \"Full-time\",\n      \"location\": \"New York\",\n      \"remote_policy\": \"Hybrid\",\n      \"required_skills\": [\n        \"Python\",\n        \"Machine Learning\",\n        \"Data Analysis\",\n        \"SQL\"\n      ],\n      \"preferred_skills\": [\n        \"Deep Learning\",\n        \"Cloud Computing (AWS)\"\n      ],\n      \"required_experience_years\": 3,\n      \"educational_requirements\": \"Master's Degree in Data Science or related field\",\n      \"key_responsibilities\": [\n        \"Develop and deploy machine learning models\",\n        \"Conduct data analysis and statistical modeling\",\n        \"Collaborate with cross-functional teams\",\n        \"Build data pipelines\"\n      ],\n      \"compensation_range\": \"$120k-$150k\",\n      \"flags\": []\n    },\n    \"candidateResume\": {\n      \"candidate_details\": {\n        \"personal_details\": {\n          \"full_name\": \"Jane Smith\",\n          \"email\": \"jane.smith@email.com\",\n          \"phone\": \"+1-555-123-4567\",\n          \"linkedin\": \"linkedin.com/in/janesmith\"\n        },\n        \"summary\": \"Highly motivated data scientist with 3+ years of experience in machine learning, data analysis, and statistical modeling. Proven ability to develop and implement effective solutions to complex business problems.\",\n        \"skills\": [\n          {\n            \"name\": \"Python\",\n            \"level\": \"Expert\"\n          },\n          {\n            \"name\": \"Machine Learning\",\n            \"level\": \"Expert\"\n          },\n          {\n            \"name\": \"Data Analysis\",\n            \"level\": \"Proficient\"\n          },\n          {\n            \"name\": \"SQL\",\n            \"level\": \"Proficient\"\n          },\n          {\n            \"name\": \"Deep Learning\",\n            \"level\": \"Intermediate\"\n          },\n          {\n            \"name\": \"Cloud Computing (AWS)\",\n            \"level\": \"Intermediate\"\n          }\n        ],\n        \"experience\": [\n          {\n            \"position\": \"Data Scientist\",\n            \"company\": \"Acme Corp\",\n            \"start_date\": \"2020-06-01\",\n            \"end_date\": \"2023-08-15\",\n            \"responsibilities\": [\n              \"Developed and deployed machine learning models for fraud detection, resulting in a 20% reduction in fraudulent transactions.\",\n              \"Conducted data analysis to identify key business insights and trends.\",\n              \"Collaborated with cross-functional teams to implement data-driven solutions.\",\n              \"Built data pipelines for efficient data processing and storage.\"\n            ]\n          },\n          {\n            \"position\": \"Data Analyst\",\n            \"company\": \"Beta Inc.\",\n            \"start_date\": \"2019-01-02\",\n            \"end_date\": \"2020-05-31\",\n            \"responsibilities\": [\n              \"Performed data analysis to support business decision-making.\",\n              \"Created dashboards and reports to visualize key performance indicators.\",\n              \"Assisted in the development of machine learning models.\"\n            ]\n          }\n        ],\n        \"education\": [\n          {\n            \"degree\": \"M.Sc. Data Science\",\n            \"institution\": \"University of California, Berkeley\",\n            \"start_year\": 2017,\n            \"end_year\": 2018,\n            \"grade\": \"3.9/4.0\"\n          },\n          {\n            \"degree\": \"B.Sc. Statistics\",\n            \"institution\": \"University of Michigan\",\n            \"start_year\": 2013,\n            \"end_year\": \"2016\",\n            \"grade\": \"3.7/4.0\"\n          }\n        ],\n        \"projects\": [\n          {\n            \"name\": \"Customer Churn Prediction\",\n            \"description\": \"Developed a machine learning model to predict customer churn with 85% accuracy.\",\n            \"skills\": [\"Python\", \"Machine Learning\", \"Data Analysis\"]\n          }\n        ],\n        \"certifications\": [\n          {\n            \"name\": \"AWS Certified Machine Learning Specialist\",\n            \"issuing_organization\": \"Amazon Web Services\",\n            \"issue_date\": \"2022-12-01\"\n          }\n        ]\n      }\n    },\n    \"questions\": [\n      {\n        \"questionId\": \"Q1\",\n        \"skill\": \"Python\",\n        \"level\": \"Expert\",\n        \"type\": \"theoretical\",\n        \"prompt\": \"Explain the difference between lists and tuples in Python. When would you use one over the other?\",\n        \"expectedAnswer\": \"Lists are mutable, while tuples are immutable. Use tuples when you want to ensure data integrity or use them as keys in dictionaries.\",\n        \"candidateResponse\": null,\n        \"timeTakenSeconds\": null,\n        \"score\": null,\n        \"feedback\": null\n      },\n      {\n        \"questionId\": \"Q2\",\n        \"skill\": \"Machine Learning\",\n        \"level\": \"Expert\",\n        \"type\": \"practical\",\n        \"prompt\": \"Describe the steps involved in building and evaluating a machine learning model. Provide an example of a model you have built and evaluated.\",\n        \"expectedAnswer\": \"Data collection, preprocessing, feature engineering, model selection, training, evaluation, and deployment. For example, a fraud detection model using logistic regression.\",\n        \"candidateResponse\": null,\n        \"timeTakenSeconds\": null,\n        \"score\": null,\n        \"feedback\": null\n      },\n      {\n        \"questionId\": \"Q3\",\n        \"skill\": \"Data Analysis\",\n        \"level\": \"Proficient\",\n        \"type\": \"problem-solving\",\n        \"prompt\": \"Given a dataset with missing values, what are the different approaches you can take to handle them? Explain the pros and cons of each approach.\",\n        \"expectedAnswer\": \"Imputation (mean, median, mode), deletion (listwise, pairwise), or using algorithms that handle missing data natively. Pros and cons depend on the specific dataset and missingness pattern.\",\n        \"candidateResponse\": null,\n        \"timeTakenSeconds\": null,\n        \"score\": null,\n        \"feedback\": null\n      },\n      {\n        \"questionId\": \"Q4\",\n        \"skill\": \"SQL\",\n        \"level\": \"Proficient\",\n        \"type\": \"practical\",\n        \"prompt\": \"Write a SQL query to retrieve the top 10 customers with the highest total purchase amount.\",\n        \"expectedAnswer\": \"SELECT customer_id, SUM(purchase_amount) AS total_purchase FROM purchases GROUP BY customer_id ORDER BY total_purchase DESC LIMIT 10;\",\n        \"candidateResponse\": null,\n        \"timeTakenSeconds\": null,\n        \"score\": null,\n        \"feedback\": null\n      },\n      {\n        \"questionId\": \"Q5\",\n        \"skill\": \"Cloud Computing (AWS)\",\n        \"level\": \"Intermediate\",\n        \"type\": \"theoretical\",\n        \"prompt\": \"Explain the differences between EC2, S3, and Lambda in AWS. When would you use each of these services?\",\n        \"expectedAnswer\": \"EC2 is a virtual server, S3 is object storage, and Lambda is a serverless compute service. Use EC2 for general-purpose computing, S3 for storing files, and Lambda for event-driven applications.\",\n        \"candidateResponse\": null,\n        \"timeTakenSeconds\": null,\n        \"score\": null,\n        \"feedback\": null\n      }\n    ],\n    \"metadata\": {\n      \"scheduledAt\": null,\n      \"conductedAt\": null,\n      \"interviewer\": \"Jane Doe\",\n      \"jobDescriptionId\": \"JOB123\",\n      \"candidateId\": \"CAND456\"\n    },\n     \"emails\": [\n      {\n        \"type\": \"invite\",\n        \"timestamp\": null,\n        \"subject\": \"Interview Invitation\",\n        \"body\": \"Dear Jane Smith, You are invited to an interview...\",\n        \"status\": \"pending\"\n      },\n      {\n        \"type\": \"follow_up\",\n        \"timestamp\": null,\n        \"subject\": \"Interview Follow-up\",\n        \"body\": \"Dear Jane Smith, Thank you for your time...\",\n        \"status\": \"pending\"\n      }\n    ],\n    \"evaluationReport\": {\n      \"overallScore\": null,\n      \"summary\": null,\n      \"strengths\": [],\n      \"weaknesses\": [],\n      \"recommendation\": null\n    }\n  }\n}\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "JSON"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Build an email automation component to send interview invites and follow-ups triggered by interview module events.",
+        "agent_id": 2,
+        "next": [],
+        "prev": [
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Create a scoring algorithm that evaluates candidate responses against expected answers and outputs scores in JSON.",
+        "agent_id": 2,
+        "next": [
+          "task5"
+        ],
+        "prev": [
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "JSON"
+      },
+      "task5": {
+        "id": "task5",
+        "objective": "Implement a report generator that compiles job requirements, candidate profile, interview responses, and scores into a .txt evaluation report.",
+        "agent_id": 2,
+        "next": [],
+        "prev": [
+          "task0",
+          "task1",
+          "task4"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "coding_agent",
+        "output_format": "Plain text"
+      }
+    }
+  }
+}

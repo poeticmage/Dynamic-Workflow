@@ -1,0 +1,98 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement a parser for the job description to extract key requirements and skills",
+            "agent_id": 1,
+            "next": [
+                "task3",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement a resume parser to extract candidate qualifications and map them to job requirements",
+            "agent_id": 1,
+            "next": [
+                "task3",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop an email notification module to send emails at specified workflow stages",
+            "agent_id": 1,
+            "next": [
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Create a technical interview management component that generates questions and records candidate responses",
+            "agent_id": 1,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0",
+                "task1",
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Build a scoring engine to evaluate candidate responses against predefined criteria",
+            "agent_id": 1,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement the final evaluation report generator to compile scores and analysis into a summary",
+            "agent_id": 1,
+            "next": [],
+            "prev": [
+                "task0",
+                "task1",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        }
+    }
+}

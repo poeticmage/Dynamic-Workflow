@@ -1,0 +1,130 @@
+{
+  "timestamp": "2026-05-27T16:34:57.547145",
+  "description": "Complete workflow execution for: You are a workflow planning agent.\nYour task is to...",
+  "data": {
+    "task": "You are a workflow planning agent.\nYour task is to:\n-\"Analyze the job description\",\n    \"Analyze the candidate resume\",\n    \"Conduct technical interview\",\n    \"Send emails as and when needed\",\n    \"Score candidate responses\",\n    \"Generate final evaluation report\"\n\nReturn the output as a .txt file of all the steps taken to perform the tasks.\n\n\n",
+    "workflow": {
+      "tasks": {
+        "task0": {
+          "id": "task0",
+          "objective": "Extract key requirements (skills, years of experience, and qualifications) from the job description and structure them into a JSON format.",
+          "agent_id": 4,
+          "next": [
+            "task2"
+          ],
+          "prev": [],
+          "status": "completed",
+          "history": "```json\n{\n  \"job_requirements\": {\n    \"skills\": [\n      \"JavaScript\",\n      \"React.js\",\n      \"RESTful APIs\"\n    ],\n    \"years_of_experience\": \"3-5\",\n    \"qualifications\": [\n      \"Bachelor’s degree in Computer Science\",\n      \"AWS certification\"\n    ]\n  }\n}\n```",
+          "remaining_dependencies": 0,
+          "agent": "",
+          "output_format": "JSON"
+        },
+        "task1": {
+          "id": "task1",
+          "objective": "Extract and structure candidate qualifications from the resume",
+          "agent_id": 5,
+          "next": [
+            "task3"
+          ],
+          "prev": [],
+          "status": "completed",
+          "history": "```json\n{\n  \"candidate_qualifications\": {\n    \"skills\": [\n      \"Python\",\n      \"Java\",\n      \"C++\",\n      \"JavaScript\",\n      \"SQL\",\n      \"Git\",\n      \"Docker\",\n      \"RESTful APIs\",\n      \"AWS\",\n      \"Django\",\n      \"PostgreSQL\",\n      \"Spring Boot\",\n      \"Angular\",\n      \"MySQL\",\n      \"Node.js\",\n      \"Express\",\n      \"Socket.io\",\n      \"MongoDB\"\n    ],\n    \"experience\": [\n      {\n        \"company\": \"Tech Solutions Inc.\",\n        \"role\": \"Senior Software Engineer\",\n        \"start_date\": \"2021-06\",\n        \"end_date\": \"Present\",\n        \"responsibilities\": [\n          \"Led backend development using Python and Django\",\n          \"Architected microservices deployed on AWS ECS\",\n          \"Mentored junior developers and conducted code reviews\"\n        ]\n      },\n      {\n        \"company\": \"NextGen Apps LLC\",\n        \"role\": \"Software Engineer\",\n        \"start_date\": \"2018-07\",\n        \"end_date\": \"2021-05\",\n        \"responsibilities\": [\n          \"Developed Java-based RESTful APIs\",\n          \"Integrated PostgreSQL databases with application logic\",\n          \"Collaborated in an Agile team with bi-weekly sprints\"\n        ]\n      }\n    ],\n    \"education\": [\n      {\n        \"institution\": \"State University\",\n        \"degree\": \"Bachelor of Science in Computer Science\",\n        \"start_date\": \"2014-08\",\n        \"end_date\": \"2018-05\",\n        \"GPA\": \"3.7/4.0\"\n      }\n    ],\n    \"certifications\": [\n      {\n        \"name\": \"AWS Certified Solutions Architect – Associate\",\n        \"issuing_organization\": \"Amazon Web Services\",\n        \"issue_date\": \"2020-09\",\n        \"expiration_date\": \"2023-09\"\n      },\n      {\n        \"name\": \"Oracle Certified Professional, Java SE 11 Developer\",\n        \"issuing_organization\": \"Oracle\",\n        \"issue_date\": \"2019-04\"\n      }\n    ],\n    \"projects\": [\n      {\n        \"name\": \"Inventory Management System\",\n        \"description\": \"Built a full-stack application to track stock levels and generate real-time reports.\",\n        \"technologies\": [\n          \"Java\",\n          \"Spring Boot\",\n          \"Angular\",\n          \"MySQL\"\n        ],\n        \"year\": 2020\n      },\n      {\n        \"name\": \"Real-Time Chat Application\",\n        \"description\": \"Developed a scalable chat service with WebSocket-based messaging.\",\n        \"technologies\": [\n          \"Node.js\",\n          \"Express\",\n          \"Socket.io\",\n          \"MongoDB\"\n        ],\n        \"year\": 2019\n      }\n    ],\n    \"awards\": [\n      {\n        \"title\": \"Employee of the Year\",\n        \"issuer\": \"Tech Solutions Inc.\",\n        \"date\": \"2020-12\",\n        \"description\": \"Recognized for outstanding performance and leadership in project delivery.\"\n      }\n    ],\n    \"publications\": [\n      {\n        \"title\": \"Implementing Microservices on AWS\",\n        \"publisher\": \"Tech Journal\",\n        \"date\": \"2019-07\",\n        \"url\": \"https://techjournal.org/microservices-aws\"\n      }\n    ]\n  }\n}\n```",
+          "remaining_dependencies": 0,
+          "agent": "resume_matching_agent",
+          "output_format": "JSON"
+        },
+        "task2": {
+          "id": "task2",
+          "objective": "Generate a set of technical interview questions mapped to the job requirements",
+          "agent_id": 7,
+          "next": [
+            "task3",
+            "task4"
+          ],
+          "prev": [
+            "task0"
+          ],
+          "status": "completed",
+          "history": "1. Analyze job description to identify required skills, experience, and qualifications (from task0).\n2. Analyze candidate resume to identify skills, experience and qualifications.\n3. Create interview questions for JavaScript based on job requirements.\n4. Create interview questions for React.js based on job requirements.\n5. Create interview questions for RESTful APIs based on job requirements.\n6. Create interview questions based on required years of experience.\n7. Create interview questions based on required qualifications.\n8. Conduct technical interview and record candidate responses (task3).\n9. Prepare and send emails for interview invitation and follow-ups (task4).\n10. Score candidate responses based on predefined criteria.\n11. Generate final evaluation report summarizing candidate's performance.\n",
+          "remaining_dependencies": 0,
+          "agent": "interview_agent",
+          "output_format": "Plain text"
+        },
+        "task3": {
+          "id": "task3",
+          "objective": "Conduct the technical interview and record candidate responses",
+          "agent_id": 7,
+          "next": [
+            "task5"
+          ],
+          "prev": [
+            "task1",
+            "task2"
+          ],
+          "status": "completed",
+          "history": "```text\n1. Schedule the technical interview with the candidate.\n2. Prepare the interview environment (e.g., video conferencing setup, code editor).\n3. Start the interview and introduce the interview process to the candidate.\n4. Ask the candidate the prepared JavaScript interview questions.\n5. Record the candidate's answers to the JavaScript questions.\n6. Ask the candidate the prepared React.js interview questions.\n7. Record the candidate's answers to the React.js questions.\n8. Ask the candidate the prepared RESTful APIs interview questions.\n9. Record the candidate's answers to the RESTful APIs questions.\n10. Ask the candidate the prepared experience-based interview questions.\n11. Record the candidate's answers to the experience-based questions.\n12. Ask the candidate the prepared qualifications-based interview questions.\n13. Record the candidate's answers to the qualifications-based questions.\n14. Allow the candidate to ask questions about the role and company.\n15. Thank the candidate for their time and explain the next steps in the hiring process.\n16. Save all recorded responses and notes from the interview.\n```\n",
+          "remaining_dependencies": 0,
+          "agent": "interview_agent",
+          "output_format": "Plain text"
+        },
+        "task4": {
+          "id": "task4",
+          "objective": "Prepare and send emails for interview invitation and follow-ups",
+          "agent_id": 6,
+          "next": [],
+          "prev": [
+            "task2"
+          ],
+          "status": "completed",
+          "history": "1. Draft email template for interview invitation including date, time, location/meeting link, and interview details.\n2. Personalize the interview invitation email with the candidate's name and the specific role.\n3. Send the interview invitation email to the candidate.\n4. Schedule a follow-up email to be sent a day before the interview as a reminder.\n5. Draft a follow-up email to be sent after the interview to thank the candidate for their time.\n6. Customize the post-interview thank you email with specific feedback or next steps, if available.\n7. Send the post-interview thank you email to the candidate.\n8. Draft an email template to request feedback from the interviewer(s).\n9. Send the feedback request email to the interviewer(s) after the interview.\n10. Draft an email template for informing the candidate about the interview decision (offer/rejection).\n11. Personalize the offer/rejection email with specific reasons or feedback, if appropriate.\n12. Send the offer/rejection email to the candidate.\n",
+          "remaining_dependencies": 0,
+          "agent": "email_agent",
+          "output_format": "Plain text"
+        },
+        "task5": {
+          "id": "task5",
+          "objective": "Score the candidate's interview responses against predefined criteria",
+          "agent_id": 8,
+          "next": [
+            "task6"
+          ],
+          "prev": [
+            "task3"
+          ],
+          "status": "completed",
+          "history": "```json\n{\n  \"steps\": [\n    \"Define scoring criteria for each interview question category (JavaScript, React.js, RESTful APIs, experience-based, qualifications-based).\",\n    \"Establish a scoring scale (e.g., 1-5, with 1 being Unsatisfactory and 5 being Exceptional) for each criterion.\",\n    \"Review recorded responses to the JavaScript interview questions.\",\n    \"Score the candidate's JavaScript responses based on the predefined criteria and scoring scale.\",\n    \"Record the scores for each JavaScript question.\",\n    \"Review recorded responses to the React.js interview questions.\",\n    \"Score the candidate's React.js responses based on the predefined criteria and scoring scale.\",\n    \"Record the scores for each React.js question.\",\n    \"Review recorded responses to the RESTful APIs interview questions.\",\n    \"Score the candidate's RESTful APIs responses based on the predefined criteria and scoring scale.\",\n    \"Record the scores for each RESTful APIs question.\",\n    \"Review recorded responses to the experience-based interview questions.\",\n    \"Score the candidate's experience-based responses based on the predefined criteria and scoring scale.\",\n    \"Record the scores for each experience-based question.\",\n    \"Review recorded responses to the qualifications-based interview questions.\",\n    \"Score the candidate's qualifications-based responses based on the predefined criteria and scoring scale.\",\n    \"Record the scores for each qualifications-based question.\",\n    \"Calculate the total score for each category (JavaScript, React.js, RESTful APIs, experience-based, qualifications-based).\",\n    \"Calculate the overall total score for the candidate by summing the category totals.\",\n    \"Document any specific observations or justifications for assigned scores.\",\n    \"Store all scores and observations for inclusion in the final evaluation report.\"\n  ]\n}\n```",
+          "remaining_dependencies": 0,
+          "agent": "scoring_agent",
+          "output_format": "JSON"
+        },
+        "task6": {
+          "id": "task6",
+          "objective": "Compile analysis, scores, and feedback into a final evaluation report as a .txt file detailing all steps taken to perform the tasks",
+          "agent_id": 3,
+          "next": [],
+          "prev": [
+            "task0",
+            "task1",
+            "task5"
+          ],
+          "status": "completed",
+          "history": "```txt\n1. Analyze the job description to extract required skills (JavaScript, React.js, RESTful APIs), years of experience (3-5), and qualifications (Bachelor’s degree in Computer Science, AWS certification).\n2. Analyze the candidate's resume to extract skills (Python, Java, C++, JavaScript, SQL, Git, Docker, RESTful APIs, AWS, Django, PostgreSQL, Spring Boot, Angular, MySQL, Node.js, Express, Socket.io, MongoDB), experience, education, certifications (AWS Certified Solutions Architect – Associate, Oracle Certified Professional, Java SE 11 Developer), projects, awards, and publications.\n3. Conduct a technical interview, focusing on JavaScript, React.js, RESTful APIs, experience, and qualifications.\n4. Define scoring criteria for each interview question category (JavaScript, React.js, RESTful APIs, experience-based, qualifications-based).\n5. Establish a scoring scale (e.g., 1-5, with 1 being Unsatisfactory and 5 being Exceptional) for each criterion.\n6. Review recorded responses to the JavaScript interview questions.\n7. Score the candidate's JavaScript responses based on the predefined criteria and scoring scale.\n8. Record the scores for each JavaScript question.\n9. Review recorded responses to the React.js interview questions.\n10. Score the candidate's React.js responses based on the predefined criteria and scoring scale.\n11. Record the scores for each React.js question.\n12. Review recorded responses to the RESTful APIs interview questions.\n13. Score the candidate's RESTful APIs responses based on the predefined criteria and scoring scale.\n14. Record the scores for each RESTful APIs question.\n15. Review recorded responses to the experience-based interview questions.\n16. Score the candidate's experience-based responses based on the predefined criteria and scoring scale.\n17. Record the scores for each experience-based question.\n18. Review recorded responses to the qualifications-based interview questions.\n19. Score the candidate's qualifications-based responses based on the predefined criteria and scoring scale.\n20. Record the scores for each qualifications-based question.\n21. Calculate the total score for each category (JavaScript, React.js, RESTful APIs, experience-based, qualifications-based).\n22. Calculate the overall total score for the candidate by summing the category totals.\n23. Document any specific observations or justifications for assigned scores.\n24. Compile all analysis, scores, and feedback into a final evaluation report.\n25. Send emails as and when needed for scheduling interviews, providing feedback, or communicating the final decision.\n```",
+          "remaining_dependencies": 0,
+          "agent": "",
+          "output_format": "Plain text"
+        }
+      }
+    },
+    "summary": "```\n1. Analyze the job description to extract required skills (JavaScript, React.js, RESTful APIs), years of experience (3-5), and qualifications (Bachelor’s degree in Computer Science, AWS certification).\n2. Analyze the candidate's resume to extract skills (Python, Java, C++, JavaScript, SQL, Git, Docker, RESTful APIs, AWS, Django, PostgreSQL, Spring Boot, Angular, MySQL, Node.js, Express, Socket.io, MongoDB), experience, education, certifications (AWS Certified Solutions Architect – Associate, Oracle Certified Professional, Java SE 11 Developer), projects, awards, and publications.\n3. Conduct a technical interview, focusing on JavaScript, React.js, RESTful APIs, experience, and qualifications.\n4. Define scoring criteria for each interview question category (JavaScript, React.js, RESTful APIs, experience-based, qualifications-based).\n5. Establish a scoring scale (e.g., 1-5, with 1 being Unsatisfactory and 5 being Exceptional) for each criterion.\n6. Review recorded responses to the JavaScript interview questions.\n7. Score the candidate's JavaScript responses based on the predefined criteria and scoring scale.\n8. Record the scores for each JavaScript question.\n9. Review recorded responses to the React.js interview questions.\n10. Score the candidate's React.js responses based on the predefined criteria and scoring scale.\n11. Record the scores for each React.js question.\n12. Review recorded responses to the RESTful APIs interview questions.\n13. Score the candidate's RESTful APIs responses based on the predefined criteria and scoring scale.\n14. Record the scores for each RESTful APIs question.\n15. Review recorded responses to the experience-based interview questions.\n16. Score the candidate's experience-based responses based on the predefined criteria and scoring scale.\n17. Record the scores for each experience-based question.\n18. Review recorded responses to the qualifications-based interview questions.\n19. Score the candidate's qualifications-based responses based on the predefined criteria and scoring scale.\n20. Record the scores for each qualifications-based question.\n21. Calculate the total score for each category (JavaScript, React.js, RESTful APIs, experience-based, qualifications-based).\n22. Calculate the overall total score for the candidate by summing the category totals.\n23. Document any specific observations or justifications for assigned scores.\n24. Compile all analysis, scores, and feedback into a final evaluation report.\n25. Send emails as and when needed for scheduling interviews, providing feedback, or communicating the final decision.\n```",
+    "execution_summary": {
+      "timestamp": "2026-05-27T16:34:57.546920",
+      "overall_task": "You are a workflow planning agent.\nYour task is to:\n-\"Analyze the job description\",\n    \"Analyze the candidate resume\",\n    \"Conduct technical interview\",\n    \"Send emails as and when needed\",\n    \"Score candidate responses\",\n    \"Generate final evaluation report\"\n\nReturn the output as a .txt file of all the steps taken to perform the tasks.\n\n\n",
+      "total_tasks": 7,
+      "completed_tasks": 7,
+      "failed_tasks": 0,
+      "total_duration_seconds": 251.419695854187,
+      "agents_used": 0,
+      "summary_result_length": 2598
+    }
+  }
+}

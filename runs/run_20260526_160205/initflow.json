@@ -1,0 +1,130 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Parse and structure job description into a machine-readable requirements schema",
+            "agent_id": 4,
+            "next": [
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "job_description_agent",
+            "output_format": "JSON"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Parse and structure candidate resume into a profile data model",
+            "agent_id": 5,
+            "next": [
+                "task2",
+                "task3"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "resume_matching_agent",
+            "output_format": "JSON"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop resume\u2013job match analysis algorithm to produce match scores and key alignment points",
+            "agent_id": 2,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "JSON"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Implement AI-based dynamic interview engine that generates technical and behavioral questions and follow-ups",
+            "agent_id": 2,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Build answer evaluation module to assess relevance, depth, confidence, and technical accuracy of responses",
+            "agent_id": 2,
+            "next": [
+                "task5",
+                "task7"
+            ],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Create scoring aggregation module to compute final scores across match, technical, and behavioral categories",
+            "agent_id": 7,
+            "next": [
+                "task7"
+            ],
+            "prev": [
+                "task2",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "interview_agent",
+            "output_format": "Python code"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Develop email template generator for interview invitations and follow-up communications",
+            "agent_id": 2,
+            "next": [],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task7": {
+            "id": "task7",
+            "objective": "Generate final candidate evaluation report (.txt) including match analysis, interview summary, assessments, strengths/weaknesses, and recommendation",
+            "agent_id": 3,
+            "next": [],
+            "prev": [
+                "task2",
+                "task4",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 3,
+            "agent": "summary_agent",
+            "output_format": "Plain text"
+        }
+    }
+}

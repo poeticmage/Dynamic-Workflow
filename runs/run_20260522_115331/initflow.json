@@ -1,0 +1,98 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Implement the grid and gem cell data structures, including cell states and color mapping.",
+            "agent_id": 0,
+            "next": [
+                "task2",
+                "task3",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Grid Developer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino definitions, rotation logic, next-piece generation, and keyboard input handling for movement and rotation.",
+            "agent_id": 1,
+            "next": [
+                "task2",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Tetromino & Control Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Implement falling behavior, collision detection, locking tetrominoes into the grid, and converting locked tetromino blocks into colored gems.",
+            "agent_id": 2,
+            "next": [
+                "task3"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Locking & Conversion Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Implement line-clearing and match-3 gem detection, removal, fall-down refill logic, and chain reaction handling.",
+            "agent_id": 3,
+            "next": [
+                "task4"
+            ],
+            "prev": [
+                "task0",
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Clearing Mechanic Developer",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Implement scoring and bonus calculation based on line clears, match combos, and chain reactions.",
+            "agent_id": 4,
+            "next": [],
+            "prev": [
+                "task3"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Scoring Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement Pygame-based GUI to render the game grid, falling tetrominoes, next-piece preview, score display, and smooth animations.",
+            "agent_id": 5,
+            "next": [],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "GUI Developer",
+            "output_format": "Python code"
+        }
+    }
+}

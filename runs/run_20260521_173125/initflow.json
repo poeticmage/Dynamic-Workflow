@@ -1,0 +1,104 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: game grid representation, tetromino shape matrices, color-to-gem mappings",
+            "agent_id": 0,
+            "next": [
+                "task1",
+                "task2",
+                "task4"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "Data Structure Engineer",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino falling, rotation, collision detection, and locking into the grid",
+            "agent_id": 1,
+            "next": [
+                "task3",
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Tetris Mechanics Developer",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop gem conversion and match-3 detection algorithm for the grid",
+            "agent_id": 2,
+            "next": [
+                "task3",
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "Match-3 Logic Developer",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Implement combined clearing logic and scoring: Tetris line clears, Bejeweled matches, chain reactions, and bonus point calculations",
+            "agent_id": 3,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task1",
+                "task2"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "Scoring & Chain Reaction Specialist",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Build Pygame-based GUI: render grid, current score, next tetromino preview, and animations",
+            "agent_id": 4,
+            "next": [
+                "task5"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "GUI Developer",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Integrate game loop with keyboard controls, piece spawning, update cycle (fall, lock, match, clear, score), and GUI rendering",
+            "agent_id": 5,
+            "next": [],
+            "prev": [
+                "task1",
+                "task2",
+                "task3",
+                "task4"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "Integration Engineer",
+            "output_format": "Python code"
+        }
+    }
+}

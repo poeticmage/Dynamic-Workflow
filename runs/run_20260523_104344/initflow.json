@@ -1,0 +1,129 @@
+{
+    "tasks": {
+        "task0": {
+            "id": "task0",
+            "objective": "Define core data structures: game grid representation and tetromino shape/color definitions",
+            "agent_id": 1,
+            "next": [
+                "task1",
+                "task2",
+                "task4",
+                "task5"
+            ],
+            "prev": [],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 0,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task1": {
+            "id": "task1",
+            "objective": "Implement tetromino behavior: rotation, horizontal movement, gravity drop, locking into grid and conversion to colored gems",
+            "agent_id": 2,
+            "next": [
+                "task2",
+                "task3",
+                "task4",
+                "task5",
+                "task6"
+            ],
+            "prev": [
+                "task0"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task2": {
+            "id": "task2",
+            "objective": "Develop match detection and scoring: Tetris line clears, Bejeweled match-3 detection, chain reaction logic and bonus point calculation",
+            "agent_id": 2,
+            "next": [
+                "task4",
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 2,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task3": {
+            "id": "task3",
+            "objective": "Create keyboard control handlers for tetromino movement, rotation, and hard/soft drops",
+            "agent_id": 1,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        },
+        "task4": {
+            "id": "task4",
+            "objective": "Build Pygame-based GUI: render game grid as colored gems, animate falling pieces, clears, display score and next-piece preview",
+            "agent_id": 2,
+            "next": [
+                "task6"
+            ],
+            "prev": [
+                "task0",
+                "task1",
+                "task2",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 4,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task5": {
+            "id": "task5",
+            "objective": "Implement next tetromino preview logic and integrate preview data into game state",
+            "agent_id": 2,
+            "next": [
+                "task4",
+                "task6"
+            ],
+            "prev": [
+                "task1"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 1,
+            "agent": "coding_agent",
+            "output_format": "Python code"
+        },
+        "task6": {
+            "id": "task6",
+            "objective": "Assemble main game loop: orchestrate piece spawning, controls input, physics updates, gem conversion, match processing, scoring, and GUI updates",
+            "agent_id": 1,
+            "next": [],
+            "prev": [
+                "task1",
+                "task2",
+                "task3",
+                "task4",
+                "task5"
+            ],
+            "status": "pending",
+            "history": "",
+            "remaining_dependencies": 5,
+            "agent": "research_agent",
+            "output_format": "Python code"
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-05-26T17:55:35.508763",
+  "description": "Final synthesized summary of workflow execution",
+  "data": {
+    "summary_text": "```python\n[\n    \"Analyze the job description to extract key requirements and skills\",\n    \"Analyze the candidate resume to identify relevant experience and qualifications\",\n    \"Generate technical interview questions based on job requirements and candidate's resume\",\n    \"Conduct technical interview and record candidate responses\",\n    \"Score candidate responses based on predefined criteria\",\n    \"Send automated emails for interview scheduling and follow-up\",\n    \"Generate final evaluation report summarizing candidate's performance and suitability\"\n]\n```",
+    "original_task": "You are a workflow planning agent.\nYour task is to:\n-\"Analyze the job description\",\n    \"Analyze the candidate resume\",\n    \"Conduct technical interview\",\n    \"Send emails as and when needed\",\n    \"Score candidate responses\",\n    \"Generate final evaluation report\"\n\nReturn the output as a Python list of strings.\n\n\n"
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "description": "Workflow state before refinement process",
+  "timestamp": "2026-05-26T17:30:56.941277",
+  "task_id": "workflow_refinement",
+  "iteration": 1,
+  "data": {
+    "workflow_tasks": {
+      "task0": {
+        "id": "task0",
+        "objective": "Parse the high-level user objective into core actionable components",
+        "agent_id": 1,
+        "next": [
+          "task2"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "[\n    \"Analyze user objective\",\n    \"Identify core actionable components\",\n    \"Decompose objective into subtasks\",\n    \"Refine subtasks for atomicity\",\n    \"Ensure each subtask represents one specialized operation\",\n    \"List subtasks as strings in a Python list\"\n]\n",
+              "feedback": "here are some feedbacks:\n- The subtasks provided are meta-steps about how to decompose an objective, rather than the actionable components derived from the specific high-level objective (“You are a workflow planning agent”).\n- Each subtask should directly represent a core action that the agent will perform in planning a workflow.\n- The list should outline the actual steps the agent will take, not the process of breaking them down.\n\nhere are the changes:\n[\n    \"Gather the user's workflow planning objective\",\n    \"Analyze workflow requirements and constraints\",\n    \"Identify major workflow phases\",\n    \"Decompose each phase into atomic tasks\",\n    \"Sequence tasks in logical order\",\n    \"Validate task dependencies and completeness\"\n]"
+            },
+            {
+              "revision": 1,
+              "result": "```python\n[\n    \"Understand user's objective and desired outcome\",\n    \"Identify key steps required to achieve the objective\",\n    \"Define inputs and outputs for each step\",\n    \"Determine the dependencies between steps\",\n    \"Outline the resources needed for each step\",\n    \"Estimate the time and effort required for each step\",\n    \"Prioritize and sequence the steps in a logical order\",\n    \"Document the workflow plan for execution\"\n]\n```",
+              "feedback": "here are some feedbacks:\n- The second subtask (“Identify key steps required to achieve the objective”) is still a meta-planning instruction rather than an actual step the agent will perform.\n- We should turn each item into a concrete, single-action operation that the workflow planning agent will execute.\n- Include a validation/review step to ensure completeness and readiness for execution.\n\nhere are the changes:\n[\n    \"Gather the user's high-level workflow objective\",\n    \"Analyze the objective to identify major workflow phases\",\n    \"Break each phase into atomic, actionable tasks\",\n    \"Define inputs and outputs for every task\",\n    \"Determine dependencies and logical sequencing of tasks\",\n    \"Estimate required time, effort, and resources per task\",\n    \"Review and validate the workflow plan for completeness\",\n    \"Document the finalized workflow plan for execution\"\n]"
+            },
+            {
+              "revision": 2,
+              "result": "```python\n[\n    \"Receive high-level objective from the user\",\n    \"Clarify ambiguous aspects of the objective\",\n    \"Deconstruct the objective into major milestones\",\n    \"Transform milestones into concrete actions\",\n    \"Refine actions into specialized subtasks\",\n    \"Ensure each subtask is independently executable\",\n    \"Prioritize subtasks based on dependencies and urgency\",\n    \"Present the list of actionable subtasks\"\n]\n```",
+              "feedback": "## FEEDBACK to Current Result\nhere are some feedbacks:\n- The subtasks remain high-level meta-instructions about planning rather than distinct, single-action operations the agent will perform.\n- Steps like “Clarify ambiguous aspects” bundle multiple actions (identifying ambiguities and asking for clarification) into one.\n- We need explicit, concrete actions (e.g., detect ambiguities, send clarification questions) and ensure each item is one atomic operation.\n\nhere are the changes:\n```python\n[\n    \"Receive and read the user's high-level objective\",\n    \"Identify ambiguous or undefined terms in the objective\",\n    \"Generate and send questions to clarify ambiguities\",\n    \"Extract major milestones from the clarified objective\",\n    \"Decompose each milestone into atomic tasks\",\n    \"Specify the input and output for each task\",\n    \"Determine dependencies and sequence tasks logically\",\n    \"Present the final list of executable subtasks\"\n]\n```"
+            },
+            {
+              "revision": 3,
+              "result": "```python\n[\n    \"Receive and interpret the user's objective\",\n    \"Identify the desired outcome of the workflow\",\n    \"Extract key entities and resources involved\",\n    \"Detect implicit assumptions and constraints\",\n    \"Define the scope and boundaries of the workflow\",\n    \"Outline the major phases of the workflow\",\n    \"Prioritize phases based on dependencies and impact\",\n    \"Confirm understanding of the objective and constraints\"\n]\n```\n",
+              "feedback": "here are some feedbacks:\n- Some items combine multiple operations (e.g., “Extract key entities and resources” should be two separate actions).\n- “Receive and interpret” bundles two steps; interpret should follow receipt.\n- “Detect implicit assumptions and constraints” mixes two different identification tasks.\n- “Confirm understanding” is vague; better to explicitly generate clarification questions for any ambiguities.\n- Each subtask must represent one very specific, atomic action.\n\nhere are the changes:\n```python\n[\n    \"Receive the user's high-level objective\",\n    \"Interpret the objective details\",\n    \"Identify the desired workflow outcome\",\n    \"Extract key entities mentioned in the objective\",\n    \"Extract required resources specified by the objective\",\n    \"Detect implicit assumptions in the objective\",\n    \"Identify explicit constraints in the objective\",\n    \"Define the workflow's scope\",\n    \"Outline the workflow's boundaries\",\n    \"Outline major workflow phases\",\n    \"Prioritize each phase based on dependencies\",\n    \"Sequence phases in logical order\",\n    \"Generate and send clarification questions for ambiguities\"\n]\n```"
+            },
+            {
+              "revision": 4,
+              "result": "```python\n[\n    \"Receive the user's high-level objective\",\n    \"Interpret the objective details\",\n    \"Identify the desired workflow outcome\",\n    \"Extract key entities mentioned in the objective\",\n    \"Extract required resources specified by the objective\",\n    \"Detect implicit assumptions in the objective\",\n    \"Identify explicit constraints in the objective\",\n    \"Define the workflow's scope\",\n    \"Outline the workflow's boundaries\",\n    \"Outline major workflow phases\",\n    \"Prioritize each phase based on dependencies\",\n    \"Sequence phases in logical order\",\n    \"Generate and send clarification questions for ambiguities\"\n]\n```\n",
+              "feedback": "here are some feedbacks:\n- The step “Generate and send clarification questions for ambiguities” bundles two distinct actions (generation and sending).\n- To keep each subtask atomic, “Generate clarification questions” and “Send clarification questions” should be separate.\n- Consider using consistent verbs (“Extract” rather than “Outline” for data-oriented tasks) and remove any overlap between “Define scope” and “Outline boundaries” by standardizing to “Define”.\n\nhere are the changes:\n```python\n[\n    \"Receive the user's high-level objective\",\n    \"Interpret the objective details\",\n    \"Identify the desired workflow outcome\",\n    \"Extract key entities from the objective\",\n    \"Extract required resources from the objective\",\n    \"Detect implicit assumptions in the objective\",\n    \"Identify explicit constraints in the objective\",\n    \"Define the workflow scope\",\n    \"Define the workflow boundaries\",\n    \"Extract major workflow phases\",\n    \"Prioritize phases based on dependencies\",\n    \"Sequence phases in logical order\",\n    \"Generate clarification questions for detected ambiguities\",\n    \"Send clarification questions to the user\"\n]\n```"
+            },
+            {
+              "revision": 5,
+              "result": "```python\n[\n    \"Define target audience for marketing campaign\",\n    \"Determine key marketing channels\",\n    \"Create marketing content for each channel\",\n    \"Set up tracking for campaign performance\",\n    \"Launch marketing campaigns on selected channels\",\n    \"Monitor campaign performance and engagement\",\n    \"Analyze campaign data and generate reports\",\n    \"Optimize campaigns based on performance data\",\n    \"Manage marketing budget allocation\",\n    \"Communicate campaign updates to stakeholders\"\n]\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "research_agent",
+        "output_format": "Plain text"
+      },
+      "task1": {
+        "id": "task1",
+        "objective": "Define criteria for what constitutes an atomic executable subtask",
+        "agent_id": 2,
+        "next": [
+          "task2"
+        ],
+        "prev": [],
+        "status": "completed",
+        "history": {
+          "history": [
+            {
+              "revision": 0,
+              "result": "```python\n[\n    \"Define 'atomic' in the context of task granularity.\",\n    \"Establish criteria for 'executable' subtasks.\",\n    \"Specify the level of specialization required for each subtask.\",\n    \"Determine the maximum scope of each subtask (one operation).\",\n    \"Create a checklist to verify atomicity and executability.\",\n    \"Define acceptable input and output formats for subtasks.\",\n    \"Establish naming conventions for subtasks.\",\n    \"Set standards for subtask descriptions to ensure clarity.\",\n    \"Define error handling procedures for subtasks.\",\n    \"Determine the level of detail required in subtask documentation.\"\n]\n```",
+              "feedback": "here are some feedbacks:\n- The current list outlines steps to create criteria rather than the criteria themselves.  \n- The task requires explicit definitions of what makes a subtask both “atomic” and “executable.”  \n- We need concise, actionable criteria—each item should be a standalone rule that can be applied directly.\n\nhere are the changes:\n```python\n[\n    \"Single responsibility: each subtask performs exactly one well-defined action\",\n    \"Independence: subtask can run without requiring other subtasks to complete first\",\n    \"Clear inputs: all required inputs are explicitly defined and minimal\",\n    \"Explicit outputs: result or side effects are clearly specified and measurable\",\n    \"Determinism: same inputs always produce the same outputs\",\n    \"Automatability: the subtask can be executed by a machine without manual intervention\",\n    \"Minimal scope: contains only the essential steps needed to achieve its goal\",\n    \"Error handling: specifies how failures are detected and reported\",\n    \"Repeatability: can be run multiple times with consistent behavior\",\n    \"Standardized naming: uses a clear, consistent naming convention for easy identification\"\n]\n```"
+            },
+            {
+              "revision": 1,
+              "result": "```python\n[\n    \"Atomic: Performs a single, indivisible action.\",\n    \"Executable: Can be run independently with defined inputs and outputs.\",\n    \"Specialized: Focuses on one specific operation.\",\n    \"Concise: Achieves its goal with minimal steps.\",\n    \"Independent: Does not rely on the completion of other subtasks to start.\",\n    \"Testable: Output can be easily verified.\",\n    \"Documented: Purpose and usage are clearly described.\",\n    \"Idempotent: Repeated execution produces the same result if the state hasn't changed.\",\n    \"Autonomous: Requires no manual intervention during execution.\",\n    \"Unambiguous: Has a clear and well-defined purpose.\"\n]\n```\n",
+              "feedback": "here are some feedbacks:\n- A few criteria overlap (e.g., “Executable,” “Autonomous,” and “Independent” all address execution independence).\n- We’re missing explicit rules for inputs and outputs.\n- “Documented” is more of a guideline than a core executable criterion.\n- We need a clear error-handling rule and a naming convention.\n\nhere are the changes:\n```python\n[\n    \"Single-responsibility: performs exactly one well-defined action\",\n    \"Independent-execution: can start and finish without other subtasks\",\n    \"Clear-inputs: all required inputs are explicitly defined and minimal\",\n    \"Explicit-outputs: results or side-effects are precisely specified\",\n    \"Deterministic: same inputs always yield the same outputs\",\n    \"Machine-executable: can run end-to-end without manual steps\",\n    \"Minimal-scope: contains only the steps essential to its goal\",\n    \"Error-handling: defines how failures are detected and reported\",\n    \"Repeatable: safe to run multiple times with consistent behavior\",\n    \"Consistent-naming: uses a clear, standardized name for identification\"\n]\n```"
+            },
+            {
+              "revision": 2,
+              "result": "```python\n[\n    \"Single-responsibility: performs one well-defined action\",\n    \"Independent-execution: can run without dependency on other subtasks\",\n    \"Clear-inputs: requires minimal, well-defined inputs\",\n    \"Explicit-outputs: produces precisely specified results or side-effects\",\n    \"Deterministic: same inputs always produce identical outputs\",\n    \"Machine-executable: runs automatically without manual intervention\",\n    \"Minimal-scope: contains only the essential steps for its objective\",\n    \"Error-handling: includes defined procedures for detecting and reporting failures\",\n    \"Repeatable: safe to run multiple times with consistent results\",\n    \"Standardized-naming: follows a consistent naming convention\"\n]\n```",
+              "feedback": "there are no additional problems"
+            }
+          ]
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Plain text"
+      },
+      "task2": {
+        "id": "task2",
+        "objective": "Decompose each actionable component into specialized atomic subtasks",
+        "agent_id": 2,
+        "next": [
+          "task3"
+        ],
+        "prev": [
+          "task0",
+          "task1"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 0,
+        "agent": "coding_agent",
+        "output_format": "Python list"
+      },
+      "task3": {
+        "id": "task3",
+        "objective": "Format the list of subtasks as valid Python code",
+        "agent_id": 3,
+        "next": [
+          "task4"
+        ],
+        "prev": [
+          "task2"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "summary_agent",
+        "output_format": "Python code"
+      },
+      "task4": {
+        "id": "task4",
+        "objective": "Integrate the formatted subtasks into the final JSON workflow structure",
+        "agent_id": 4,
+        "next": [],
+        "prev": [
+          "task3"
+        ],
+        "status": "pending",
+        "history": {
+          "history": []
+        },
+        "remaining_dependencies": 1,
+        "agent": "job_description_agent",
+        "output_format": "JSON"
+      }
+    }
+  }
+}
