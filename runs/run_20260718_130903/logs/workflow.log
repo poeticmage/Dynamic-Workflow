@@ -1,0 +1,7 @@
+{"timestamp": "2026-07-18 13:09:24,036", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "init_workflow", "line": 136, "message": "Workflow generation complete: 2 successful, 0 failed"}
+{"timestamp": "2026-07-18 13:09:24,037", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "compare_results", "line": 87, "message": "Comparing 2 workflow candidates..."}
+{"timestamp": "2026-07-18 13:09:24,037", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "compare_results", "line": 88, "message": "Dependency complexities: [0.0, 0.0]"}
+{"timestamp": "2026-07-18 13:09:24,037", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "compare_results", "line": 89, "message": "Parallelisms: [1.0, 1.0]"}
+{"timestamp": "2026-07-18 13:09:24,037", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "init_workflow", "line": 149, "message": "Initial workflow saved to runs/run_20260718_130903/initflow.json"}
+{"timestamp": "2026-07-18 13:09:28,425", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "update_workflow", "line": 154, "message": "Starting workflow refinement..."}
+{"timestamp": "2026-07-18 13:09:30,577", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "update_workflow", "line": 193, "message": "Workflow refinement: no changes proposed."}

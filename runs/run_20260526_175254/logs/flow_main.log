@@ -1,0 +1,35 @@
+2026-05-26 17:52:54 | flow.main | INFO     | logging_config.py:282 | Run metadata saved to runs/run_20260526_175254/run_metadata.json
+2026-05-26 17:52:54 | flow.main | INFO     | main.py:59 | Starting Flow execution for task: You are a workflow planning agent.
+Your task is to:
+-"Analyze the job description",
+    "Analyze the...
+2026-05-26 17:52:54 | flow.main | INFO     | main.py:60 | Run ID: 20260526_175254
+2026-05-26 17:52:54 | flow.main | INFO     | main.py:61 | Run Directory: runs/run_20260526_175254
+2026-05-26 17:52:54 | flow.main | INFO     | main.py:62 | Configuration: 5 candidates, refine_threshold=3, max_validation_itt=5
+2026-05-26 17:54:05 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175405_task2_iter0_task_execution_task2.json
+2026-05-26 17:54:06 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175406_task1_iter0_task_execution_task1.json
+2026-05-26 17:54:06 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175406_task0_iter0_task_execution_task0.json
+2026-05-26 17:54:16 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175416_task2_iter1_validation_task2.json
+2026-05-26 17:54:17 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175417_task0_iter1_validation_task0.json
+2026-05-26 17:54:17 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175417_task1_iter1_validation_task1.json
+2026-05-26 17:54:23 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175423_task2_iter2_re_execution_task2.json
+2026-05-26 17:54:26 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175426_task2_iter2_validation_task2.json
+2026-05-26 17:54:26 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175426_workflow_refinement_iter1_workflow_pre_refinement.json
+2026-05-26 17:54:35 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175435_workflow_refinement_iter2_workflow_post_refinement.json
+2026-05-26 17:54:37 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175437_task3_iter0_task_execution_task3.json
+2026-05-26 17:54:44 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175444_task3_iter1_validation_task3.json
+2026-05-26 17:54:49 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175449_task3_iter2_re_execution_task3.json
+2026-05-26 17:54:53 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175453_task3_iter2_validation_task3.json
+2026-05-26 17:55:00 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175500_task4_iter0_task_execution_task4.json
+2026-05-26 17:55:03 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175503_task4_iter1_validation_task4.json
+2026-05-26 17:55:12 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175512_task5_iter0_task_execution_task5.json
+2026-05-26 17:55:21 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175521_task5_iter1_validation_task5.json
+2026-05-26 17:55:30 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175530_task5_iter2_re_execution_task5.json
+2026-05-26 17:55:32 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175532_task5_iter2_validation_task5.json
+2026-05-26 17:55:32 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_175532_workflow_refinement_iter1_workflow_pre_refinement.json
+2026-05-26 17:55:32 | flow.main | INFO     | main.py:70 | Flow execution completed in 158.71 seconds
+2026-05-26 17:55:32 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260526_175254/results/workflow_final_state.json
+2026-05-26 17:55:35 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260526_175254/results/final_summary.json
+2026-05-26 17:55:35 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260526_175254/results/workflow_run_20260526_175535.json
+2026-05-26 17:55:35 | flow.main | INFO     | main.py:100 | All results saved successfully to run directory: runs/run_20260526_175254
+2026-05-26 17:55:35 | flow.main | INFO     | main.py:101 | Run completed! Check runs/run_20260526_175254 for all files from this execution.

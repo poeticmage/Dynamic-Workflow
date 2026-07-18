@@ -1,0 +1,17 @@
+2026-07-18 13:10:45 | flow.main | INFO     | logging_config.py:282 | Run metadata saved to runs/run_20260718_131045/run_metadata.json
+2026-07-18 13:10:45 | flow.main | INFO     | main.py:78 | Starting Flow execution for task: 
+Your task is to take interview. The following are the steps
+-"Analyze the job description",
+    "An...
+2026-07-18 13:10:45 | flow.main | INFO     | main.py:79 | Run ID: 20260718_131045
+2026-07-18 13:10:45 | flow.main | INFO     | main.py:80 | Run Directory: runs/run_20260718_131045
+2026-07-18 13:10:45 | flow.main | INFO     | main.py:81 | Configuration: 5 candidates, refine_threshold=3, max_validation_itt=5
+2026-07-18 13:10:45 | flow.main | INFO     | main.py:42 | [flow] Planning workflow for: 
+Your task is to take interview. The following are the steps
+-"Analyze the job d...
+2026-07-18 13:11:17 | flow.main | INFO     | main.py:42 | [flow] Workflow planned with 6 tasks.
+2026-07-18 13:11:50 | flow.main | INFO     | main.py:42 | [attempt_task0] Task task0 validated after 3 attempt(s).
+2026-07-18 13:11:50 | flow.main | INFO     | main.py:42 | [attempt_task1] Task task1 validated after 2 attempt(s).
+2026-07-18 13:12:10 | flow.main | INFO     | main.py:42 | [attempt_task2] Task task2 validated after 1 attempt(s).
+2026-07-18 13:12:13 | flow.main | INFO     | main.py:42 | [flow] Workflow refined (remaining refine iterations: 4).
+2026-07-18 13:12:37 | flow.main | INFO     | main.py:42 | [attempt_task3] Task task3 validated after 1 attempt(s).

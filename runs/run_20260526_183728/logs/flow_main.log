@@ -1,0 +1,8 @@
+2026-05-26 18:37:28 | flow.main | INFO     | logging_config.py:282 | Run metadata saved to runs/run_20260526_183728/run_metadata.json
+2026-05-26 18:37:28 | flow.main | INFO     | main.py:59 | Starting Flow execution for task: You are a workflow planning agent.
+Your task is to:
+-"Analyze the job description",
+    "Analyze the...
+2026-05-26 18:37:28 | flow.main | INFO     | main.py:60 | Run ID: 20260526_183728
+2026-05-26 18:37:28 | flow.main | INFO     | main.py:61 | Run Directory: runs/run_20260526_183728
+2026-05-26 18:37:28 | flow.main | INFO     | main.py:62 | Configuration: 5 candidates, refine_threshold=3, max_validation_itt=5

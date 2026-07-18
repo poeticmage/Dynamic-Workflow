@@ -1,0 +1,26 @@
+2026-07-18 17:45:01 | flow.main | INFO     | logging_config.py:282 | Run metadata saved to runs/run_20260718_174501/run_metadata.json
+2026-07-18 17:45:01 | flow.main | INFO     | main.py:78 | Starting Flow execution for task: 
+Your task is to take interview. The following are the steps
+-"Analyze the job description",
+    "An...
+2026-07-18 17:45:01 | flow.main | INFO     | main.py:79 | Run ID: 20260718_174501
+2026-07-18 17:45:01 | flow.main | INFO     | main.py:80 | Run Directory: runs/run_20260718_174501
+2026-07-18 17:45:01 | flow.main | INFO     | main.py:81 | Configuration: 5 candidates, refine_threshold=3, max_validation_itt=5
+2026-07-18 17:45:01 | flow.main | INFO     | main.py:42 | [flow] Planning workflow for: 
+Your task is to take interview. The following are the steps
+-"Analyze the job d...
+2026-07-18 17:45:25 | flow.main | INFO     | main.py:42 | [flow] Workflow planned with 6 tasks.
+2026-07-18 17:45:53 | flow.main | INFO     | main.py:42 | [attempt_task0] Task task0 validated after 2 attempt(s).
+2026-07-18 17:45:59 | flow.main | INFO     | main.py:42 | [attempt_task1] Task task1 validated after 2 attempt(s).
+2026-07-18 17:46:06 | flow.main | INFO     | main.py:42 | [attempt_task3] Task task3 validated after 1 attempt(s).
+2026-07-18 17:46:14 | flow.main | INFO     | main.py:42 | [attempt_task2] Task task2 validated after 1 attempt(s).
+2026-07-18 17:46:18 | flow.main | INFO     | main.py:42 | [flow] Workflow refined (remaining refine iterations: 4).
+2026-07-18 17:47:48 | flow.main | INFO     | main.py:42 | [attempt_task4] Task task4 validated after 2 attempt(s).
+2026-07-18 17:48:04 | flow.main | INFO     | main.py:42 | [attempt_task5] Task task5 validated after 1 attempt(s).
+2026-07-18 17:48:04 | flow.main | INFO     | main.py:42 | [flow] All tasks completed.
+2026-07-18 17:48:04 | flow.main | INFO     | main.py:99 | Flow execution completed in 182.65 seconds
+2026-07-18 17:48:04 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260718_174501/results/workflow_final_state.json
+2026-07-18 17:48:22 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260718_174501/results/final_summary.json
+2026-07-18 17:48:22 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260718_174501/results/workflow_run_20260718_174822.json
+2026-07-18 17:48:22 | flow.main | INFO     | main.py:123 | All results saved successfully to run directory: runs/run_20260718_174501
+2026-07-18 17:48:22 | flow.main | INFO     | main.py:124 | Run completed! Check runs/run_20260718_174501 for all files from this execution.

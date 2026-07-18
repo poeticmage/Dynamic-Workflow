@@ -1,0 +1,5 @@
+{"timestamp": "2026-07-18 17:02:42,468", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "init_workflow", "line": 163, "message": "Workflow generation complete: 1 successful, 0 failed"}
+{"timestamp": "2026-07-18 17:02:42,468", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "compare_results", "line": 114, "message": "Comparing 1 workflow candidates..."}
+{"timestamp": "2026-07-18 17:02:42,468", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "compare_results", "line": 115, "message": "Dependency complexities: [0.74535599249993]"}
+{"timestamp": "2026-07-18 17:02:42,468", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "compare_results", "line": 116, "message": "Parallelisms: [1.2]"}
+{"timestamp": "2026-07-18 17:02:42,469", "level": "INFO", "logger": "flow.workflow", "module": "workflow_manager", "function": "init_workflow", "line": 176, "message": "Initial workflow saved to runs/run_20260718_170226/initflow.json"}

@@ -1,0 +1,29 @@
+2026-05-26 15:44:14 | flow.main | INFO     | logging_config.py:282 | Run metadata saved to runs/run_20260526_154414/run_metadata.json
+2026-05-26 15:44:14 | flow.main | INFO     | main.py:63 | Starting Flow execution for task: I want to create a website for the following conference:
+    1). Conference Name: International Conf...
+2026-05-26 15:44:14 | flow.main | INFO     | main.py:64 | Run ID: 20260526_154414
+2026-05-26 15:44:14 | flow.main | INFO     | main.py:65 | Run Directory: runs/run_20260526_154414
+2026-05-26 15:44:14 | flow.main | INFO     | main.py:66 | Configuration: 5 candidates, refine_threshold=3, max_validation_itt=5
+2026-05-26 15:44:29 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154429_task0_iter0_task_execution_task0.json
+2026-05-26 15:44:32 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154432_task0_iter1_validation_task0.json
+2026-05-26 15:44:33 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154433_task1_iter0_task_execution_task1.json
+2026-05-26 15:44:35 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154435_task1_iter1_validation_task1.json
+2026-05-26 15:44:39 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154439_task4_iter0_task_execution_task4.json
+2026-05-26 15:44:39 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154439_task2_iter0_task_execution_task2.json
+2026-05-26 15:44:41 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154441_task2_iter1_validation_task2.json
+2026-05-26 15:44:43 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154443_task3_iter0_task_execution_task3.json
+2026-05-26 15:44:45 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154445_task3_iter1_validation_task3.json
+2026-05-26 15:44:47 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154447_task4_iter1_validation_task4.json
+2026-05-26 15:44:50 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154450_task4_iter2_re_execution_task4.json
+2026-05-26 15:44:52 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154452_task4_iter2_validation_task4.json
+2026-05-26 15:44:52 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154452_workflow_refinement_iter1_workflow_pre_refinement.json
+2026-05-26 15:44:55 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154455_workflow_refinement_iter2_workflow_post_refinement.json
+2026-05-26 15:45:10 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154510_task5_iter0_task_execution_task5.json
+2026-05-26 15:45:15 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154515_task5_iter1_validation_task5.json
+2026-05-26 15:45:15 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260526_154515_workflow_refinement_iter1_workflow_pre_refinement.json
+2026-05-26 15:45:16 | flow.main | INFO     | main.py:74 | Flow execution completed in 61.32 seconds
+2026-05-26 15:45:16 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260526_154414/results/workflow_final_state.json
+2026-05-26 15:46:03 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260526_154414/results/final_summary.json
+2026-05-26 15:46:03 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260526_154414/results/workflow_run_20260526_154603.json
+2026-05-26 15:46:03 | flow.main | INFO     | main.py:104 | All results saved successfully to run directory: runs/run_20260526_154414
+2026-05-26 15:46:03 | flow.main | INFO     | main.py:105 | Run completed! Check runs/run_20260526_154414 for all files from this execution.

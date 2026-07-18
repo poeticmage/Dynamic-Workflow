@@ -1,0 +1,6 @@
+2026-05-26 17:20:03 | flow.main | INFO     | logging_config.py:282 | Run metadata saved to runs/run_20260526_172003/run_metadata.json
+2026-05-26 17:20:03 | flow.main | INFO     | main.py:64 | Starting Flow execution for task: Perform interview and candidate evaluation for a candidate.
+- Analyze job descriptions and candidate...
+2026-05-26 17:20:03 | flow.main | INFO     | main.py:65 | Run ID: 20260526_172003
+2026-05-26 17:20:03 | flow.main | INFO     | main.py:66 | Run Directory: runs/run_20260526_172003
+2026-05-26 17:20:03 | flow.main | INFO     | main.py:67 | Configuration: 5 candidates, refine_threshold=3, max_validation_itt=5

@@ -1,0 +1,56 @@
+2026-05-27 12:04:06 | flow.main | INFO     | logging_config.py:282 | Run metadata saved to runs/run_20260527_120406/run_metadata.json
+2026-05-27 12:04:06 | flow.main | INFO     | main.py:59 | Starting Flow execution for task: You are a workflow planning agent.
+Your task is to:
+-"Analyze the job description",
+    "Analyze the...
+2026-05-27 12:04:06 | flow.main | INFO     | main.py:60 | Run ID: 20260527_120406
+2026-05-27 12:04:06 | flow.main | INFO     | main.py:61 | Run Directory: runs/run_20260527_120406
+2026-05-27 12:04:06 | flow.main | INFO     | main.py:62 | Configuration: 5 candidates, refine_threshold=3, max_validation_itt=5
+2026-05-27 12:05:45 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120545_task0_iter0_task_execution_task0.json
+2026-05-27 12:05:46 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120546_task1_iter0_task_execution_task1.json
+2026-05-27 12:05:50 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120550_task0_iter1_validation_task0.json
+2026-05-27 12:05:51 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120551_task0_iter2_re_execution_task0.json
+2026-05-27 12:05:52 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120552_task1_iter1_validation_task1.json
+2026-05-27 12:05:56 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120556_task1_iter2_re_execution_task1.json
+2026-05-27 12:05:59 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120559_task1_iter2_validation_task1.json
+2026-05-27 12:06:04 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120604_task0_iter2_validation_task0.json
+2026-05-27 12:06:05 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120605_task0_iter3_re_execution_task0.json
+2026-05-27 12:06:11 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120611_task0_iter3_validation_task0.json
+2026-05-27 12:06:12 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120612_task0_iter4_re_execution_task0.json
+2026-05-27 12:06:22 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120622_task0_iter4_validation_task0.json
+2026-05-27 12:06:24 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120624_task0_iter5_re_execution_task0.json
+2026-05-27 12:06:32 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120632_task0_iter5_validation_task0.json
+2026-05-27 12:06:34 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120634_task0_iter0_task_execution_task0.json
+2026-05-27 12:06:41 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120641_task0_iter1_validation_task0.json
+2026-05-27 12:06:44 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120644_task0_iter2_re_execution_task0.json
+2026-05-27 12:06:55 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120655_task0_iter2_validation_task0.json
+2026-05-27 12:06:55 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120655_workflow_refinement_iter1_workflow_pre_refinement.json
+2026-05-27 12:06:59 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120659_workflow_refinement_iter2_workflow_post_refinement.json
+2026-05-27 12:07:01 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120701_task2_iter0_task_execution_task2.json
+2026-05-27 12:07:09 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120709_task2_iter1_validation_task2.json
+2026-05-27 12:07:16 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120716_task2_iter2_re_execution_task2.json
+2026-05-27 12:07:19 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120719_task2_iter2_validation_task2.json
+2026-05-27 12:07:21 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120721_task3_iter0_task_execution_task3.json
+2026-05-27 12:07:26 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120726_task3_iter1_validation_task3.json
+2026-05-27 12:07:28 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120728_task5_iter0_task_execution_task5.json
+2026-05-27 12:07:29 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120729_task4_iter0_task_execution_task4.json
+2026-05-27 12:07:39 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120739_task5_iter1_validation_task5.json
+2026-05-27 12:07:40 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120740_task4_iter1_validation_task4.json
+2026-05-27 12:07:48 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120748_task4_iter2_re_execution_task4.json
+2026-05-27 12:07:48 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120748_task5_iter2_re_execution_task5.json
+2026-05-27 12:07:50 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120750_task4_iter2_validation_task4.json
+2026-05-27 12:07:50 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120750_task5_iter2_validation_task5.json
+2026-05-27 12:07:50 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120750_workflow_refinement_iter1_workflow_pre_refinement.json
+2026-05-27 12:07:53 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120753_workflow_refinement_iter2_workflow_post_refinement.json
+2026-05-27 12:07:55 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120755_task6_iter0_task_execution_task6.json
+2026-05-27 12:08:02 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120802_task6_iter1_validation_task6.json
+2026-05-27 12:08:06 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120806_task6_iter2_re_execution_task6.json
+2026-05-27 12:08:16 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120816_task6_iter2_validation_task6.json
+2026-05-27 12:08:21 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120821_task6_iter3_re_execution_task6.json
+2026-05-27 12:08:29 | flow.main | INFO     | logging_config.py:431 | Intermediate snapshot saved: 20260527_120829_task6_iter3_validation_task6.json
+2026-05-27 12:08:29 | flow.main | INFO     | main.py:70 | Flow execution completed in 262.67 seconds
+2026-05-27 12:08:29 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260527_120406/results/workflow_final_state.json
+2026-05-27 12:08:33 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260527_120406/results/final_summary.json
+2026-05-27 12:08:33 | flow.main | INFO     | logging_config.py:215 | Results saved to runs/run_20260527_120406/results/workflow_run_20260527_120833.json
+2026-05-27 12:08:33 | flow.main | INFO     | main.py:100 | All results saved successfully to run directory: runs/run_20260527_120406
+2026-05-27 12:08:33 | flow.main | INFO     | main.py:101 | Run completed! Check runs/run_20260527_120406 for all files from this execution.
