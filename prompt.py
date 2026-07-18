@@ -49,6 +49,15 @@ The breakdown should focus on **essential implementation tasks only**, avoiding 
 ---
 
 # **Guidelines for Workflow Design**
+## **0. Preserve Explicitly Named Steps**
+- **If the objective enumerates named steps/phases (a numbered or bulleted list, an explicit
+  sequence of stage names, etc.), you MUST emit exactly one task per named step.** Do not omit,
+  merge, or silently skip a step the user explicitly listed - even if it looks conditional or
+  situational (e.g. "send emails as and when needed" still becomes its own task; that task's own
+  execution is what decides whether there is anything to send, not the planner).
+- This rule takes priority over "keep it lean" below - matching the user's explicit step list
+  exactly is more important than a shorter task count.
+
 ## **1. Core Implementation Focus**
 - **Focus only on essential implementation tasks.** Each task should produce concrete deliverables (code, algorithms, data structures, etc.).
 - **Avoid meta-tasks.** Do NOT include tasks for testing, debugging, deployment, monitoring, or complex state management.

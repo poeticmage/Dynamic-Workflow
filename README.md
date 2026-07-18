@@ -1,6 +1,8 @@
 ﻿# Flow: Modularized Agentic Workflow Automation
 
-An implementation of \Modularized Agentic Workflow Automation using Google ADK and Gemini.
+An implementation of Modularized Agentic Workflow Automation using Google ADK and Gemini.
+
+Reference:  ["FLOW: Modularized Workflow ICLR 2025 "](https://arxiv.org/abs/2501.07834)
 
 Flow converts a high-level objective into an Activity-on-Vertex (AOV) task graph, assigns specialized agents, executes independent tasks concurrently, validates their results, dynamically refines the workflow, and synthesizes a final deliverable.
 
@@ -191,6 +193,94 @@ When every task is completed, a summary agent receives:
 - the latest output from each task.
 
 It produces an integrated final deliverable rather than a description of the internal workflow.
+
+## Agent Hierarchy
+
+```mermaid
+flowchart TD
+    MAIN["main.py"] --> ROOTRUNNER["Root ADK Runner<br/>Session: flow_run_run_id"]
+    ROOTRUNNER --> FLOW["FlowAgent<br/>Custom BaseAgent<br/>Root orchestrator"]
+
+    FLOW --> MANAGER["WorkflowManager<br/>Plain Python coordinator"]
+    FLOW --> ATTEMPT["TaskAttemptAgent<br/>Custom BaseAgent<br/>Created per runnable task"]
+
+    MANAGER --> PLANNER["workflow_planner<br/>Structured LlmAgent<br/>Output: PlannedWorkflow"]
+    MANAGER --> ROUTER["agent_router<br/>Structured LlmAgent<br/>Output: AgentSelection"]
+    MANAGER --> REFINER["workflow_refiner<br/>Structured LlmAgent<br/>Output: WorkflowDelta"]
+
+    ATTEMPT --> SPECIALIST{"Specialist selected<br/>by agent_router"}
+
+    SPECIALIST --> RESEARCH["1. research_agent<br/>Research and analysis"]
+    SPECIALIST --> CODING["2. coding_agent<br/>Software engineering"]
+    SPECIALIST --> SUMMARY["3. summary_agent<br/>Task-level summarization"]
+    SPECIALIST --> JOB["4. job_description_agent<br/>Job-description analysis"]
+    SPECIALIST --> RESUME["5. resume_matching_agent<br/>Resume evaluation"]
+    SPECIALIST --> EMAIL["6. email_agent<br/>Email drafting"]
+    SPECIALIST --> INTERVIEW["7. interview_agent<br/>Interview generation and evaluation"]
+    SPECIALIST --> SCORING["8. scoring_agent<br/>Candidate scoring"]
+
+    RESEARCH --> VALIDATION
+    CODING --> VALIDATION
+    SUMMARY --> VALIDATION
+    JOB --> VALIDATION
+    RESUME --> VALIDATION
+    EMAIL --> VALIDATION
+    INTERVIEW --> VALIDATION
+    SCORING --> VALIDATION
+
+    VALIDATION{"Result validation"}
+
+    VALIDATION -->|Text result| TEXTVALIDATOR["text_validator<br/>Structured LlmAgent<br/>Output: ValidationVerdict"]
+    VALIDATION -->|Python result| CODETESTER["CodeTester<br/>Plain Python validator<br/>No ADK Runner"]
+
+    TEXTVALIDATOR -->|Failed with feedback| SPECIALIST
+    CODETESTER -->|Failed with feedback| SPECIALIST
+
+    TEXTVALIDATOR -->|Completed| TASKDONE["Task completed"]
+    CODETESTER -->|Completed| TASKDONE
+
+    TASKDONE --> FLOW
+
+    FLOW -->|All workflow tasks completed| FINALSUMMARY["workflow_summarizer<br/>Final synthesis LlmAgent"]
+    FINALSUMMARY --> OUTPUT["Final workflow deliverable"]
+```
+
+### Runner Hierarchy
+
+```mermaid
+flowchart TD
+    subgraph OUTER["Root orchestration runtime"]
+        ROOTSERVICE["Dedicated InMemorySessionService"]
+        ROOTRUNNER["Root ADK Runner"]
+        FLOW["FlowAgent<br/>Custom BaseAgent"]
+
+        ROOTSERVICE --> ROOTRUNNER
+        ROOTRUNNER --> FLOW
+    end
+
+    subgraph ORCHESTRATION["Python orchestration layer"]
+        FLOW --> WM["WorkflowManager"]
+        FLOW --> TA["TaskAttemptAgent instances"]
+        FLOW --> GRAPH["Workflow and Task graph"]
+        FLOW --> ASYNC["asyncio scheduler<br/>locks and event queue"]
+    end
+
+    WM --> INNER
+    TA --> INNER
+
+    subgraph INNER["Shared LLM runtime — adk_runtime.py"]
+        SERVICE["Global InMemorySessionService"]
+        CACHE["Runner cache<br/>one Runner per agent name"]
+
+        SERVICE --> CACHE
+
+        CACHE --> PR["workflow_planner Runner"]
+        CACHE --> RR["agent_router Runner"]
+        CACHE --> RFR["workflow_refiner Runner"]
+        CACHE --> VR["text_validator Runner"]
+        CACHE --> SR["Specialist Runner"]
+        CACHE
+
 
 ## Project Structure
 

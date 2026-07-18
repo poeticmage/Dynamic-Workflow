@@ -7,11 +7,12 @@ are plain structured-output LlmAgents - no tools, since `output_schema` and
 """
 
 from google.adk.agents import LlmAgent
+from google.genai import types
 
 import prompt
 from agent import AGENTS
 from config import Config
-from schemas import AgentSelection, PlannedWorkflow, WorkflowDelta
+from schemas import AgentAssignments, PlannedWorkflow, WorkflowDelta
 
 planner_agent = LlmAgent(
     name="workflow_planner",
@@ -30,25 +31,28 @@ refiner_agent = LlmAgent(
 )
 
 _AGENT_ROSTER = "\n\n".join(
-    f"ID {agent_id}\nName: {spec.name}\nDescription: {spec.description}\nInstruction: {spec.instruction}"
+    f"ID {agent_id}\nName: {spec.name}\nDescription: {spec.description}"
     for agent_id, spec in AGENTS.items()
 )
 
-ROUTER_INSTRUCTION = f"""You are an agent router.
+ROUTER_INSTRUCTION = f"""You are an agent router for a multi-task workflow.
 
-You MUST choose exactly one agent from the Available Agents list below to carry out the given
-task objective.
+You will be given a list of tasks (each with a task_id and an objective). You MUST assign
+exactly one agent to EVERY task, from the Available Agents list below.
 
 CRITICAL RULES:
-1. Read EVERY available agent before making a decision.
-2. Evaluate EVERY agent's description and instruction.
-3. Do NOT invent new agents.
-4. Do NOT assume capabilities that are not explicitly stated.
-5. You may ONLY select an agent ID that appears in Available Agents.
-6. Compare all candidates before selecting the final answer.
-7. Prefer the agent whose DESCRIPTION most directly matches the objective.
-8. Use the instruction only as supporting evidence.
-9. If multiple agents appear relevant, choose the most specialized one.
+1. Read EVERY available agent before making any decision.
+2. Evaluate ALL tasks TOGETHER, not independently. Two tasks can look similar at a glance - do
+   not default to the same agent for both just because it fit an earlier task. Re-derive the best
+   match for each task_id from scratch against the FULL roster.
+3. Prefer the agent whose description most SPECIFICALLY and LITERALLY names the task's domain
+   (e.g. a task about analyzing a job description belongs to the agent explicitly described as
+   parsing/structuring job descriptions) over a more general or adjacent agent that could
+   plausibly also handle it. A specific-domain match always outranks a general one.
+4. Do NOT invent new agents or agent IDs - only use IDs that appear in Available Agents below.
+5. Do NOT assume capabilities that are not explicitly stated in an agent's description.
+6. Every task_id you were given must appear exactly once in your output, each with exactly one
+   agent_id.
 
 Available agents:
 {_AGENT_ROSTER}
@@ -58,6 +62,10 @@ router_agent = LlmAgent(
     name="agent_router",
     model=Config.ROUTER_MODEL,
     instruction=ROUTER_INSTRUCTION,
-    output_schema=AgentSelection,
-    output_key="agent_selection",
+    output_schema=AgentAssignments,
+    output_key="agent_assignments",
+    # Routing is a classification decision, not a generative one - deterministic
+    # sampling makes it consistently pick its single best judgment instead of
+    # occasionally sampling a plausible-but-wrong adjacent agent.
+    generate_content_config=types.GenerateContentConfig(temperature=0.0),
 )

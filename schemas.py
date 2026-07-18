@@ -58,7 +58,20 @@ class ValidationVerdict(BaseModel):
     feedback: str = Field(default="", description="Improvement feedback if status is 'failed'")
 
 
-class AgentSelection(BaseModel):
-    """Structured output of the router agent that assigns a task to a specialist module."""
+class AgentAssignment(BaseModel):
+    """One task's agent assignment, as part of a batched routing decision."""
 
+    task_id: str = Field(description="The task id this assignment is for")
     agent_id: int = Field(description="ID of the selected agent from the AGENTS registry")
+
+
+class AgentAssignments(BaseModel):
+    """Structured output of the router agent.
+
+    All tasks in a candidate workflow are routed in a single call so the
+    router can reason about them together (e.g. not pick the same agent for
+    two tasks when a more specific one exists for one of them), rather than
+    N independent single-task calls with no visibility into siblings.
+    """
+
+    assignments: List[AgentAssignment]

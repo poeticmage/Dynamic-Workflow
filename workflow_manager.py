@@ -17,7 +17,7 @@ from agent import AGENTS
 from history import History
 from logging_config import get_logger, get_run_directory, log_intermediate_result
 from planning_agents import planner_agent, refiner_agent, router_agent
-from schemas import AgentSelection, PlannedTask, PlannedWorkflow, WorkflowDelta
+from schemas import AgentAssignments, PlannedTask, PlannedWorkflow, WorkflowDelta
 from workflow import Task, Workflow
 
 logger = get_logger('workflow')
@@ -30,26 +30,53 @@ class WorkflowManager:
         self.objective = objective
         self.workflow: Optional[Workflow] = None
 
-    async def _resolve_agent_id(self, objective: str, session_suffix: str) -> int:
-        selection = await adk_runtime.run_structured(
+    async def _resolve_agent_ids(
+        self, planned_tasks: List[PlannedTask], session_suffix: str
+    ) -> Dict[str, int]:
+        """Route every task to a specialist agent in a single batched call.
+
+        All tasks are routed together (not one independent call per task) so the
+        router can reason about them as a set - e.g. not pick the same agent for
+        two different tasks just because it fit an earlier one, when a more
+        specific agent exists for one of them.
+        """
+        if not planned_tasks:
+            return {}
+
+        tasks_payload = "\n".join(
+            f"- task_id: {t.id}\n  objective: {t.objective}" for t in planned_tasks
+        )
+        assignments = await adk_runtime.run_structured(
             router_agent,
-            f"Objective: {objective}",
+            f"Tasks to route:\n{tasks_payload}",
             session_id=f"route_{session_suffix}",
-            schema=AgentSelection,
+            schema=AgentAssignments,
         )
-        if selection.agent_id in AGENTS:
-            return selection.agent_id
-        logger.warning(
-            f"Router returned unknown agent_id {selection.agent_id}; defaulting to {min(AGENTS)}"
-        )
-        return min(AGENTS)
+
+        result: Dict[str, int] = {}
+        for a in assignments.assignments:
+            if a.agent_id in AGENTS:
+                result[a.task_id] = a.agent_id
+            else:
+                logger.warning(
+                    f"Router returned unknown agent_id {a.agent_id} for task {a.task_id}; "
+                    f"defaulting to {min(AGENTS)}"
+                )
+                result[a.task_id] = min(AGENTS)
+
+        for t in planned_tasks:
+            if t.id not in result:
+                logger.warning(
+                    f"Router did not return an assignment for task {t.id}; defaulting to {min(AGENTS)}"
+                )
+                result[t.id] = min(AGENTS)
+        return result
 
     async def _to_workflow(self, planned_tasks: List[PlannedTask], id_prefix: str) -> Workflow:
-        agent_ids = await asyncio.gather(
-            *[self._resolve_agent_id(t.objective, f"{id_prefix}_{t.id}") for t in planned_tasks]
-        )
+        agent_ids = await self._resolve_agent_ids(planned_tasks, session_suffix=id_prefix)
         tasks: Dict[str, Task] = {}
-        for planned_task, agent_id in zip(planned_tasks, agent_ids):
+        for planned_task in planned_tasks:
+            agent_id = agent_ids[planned_task.id]
             tasks[planned_task.id] = Task(
                 id=planned_task.id,
                 objective=planned_task.objective,
@@ -193,19 +220,17 @@ class WorkflowManager:
             logger.info("Workflow refinement: no changes proposed.")
             return
 
-        agent_ids = await asyncio.gather(
-            *[self._resolve_agent_id(t.objective, f"refine_{t.id}") for t in delta.tasks]
-        )
+        agent_ids = await self._resolve_agent_ids(delta.tasks, session_suffix="refine")
         merge_payload = {
             t.id: {
                 'objective': t.objective,
-                'agent_id': agent_id,
+                'agent_id': agent_ids[t.id],
                 'next': list(t.next),
                 'prev': list(t.prev),
-                'agent': AGENTS[agent_id].name,
+                'agent': AGENTS[agent_ids[t.id]].name,
                 'output_format': t.output_format,
             }
-            for t, agent_id in zip(delta.tasks, agent_ids)
+            for t in delta.tasks
         }
         self.workflow.merge_workflow(merge_payload)
 
