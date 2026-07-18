@@ -8,4 +8,5 @@ config.py
 .env
 /runs
 /venv
+.python-version
 CLAUDE.md
