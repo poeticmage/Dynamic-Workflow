@@ -1,57 +1,40 @@
 
 INIT_WORKFLOW_TEMPLATE = """{
-  "workflow": {
-    "task0": {
+  "tasks": [
+    {
+      "id": "task0",
       "objective": "Design the overall system architecture for the AI chatbot and web integration.",
-      "agent_id": 0,
+      "output_format": "Markdown",
       "next": ["task1", "task2"],
       "prev": []
     },
-    "task1": {
+    {
+      "id": "task1",
       "objective": "Develop the core AI and NLP module that processes user inputs and generates responses.",
-      "agent_id": 1,
+      "output_format": "Python code",
       "next": ["task3"],
       "prev": ["task0"]
     },
-    "task2": {
+    {
+      "id": "task2",
       "objective": "Implement the web integration layer and user interface that enables interaction with the chatbot.",
-      "agent_id": 2,
+      "output_format": "Python code",
       "next": ["task3"],
       "prev": ["task0"]
     },
-    "task3": {
+    {
+      "id": "task3",
       "objective": "Integrate the AI/NLP module with the web interface to ensure smooth data exchange and consistent behavior across the system.",
-      "agent_id": 3,
+      "output_format": "Python code",
       "next": ["task4"],
       "prev": ["task1", "task2"]
     },
-    "task4": {
+    {
+      "id": "task4",
       "objective": "Deploy the integrated system and set up monitoring protocols to ensure reliability and performance.",
-      "agent_id": 4,
+      "output_format": "Markdown",
       "next": [],
       "prev": ["task3"]
-    }
-  },
-  "agents": [
-    {
-      "id": "Agent 0",
-      "role": "System Architect"
-    },
-    {
-      "id": "Agent 1", 
-      "role": "AI/NLP Developer"
-    },
-    {
-      "id": "Agent 2",
-      "role": "Web Developer"
-    },
-    {
-      "id": "Agent 3",
-      "role": "Integration Specialist"
-    },
-    {
-      "id": "Agent 4",
-      "role": "Deployment Engineer"
     }
   ]
 }
@@ -85,28 +68,21 @@ The breakdown should focus on **essential implementation tasks only**, avoiding 
 - **Encourage parallel execution for independent components.** Core data structures, algorithms, and modules can often be developed concurrently.
 - **Keep the dependency graph simple.** Avoid deep dependency chains that increase complexity.
 
-## **4. Efficient Agent Assignment**
-- **Assign exactly one agent per task using agent_id (0, 1, 2, etc.).** Every task must have a responsible agent.
-- **Use sequential agent IDs starting from "Agent 0".** Assign agents in a clear, structured way.
-- **Focus on implementation roles.** Each agent should be responsible for building specific components.
-
-## **5. Workflow Simplicity and Maintainability**
+## **4. Workflow Simplicity and Maintainability**
 - **Keep workflows lean.** Prefer 5-8 focused implementation tasks over 10+ fragmented tasks.
 - **Maintain clarity and logical flow.** The breakdown should be intuitive, avoiding redundant or trivial steps.
 - **Prioritize core functionality.** Focus on the main features requested, not edge cases or advanced features.
 
-## **Required JSON Output Format:**
+## **Output:**
 
-Your response must be a JSON object with exactly this structure:
-- **"workflow"**: A dict where keys are task IDs ("task0", "task1", etc.) and values contain:
+Your response is a list of tasks. Each task has:
+  - **"id"**: A unique task identifier ("task0", "task1", etc.)
   - **"objective"**: Clear description of what this task accomplishes
-  - **"agent_id"**: Integer (0, 1, 2, etc.) identifying which agent handles this task
   - **"output_format"**: Required output format for this task (e.g., "JSON", "LaTeX", "Python code", "Markdown", "Plain text", etc.)
   - **"next"**: List of task IDs that depend on this task (can be empty [])
   - **"prev"**: List of task IDs this task depends on (can be empty [])
-- **"agents"**: A list of agent objects with:
-  - **"id"**: String like "Agent 0", "Agent 1", etc.
-  - **"role"**: Descriptive role name for the agent
+
+Agent/module assignment is handled separately by a router - do not assign agents yourself.
 
 **Example Template:**
 ```json
@@ -116,7 +92,6 @@ Your response must be a JSON object with exactly this structure:
 **Important Notes:**
 - Do NOT include "status" or "data" fields - these are managed by the system
 - Task dependencies are expressed through "next" and "prev" arrays
-- Agent IDs must be consistent between workflow tasks and agents list
 '''
 
 TASK_EXECUTION_PROMPT = '''
@@ -169,156 +144,6 @@ You are a task re-execution agent. Your role is to generate an improved outcome 
 Your output will serve as an improved solution for the task and will undergo further validation and integration into the larger workflow.
 '''
 
-IS_PYTHON_PROMPT = '''
-# Role
-You need to check if the content contains Python code that is **executable and meaningful for testing**.
-
-# Objective and Steps
-- Consider the code meaningful if it:
-  - Defines functions, classes, or logic that performs computations, produces outputs, or manipulates data in a testable manner.
-  - Contains conditions, loops, or logic that demonstrates purposeful behavior.
-  - Includes executable statements that contribute to functionality (e.g., function calls, print statements for output, etc.).
-
-- Consider the code NOT meaningful if it:
-  - Only defines constants, variables, or data structures without any logic or operations.
-  - Contains only comments, imports, or passive declarations without active computation or output.
-
-# Additional Guidance
-- Code that includes partial logic (e.g., incomplete functions with intended logic) can still be meaningful if its purpose is clear.
-- Minor syntax errors should not automatically classify the code as non-meaningful unless they make the entire logic unexecutable.
-
-# Response Format
-- Respond ONLY with "Y" if the code is executable and meaningful for testing.
-- Respond ONLY with "N" if no such code is present.
-'''
-
-
-
-TESTCODE_GENERATION_EXAMPLE = '''
-def run_tests():
-
-    failures = []
-
-    try:
-        assert add(2, 3) == 5, "Test failed: add(2,3) should return 5"
-    except AssertionError as e:
-        failures.append(str(e))
-
-    try:
-        assert add(-1, 1) == 0, "Test failed: add(-1,1) should return 0"
-    except AssertionError as e:
-        failures.append(str(e))
-
-    try:
-        assert add(0, 0) == 0, "Test failed: add(0,0) should return 0"
-    except AssertionError as e:
-        failures.append(str(e))
-
-    if failures:
-        print("'Error executing code:'")
-        for f in failures:
-            print(f)
-    else:
-        print("All tests passed!")
-
-run_tests()
-'''
-
-TESTCODE_EXAMPLE = '''
-def add(a, b):
-    return a + b
-'''
-
-TESTCODE_GENERATION_PROMPT = f'''
-You are a smart Python code validator responsible for creating appropriate validation tests based on the code complexity and type.
-
-# **Code Analysis & Test Strategy**
-
-1. **Simple Functions/Utilities**: Generate unit tests with assertions
-2. **Complex Applications (Games/GUIs/Interactive)**: Generate syntax and import validation only
-3. **Constants/Data/Incomplete Code**: Skip testing entirely
-
-# **Decision Rules**
-
-**GENERATE UNIT TESTS** if code contains:
-- Pure functions with clear inputs/outputs (math, string processing, algorithms)
-- Utility classes without external dependencies
-- Data processing functions
-- Simple business logic
-
-**GENERATE SYNTAX/IMPORT VALIDATION** if code contains:
-- Game development (Pygame, Tkinter, etc.)
-- Web frameworks (Flask, Django, etc.)
-- GUI applications with event loops
-- Real-time or interactive systems
-- Complex class hierarchies with external dependencies
-
-**SKIP TESTING** if code contains:
-- Only constants, variables, or data structures
-- Incomplete functions or pseudocode
-- Only imports or comments
-
-# **Test Structure Requirements**  
-- **Each test case must be wrapped in a separate `try/except` block.**  
-- **Each `try/except` block must contain only one assertion.**  
-- Tests must be independent and self-contained.  
-- Clear error messages must be provided for failures.  
-- All test results must be collected and reported.  
-
-# **Output Format & Examples**
-
-## **OUTPUT FORMAT FOR UNIT TESTS**:
-```python
-{TESTCODE_GENERATION_EXAMPLE}
-```
-
-## **OUTPUT FORMAT FOR SYNTAX/IMPORT VALIDATION**:
-```python
-def run_tests():
-    failures = []
-    
-    try:
-        # Test syntax by attempting compilation
-        compile(open(__file__).read(), __file__, 'exec')
-    except SyntaxError as e:
-        failures.append(f"Syntax Error: {{e}}")
-    
-    try:
-        # Test that all imports work
-        import sys
-        import os
-        # Add other imports from the code here
-    except ImportError as e:
-        failures.append(f"Import Error: {{e}}")
-    
-    try:
-        # Test that main classes/functions can be instantiated/called without errors
-        # Example: game = GameClass()  # Don't actually run the game loop
-    except Exception as e:
-        failures.append(f"Initialization Error: {{e}}")
-    
-    if failures:
-        print("Error executing code:")
-        for f in failures:
-            print(f)
-    else:
-        print("All validation checks passed!")
-
-run_tests()
-```
-
-## **OUTPUT FORMAT FOR SKIP TEST**:
-```python
-pass
-```
-
-# **Guidelines**
-- Do not repeat original code in tests
-- Output should contain only run_tests() function without explanations
-- For complex applications, focus on validation rather than functionality testing
-- Ensure tests don't trigger GUI windows or interactive elements
-'''
-
 TEXT_VALIDATION_PROMPT = f'''
 You are a task result evaluator responsible for determining whether a task result meets the task requirements, if not, you need to improve it.
 
@@ -340,41 +165,33 @@ You are a task result evaluator responsible for determining whether a task resul
    - Include all necessary details so that the output is self-contained and can be directly used as input for downstream tasks.
 
 
-# Response Format  
-- **If the result meets the standard:**  
-  - Return **"OK"**.  
-
-- **If the result does not meet the standard:**  
-  - add detailed jusification for the change start with "here are some feedbacks" and directly write an improved new result start with "here are the changes".
+# Response Format
+- **If the result meets the standard:** set status to "completed" and leave feedback empty.
+- **If the result does not meet the standard:** set status to "failed" and put detailed,
+  actionable feedback (what's wrong and what to change) in the feedback field.
 '''
 
 
 UPDATE_INPUT_EXAMPLE = '''
 ```json
 {
-  "current_workflow": {
-    "task0": {
+  "current_workflow": [
+    {
+      "id": "task0",
       "objective": "Collect comprehensive customer feedback from both online reviews and direct surveys, focusing on volume and sentiment.",
-      "agent_id": 0,
       "next": ["task1"],
       "prev": [],
       "status": "completed",
-      "output_format": "JSON",
-      "data": "Aggregated customer feedback data ready for analysis."
+      "output_format": "JSON"
     },
-    "task1": {
+    {
+      "id": "task1",
       "objective": "Analyze the sentiment of collected feedback.",
-      "agent_id": 1,
       "next": [],
       "prev": ["task0"],
       "status": "failed",
-      "output_format": "Markdown report",
-      "data": ""
+      "output_format": "Markdown report"
     }
-  },
-  "agents": [
-    {"id": "Agent 0", "role": "Data Collector", "tasks": [0]},
-    {"id": "Agent 1", "role": "Data Analyst", "tasks": [1]}
   ],
   "final_goal": "Develop a comprehensive customer satisfaction report that identifies detailed sentiment trends, key feedback themes, and actionable insights for strategic decision-making."
 }
@@ -384,33 +201,30 @@ UPDATE_INPUT_EXAMPLE = '''
 UPDATE_OUTPUT_EXAMPLE = '''
 ```json
 {
-  "Change Justification": {
-    "task1": "Enhanced the analysis scope by specifying advanced NLP techniques for deeper sentiment analysis, such as emotion detection and intensity scoring, to ensure more granular and actionable insights.",
-    "task2": "Introduced a new task to extend our analysis with thematic extraction using AI-powered text analytics. This task is crucial for uncovering underlying customer concerns and enhancing the final report with thematic insights."
-  },
-  "workflow": {
-    "task0": {
+  "has_changes": true,
+  "tasks": [
+    {
+      "id": "task0",
       "objective": "Collect comprehensive customer feedback from both online reviews and direct surveys, focusing on volume and sentiment.",
-      "agent_id": 0,
       "next": ["task1"],
       "prev": [],
-      "status": "completed"
+      "output_format": "JSON"
     },
-    "task1": {
+    {
+      "id": "task1",
       "objective": "Analyze the sentiment of collected feedback, categorizing responses into detailed emotional categories using advanced NLP techniques. Emphasis on emotion detection and intensity scoring to enhance data granularity.",
-      "agent_id": 1,
       "next": ["task2"],
       "prev": ["task0"],
-      "status": "pending"
+      "output_format": "Markdown report"
     },
-    "task2": {
+    {
+      "id": "task2",
       "objective": "Extract thematic elements from the feedback using AI-powered text analytics, identify major concerns and suggestions, and prepare a detailed thematic analysis report.",
-      "agent_id": 1,
       "next": [],
       "prev": ["task1"],
-      "status": "pending"
+      "output_format": "Markdown report"
     }
-  }
+  ]
 }
 ```
 '''
@@ -418,7 +232,8 @@ UPDATE_OUTPUT_EXAMPLE = '''
 WITHOUT_UPDATE_EXAMPLE = '''
 ```json
 {
-
+  "has_changes": false,
+  "tasks": []
 }
 ```
 '''
@@ -470,12 +285,14 @@ You will get the input like this: {UPDATE_INPUT_EXAMPLE}
 
 # Response Format and Example:
 - If Changes Are Made:
-  - Return a JSON object containing the updated workflow without including the "data" fields to optimize token usage. This JSON should only include the structural changes (task parameters and connections).
+  - Set "has_changes" to true and return the FULL resulting task list (existing tasks repeated
+    verbatim where unchanged, edited where needed, new tasks appended) - do not include
+    "status" or "data" fields, those are managed by the system.
 
 - Example Output for Required Optimization: {UPDATE_OUTPUT_EXAMPLE}
 
 - If No Changes Are Made:
-  - Return an empty JSON object to indicate that no modifications were necessary.
+  - Set "has_changes" to false and return an empty "tasks" list.
 
 - Output for No Required Optimization: {WITHOUT_UPDATE_EXAMPLE}
 '''

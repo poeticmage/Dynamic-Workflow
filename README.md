@@ -1,173 +1,320 @@
-﻿# [Flow: Modularized Agentic Workflow Automation (ICLR'25)](https://arxiv.org/abs/2501.07834)
+﻿# Flow: Modularized Agentic Workflow Automation
 
-## Overview
+An implementation of \Modularized Agentic Workflow Automation using Google ADK and Gemini.
 
-**Flow** is a multi-agent framework designed to enhance task automation and execution efficiency through **modular workflow design** and **dynamic refinement**. By structuring workflows as **Activity-on-Vertex (AOV) graphs**, Flow enables real-time adjustments, supports concurrent execution of subtasks, and optimizes workflow structures dynamically.
+Flow converts a high-level objective into an Activity-on-Vertex (AOV) task graph, assigns specialized agents, executes independent tasks concurrently, validates their results, dynamically refines the workflow, and synthesizes a final deliverable.
 
-## Flow-Claude (Flow for Claude Code) 
+## Architecture
 
-We have updated Flow to fully support Claude Code. Flow-Claude is designed for users working on long development tasks.
+```mermaid
+flowchart TD
+    U[User Objective] --> F[FlowAgent]
+    F --> P[Parallel Workflow Planners]
+    P --> R[Task Router]
+    R --> S[Candidate Graph Scoring]
+    S --> W[Selected Workflow]
 
-* break down requirements into parallel tasks,
-* execute them simultaneously without stopping,
-* auto-commit every change to Git,
-* and merge results automatically.
+    W --> E[Concurrent Task Execution]
+    E --> A[Specialist Agent]
+    A --> V{Output Type}
 
-Install it via: `pip install flow-claude`
+    V -->|Text| T[LLM Text Validator]
+    V -->|Python| C[Python Code Validator]
 
-GitHub link: [https://github.com/a5507203/flow-claude](https://github.com/a5507203/flow-claude)
+    T -->|Rejected| A
+    C -->|Rejected| A
+    T -->|Accepted| D[Task Completed]
+    C -->|Accepted| D
 
+    D --> N[Unlock Dependent Tasks]
+    N --> E
 
-## Key Features
+    D -->|Refinement threshold| RF[Workflow Refiner]
+    RF --> W
 
-- **Modular Workflow Design**: Workflows are structured as **Activity-on-Vertex (AOV) graphs**, enabling **parallel execution** while minimizing dependencies.
-- **Concurrency**: Subtasks execute concurrently based on predefined dependencies.
-- **Dynamic Workflow Refinement**: The framework dynamically adapts workflows based on real-time performance feedback.
-- **Error Handling & Recovery**: Flow prevents system-wide failures and subtask failures by auto validating each subtasks and modifying workflows in response to errors.
+    W -->|All tasks completed| SM[Summary Agent]
+    SM --> O[Final Results]
+```
 
-## How It Works
+## Features
 
-### 1. **Workflow Initialization**
+- Activity-on-Vertex workflow graphs
+- Concurrent candidate workflow generation
+- Automatic task decomposition
+- Dependency-aware asynchronous execution
+- Specialist-agent routing
+- Text and Python result validation
+- Feedback-driven task retries
+- Runtime workflow refinement
+- Final deliverable synthesis
+- Per-run logs and result artifacts
+- Google ADK session-based conversation history
 
-Flow structures tasks as an **AOV graph**, where:
+## End-to-End Workflow
 
-- Nodes represent individual subtasks.
-- Directed edges define dependencies between subtasks.
-- The system generates multiple workflow candidates and selects the most efficient structure based on **parallelism** and **dependency complexity**.
+### 1. Objective input
 
-### 2. **Execution & Dynamic Updates**
+The workflow objective is currently configured in `main.py`:
 
-During execution:
+```python
+overall_task = """
+Describe the objective that Flow should complete.
+"""
+```
 
-- Agents process subtasks concurrently according to their roles and dependencies.
-- Performance feedback informs real-time workflow updates.
-- New tasks may be introduced, reallocated, or modified to enhance execution efficiency.
+The current implementation does not read a query from CLI arguments or standard input.
 
-### 3. **Workflow Refinement**
+### 2. Candidate workflow generation
 
-- Workflows are continuously refined during runtime.
-- Failed tasks are dynamically reassigned or redesigned to prevent execution bottlenecks.
-- The `refine_threshold` parameter determines when workflow refinement occurs.
-- A lazy update strategy defers refinement until all active tasks are completed.
+Flow starts multiple planner-agent calls concurrently. Each planner returns a structured workflow containing approximately 5–8 tasks.
 
-### 4. **Subtask Validation**
+Every planned task includes:
 
-- Each time a task is completed, validation will be performed for `max_validation_itt` iterations.
-- The validator will first determine the nature of the subtask. If it is Python code, the Python validator will be used; otherwise, the text validator will be employed.
-- The Python validator will generate test code based on the subtask and result, and then execute it. The text validator will also generate corresponding feedback based on the subtask and result.
-- The re-execute agent will regenerate a new result based on the previous outcome and feedback.
+- `id`
+- `objective`
+- `output_format`
+- `prev`: prerequisite tasks
+- `next`: downstream tasks
 
-## Installation & Usage
+Failed candidates are discarded. Execution stops if every candidate fails.
 
-### **Requirements**
+### 3. Specialist routing
 
-- Python 3.8+
-- OpenAI API
+Each task is passed to a router agent, which assigns one of the available specialists:
 
-### **Installation**
+1. Research
+2. Coding
+3. Summarization
+4. Job-description analysis
+5. Résumé matching
+6. Email drafting
+7. Interviewing
+8. Candidate scoring
+
+All routing requests for a candidate are executed concurrently.
+
+### 4. Candidate scoring
+
+Candidate workflows are evaluated using:
+
+- dependency complexity;
+- average available parallelism.
+
+The framework normalizes both measurements and selects the graph that favors lower dependency complexity and greater parallel execution.
+
+The selected initial workflow is saved as `initflow.json`.
+
+### 5. Dependency-aware execution
+
+A task becomes runnable when:
+
+- its status is `pending` or `failed`; and
+- all declared prerequisites have completed.
+
+All currently runnable tasks execute concurrently using `asyncio`.
+
+Each task receives:
+
+- the overall objective;
+- results from its direct parent tasks;
+- objectives of its direct downstream tasks;
+- its own objective;
+- its required output format.
+
+### 6. Specialist execution
+
+Each runnable task is wrapped in a `TaskAttemptAgent`.
+
+The assigned specialist generates the task result through Google ADK. A persistent session named `exec_<task_id>` retains conversation context across validation retries.
+
+Specialists currently generate text only. They do not have tools for browsing, sending email, editing files, or interacting with external systems.
+
+### 7. Validation and retries
+
+Every generated result is classified as either Python-like output or text.
+
+#### Text validation
+
+Text results are evaluated by a structured Gemini validator using:
+
+- the overall objective;
+- the current task objective;
+- the required output format;
+- the generated result.
+
+The validator returns:
+
+- `completed` when the result is acceptable;
+- `failed` with feedback when revision is required.
+
+#### Python validation
+
+Python-like results are processed by a local validator that performs syntax, AST, import, structural, and limited execution checks.
+
+> [!WARNING]
+> Python validation uses `exec()` and is not sandboxed. Do not run untrusted objectives or generated code on sensitive systems.
+
+#### Re-execution
+
+When validation fails:
+
+1. Feedback is saved in task history.
+2. Feedback is sent to the same specialist session.
+3. The specialist generates a revised result.
+4. Validation runs again.
+
+Setting `max_validation_itt` to `0` disables validation.
+
+### 8. Dynamic workflow refinement
+
+After a configured number of task attempts, Flow pauses new scheduling and asks a refiner agent to evaluate the current graph.
+
+The refiner can:
+
+- leave the graph unchanged;
+- add tasks;
+- remove tasks;
+- modify objectives;
+- change dependencies;
+- change required output formats.
+
+Changed tasks are routed again, merged into the workflow, and affected downstream tasks may be invalidated and re-executed.
+
+Refinement receives graph structure and task statuses. It currently does not receive detailed task outputs, validator feedback, or timing metrics.
+
+### 9. Final synthesis
+
+When every task is completed, a summary agent receives:
+
+- the original objective;
+- the final workflow structure;
+- the latest output from each task.
+
+It produces an integrated final deliverable rather than a description of the internal workflow.
+
+## Project Structure
+
+```text
+.
+├── main.py                  # Application entry point
+├── flow_agent.py            # Root scheduler and orchestrator
+├── workflow_manager.py      # Planning, scoring, routing and refinement
+├── workflow.py              # Workflow graph and task state
+├── planning_agents.py       # Planner, router and refiner agents
+├── task_agents.py           # Task execution and retry loop
+├── validation_agents.py     # Text/Python validation dispatch
+├── code_test_module.py      # Local Python checks and execution
+├── summary_agent.py         # Final deliverable synthesis
+├── agent.py                 # Specialist agent definitions
+├── adk_runtime.py           # Shared ADK runners and sessions
+├── schemas.py               # Structured Pydantic outputs
+├── history.py               # Task result and feedback history
+├── prompt.py                # Agent instructions and prompts
+├── config.py                # Gemini model configuration
+├── logging_config.py        # Run directories, logs and artifacts
+└── requirements.txt
+```
+
+## Requirements
+
+- Python 3.10 or newer
+- Google Gemini API key
+
+Main dependencies:
+
+- `google-adk`
+- `google-genai`
+- `networkx`
+- `python-dotenv`
+
+## Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/tmllab/2025_ICLR_FLOW.git
 cd 2025_ICLR_FLOW
+
+python -m venv .venv
+source .venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
-### **Configuration**
+Windows activation:
 
-#### **Set API Key**
-
-Linux/MacOS:
-
-```bash
-export OPENAI_API_KEY="your-api-key"
+```powershell
+.venv\Scripts\activate
 ```
 
-Windows (CMD):
+## Configuration
 
-```bash
-set OPENAI_API_KEY="your-api-key"
+Create a `.env` file in the repository root:
+
+```env
+GOOGLE_API_KEY=your-google-api-key
 ```
 
-#### **Set OpenAI Model**
+All agent roles currently use `gemini-2.5-flash`. Model settings are defined in `config.py`.
+
+Configure the workflow in `main.py`:
 
 ```python
-GPT_MODEL: str = "your-model"
+candidate_graphs = 5
+refine_threshold = 3
+max_refine_itt = 5
+max_validation_itt = 5
 ```
 
-#### **Define Your Task**
+- `candidate_graphs`: number of planner candidates.
+- `refine_threshold`: task attempts between refinements.
+- `max_refine_itt`: maximum workflow refinements.
+- `max_validation_itt`: validations per task; use `0` to disable.
 
-```python
-overall_task: str = "your-task"
-```
-
-#### **Set Number of Candidate Graphs**
-
-Configure the number of candidate workflow graphs.
-
-```python
-candidate_graphs: int = your-candidate-graphs
-```
-
-#### **Set Optimization Threshold**
-
-Refinement will be triggered after completing the threshold amount of subtasks.  
-Smaller values trigger more frequent updates.
-
-```python
-refine_threshold: int = your-threshold
-```
-
-#### **Set Max Optimization Iteration**
-
-Configure the number of max optimization iteration times.
-
-```python
-max_refine_itt: int = your-optimization-iteration
-```
-
-#### **Set Max Validation Iteration**
-
-Configure the number of max validation iteration times.
-Note that the amount of this figure **can be 0** if you don't want any validation.
-
-```python
-max_validation_itt: int = your-validation-iteration
-```
-
-### **Run Flow**
+## Running Flow
 
 ```bash
 python main.py
 ```
 
-## **Examining Results**
+The terminal displays progress events and model usage statistics.
 
-Each subtask in the workflow includes:
+## Output Files
 
-- `id`: Unique subtask identifier.
-- `objective`: Goal or content of the subtask.
-- `agent_id`: Identifier of the agent executing the subtask.
-- `next`: List of dependent subtasks.
-- `prev`: List of prerequisite subtasks.
-- `status`: Current execution status.
-- `history`: Save the results and feedbacks of subtask.
-- `remaining_dependencies`: Number of unfinished dependencies.
-- `agent`: Assigned agent for execution.
+Each execution creates a timestamped directory:
 
-### **Result Files**
+```text
+runs/run_<timestamp>/
+├── run_metadata.json
+├── initflow.json
+├── final_summary.txt
+├── logs/
+└── results/
+    ├── workflow_final_state.json
+    ├── final_summary.json
+    └── workflow_*.json
+```
 
-- **`initflow.json`**: Stores the best-selected workflow among candidates during initialization.
-- **`result.json`**: Stores the final workflow execution results, including outputs of all subtasks.
-- **`example.txt`**: Contains the final synthesized output generated by the summary agent.
+- `run_metadata.json`: objective and execution configuration.
+- `initflow.json`: selected initial workflow.
+- `workflow_final_state.json`: final task graph and latest outputs.
+- `final_summary.json`: synthesized result and original objective.
+- `final_summary.txt`: plain-text final deliverable.
+- `logs/`: component and execution logs.
 
-## Example Applications
+## Known Limitations
 
-To facilitate learning, we provide Jupyter notebooks with illustrative examples.
+- The objective is currently hard-coded in `main.py`.
+- Specialist agents do not have external tools.
+- Workflow graphs are not fully checked for cycles or dangling references.
+- Failed tasks may be rescheduled without a workflow-level retry limit.
+- Unexpected task exceptions can leave a workflow waiting indefinitely.
+- Python execution is not sandboxed.
+- Refinement does not receive detailed validation feedback or task outputs.
+- ADK sessions use in-memory storage and are not persisted.
+- Final workflow serialization exposes the latest result rather than complete attempt history.
 
 ## Citation
 
-If you find Flow useful, please consider citing our work:
+If you use Flow in your work, please cite:
 
 ```bibtex
 @article{niu2025flow,
@@ -177,3 +324,10 @@ If you find Flow useful, please consider citing our work:
   year={2025}
 }
 ```
+
+## License
+
+See the repository license for usage and distribution terms.
+
+## Citation
+ ["FLOW: Modularized Workflow ICLR 2025 "](https://arxiv.org/abs/2501.07834)
